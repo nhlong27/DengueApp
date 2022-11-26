@@ -5,7 +5,7 @@ function App() {
 
   return (
     <div className="text-center selection:bg-green-900">
-      Doctor is working
+      Doctor is working now!
     </div>
   );
 }
