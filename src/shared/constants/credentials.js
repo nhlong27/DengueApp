@@ -1,8 +1,4 @@
-
-import * as dotenv from 'dotenv'
-dotenv.config()
-
-const HOST = process.env.HOST;
-const USERNAME = process.env.USERNAME;
-const PASSWORD = process.env.PASSWORD;
-module.exports =  {HOST, PASSWORD, USERNAME};
+const HOST = import.meta.env.VITE_HOST;
+const USERNAME = import.meta.env.VITE_USERNAME;
+const PASSWORD = import.meta.env.VITE_PASSWORD;
+export { HOST, PASSWORD, USERNAME };

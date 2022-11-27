@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import Chatbox from './components/Chatbox';
+import Content from './components/ContentContainer';
+import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
 
 function App() {
-  const [count, setCount] = useState(0);
 
   return (
-    <div className="text-center selection:bg-green-900">
-      Doctor is working now!
+    <div className="flex h-screen w-screen flex-auto">
+      <Sidebar />
+      <div className=" flex flex-grow flex-col bg-auto-white">
+        <Navbar />
+        <main className="flex w-[100%] h-[90%] flex-auto">
+          <Content />
+          <Chatbox />
+        </main>
+      </div>
     </div>
   );
 }
