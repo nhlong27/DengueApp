@@ -21,3 +21,43 @@ export const customer ={
   "phone": "",
   "email": "",
 }
+
+export let FacilityProfile = {
+
+}
+export let BuildingProfile = {
+  id: {
+    id: '',
+    entityType: '',
+  },
+  name: '',
+  type: 'BUILDING',
+  label: '',
+  full: 0,
+  beds: [],
+};
+export let RoomProfile = {
+  id:{
+    id:'',
+    entityType:''
+  },
+  name:'',
+  type:'ROOM',
+  label:'',
+  full:0,
+  beds:[]
+}
+export let BedProfile = {
+  id:{
+    id:'',
+    entityType:''
+  },
+  patientId:{
+    id:'',
+    entityType:''
+  },
+  name:'',
+  type:'BED',
+  label:'',
+  full:0
+}
