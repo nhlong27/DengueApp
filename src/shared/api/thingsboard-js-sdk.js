@@ -670,4 +670,4 @@ class tbClient {
   }
 }
 
-module.exports = tbClient;
+export default tbClient;

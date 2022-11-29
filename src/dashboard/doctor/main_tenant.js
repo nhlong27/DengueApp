@@ -1,6 +1,6 @@
-const {client} = require('../../shared/api/initClient_tenant');
+import {client} = from '../../shared/api/initClient_tenant';
 // require('dotenv').config()
-const {USERNAME, HOST, PASSWORD, TOKEN_A, TOKEN_B, DEVICE_ID_A, DEVICE_ID_B} = require('../../shared/constants/credentials.js');
+import {USERNAME, HOST, PASSWORD} = from '../../shared/constants/credentials.js';
 import * as dashboardAPI from '../../shared/api/doctor/dashboard';
 import * as nurseAPI from '../../shared/api/doctor/nurses';
 import * as facilityAPI from '../../shared/api/doctor/facilities';

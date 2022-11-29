@@ -16,7 +16,7 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  height: 600
+  height: 600,
 };
 
 export default function TransitionsModal(props) {
@@ -26,7 +26,12 @@ export default function TransitionsModal(props) {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
+      <Button
+        className="bg-light-important p-4 hover:bg-auto-black hover:text-auto-white"
+        onClick={handleOpen}
+      >
+        Create new
+      </Button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

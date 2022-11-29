@@ -34,7 +34,7 @@ export let BuildingProfile = {
   type: 'BUILDING',
   label: '',
   full: 0,
-  beds: [],
+  rooms: [],
 };
 export let RoomProfile = {
   id:{

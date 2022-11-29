@@ -1,6 +1,6 @@
-const tbClient = require('./thingsboard-js-sdk.js');
+import tbClient from './thingsboard-js-sdk.js';
 // require('dotenv').config()
-const {USERNAME, HOST, PASSWORD} = require('../constants/credentials.js');
+import {USERNAME, HOST, PASSWORD} from '../constants/credentials.js';
 
 const config = {
   host: HOST,
@@ -9,4 +9,4 @@ const config = {
 }
 
 const client = new tbClient(config);
-module.exports = {client};
+export {client};

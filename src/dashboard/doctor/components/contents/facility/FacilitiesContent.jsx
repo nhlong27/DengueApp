@@ -1,171 +1,26 @@
-import SelectFormField from '@/shared/utilities/form/SelectFormField';
-import TextFormField from '@/shared/utilities/form/TextFormField';
-import TransitionsModal from '@/shared/utilities/Modal';
-import { Typography } from '@mui/material';
-import { Field, Form, Formik, setNestedObjectValues } from 'formik';
 import React, { useState } from 'react';
-import * as yup from 'yup';
+import FacilitySearchCreate from './FacilitySearchCreate';
 
-var buildings = [
-  { label: 'A', value: 'checkthisout' },
-  { label: 'B', value: 'morevalue' },
-];
+
 const FacilitiesContent = () => {
-  const [isBuilding, setIsBuilding] = useState(false);
 
   return (
-    <TransitionsModal>
-      {isBuilding ? (
-        <FacilityFormContent optionList={buildings} schema={schema2} />
-      ) : (
-        <FacilityFormContent optionList={null} schema={schema1} />
-      )}
-    </TransitionsModal>
+    <>
+      <div className='h-[10%] shadow-lg flex justify-between items-center pl-4 pr-8'>
+        <FacilitySearchCreate />
+      </div>
+      <div className='flex-grow'>
+        Facility Content
+      </div>
+    </>
   );
 };
 
-const schema1 = yup.object({
-  buildingname: yup.string().required().min(3).max(15),
-  building: yup.array().nullable(),
-  buildinglabel: yup.string().required().min(3).max(15),
-  roomname: yup.string().required().min(3).max(15),
-  room: yup.array().nullable(),
-  roomlabel: yup.string().required().min(3).max(15),
-  bedname: yup.string().required().min(3).max(15),
-  bed: yup.array().nullable(),
-  bedlabel: yup.string().required().min(3).max(15),
-});
-const schema2 = yup.object({
-  building: yup.array().nullable(),
-  room: yup.array().nullable(),
-  bed: yup.array().nullable(),
-});
 
-const FacilityFormContent = (props) => {
-  const [isSelected, setIsSelected] = useState(false);
-  const [isCreated, setIsCreated] = useState(false);
-  const [buildingValue, setBuildingValue] = useState('');
-  const [roomValue, setRoomValue] = useState('');
-  const [bedValue, setBedValue] = useState('');
-  const [isTab, setTab] = useState({
-    buildingTab: '',
-    roomTab: 'hidden',
-    bedTab: 'hidden',
-  });
-  return (
-    <Formik
-      validationSchema={props.schema}
-      initialValues={{
-        buildingname: '',
-        buildinglabel: '',
-        building: '',
-        roomname: '',
-        room: '',
-        roomlabel: '',
-        bedname: '',
-        bed: '',
-        bedlabel: '',
-      }}
-      onSubmit={(values) => {
-        console.log(values);
-      }}
-    >
-      {({ values }) => (
-        <Form>
-          <div className={isTab.buildingTab}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              Choose a building
-            </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              Please select an existing building. Or create a new one.
-            </Typography>
-            {!props.optionList && (
-              <Field
-                options={null}
-                name="building"
-                component={SelectFormField}
-                id="standard-select-building"
-                label="No building available"
-                value={buildingValue}
-                select
-                variant="standard"
-              />
-            )}
-            {props.optionList &&
-              (!isCreated ? (
-                <Field
-                  options={props.optionList}
-                  name="building"
-                  component={SelectFormField}
-                  id="standard-select-building"
-                  label="Select a building"
-                  value={buildingValue}
-                  select
-                  variant="standard"
-                  onOpen={() => {
-                    setIsCreated(false);
-                    setIsSelected(true);
-                  }}
-                  onChange={(e) => {
-                    setBuildingValue(e.target.value);
-                    values.building = e.target.value;
-                  }}
-                />
-              ) : (
-                <Field
-                  options={props.optionList}
-                  name="building"
-                  select
-                  component={SelectFormField}
-                  id="standard-select-building"
-                  label="No building to select"
-                  defaultValue=""
-                  value=""
-                  variant="standard"
-                  onOpen={() => {
-                    setIsCreated(false);
-                    setIsSelected(true);
-                  }}
-                />
-              ))}
-            <button
-              onClick={() => {
-                setIsCreated(true);
-                setIsSelected(false);
-              }}
-              className="absolute top-[7.5rem] right-[4rem] rounded bg-auto-white p-2 hover:text-light-important hover:ring-2  hover:ring-gray-700"
-            >
-              Create a new <span className="text-light-important">building</span>
-            </button>
-            {isCreated && !isSelected ? (
-              <div className="mt-6">
-                <Field
-                  name="buildingname"
-                  component={TextFormField}
-                  required
-                  id="buildingname-required"
-                  label="Building Name"
-                  helperText="Please type the name of your building"
-                />
-                <Field
-                  name="buildinglabel"
-                  component={TextFormField}
-                  required
-                  id="buildinglabel-required"
-                  label="Building Label"
-                  helperText="Please indicate the label of your building"
-                />
-              </div>
-            ) : null}
-            <button
-              className="absolute bottom-[7.5rem] right-[4rem] rounded bg-light-important px-4 py-2 text-auto-white hover:bg-auto-black hover:text-light-important  "
-              type="button"
-              onClick={() =>
-                setTab({ buildingTab: 'hidden', roomTab: '', bedTab: 'hidden' })
-              }
-            >
-              Next
-            </button>
+
+
+
+            {/* 
           </div>
           <div className={isTab.roomTab}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
@@ -264,9 +119,23 @@ const FacilityFormContent = (props) => {
             <button
               className="absolute bottom-[7.5rem] right-[4rem] rounded bg-light-important px-4 py-2 text-auto-white hover:bg-auto-black hover:text-light-important"
               type="button"
-              onClick={() =>
-                setTab({ buildingTab: 'hidden', roomTab: 'hidden', bedTab: '' })
-              }
+              onClick={() => {
+                console.log(assetCreationObj);
+                if (!values.roomname) {
+                  assetCreationObj[values.building][values.room] = {
+                    name: values.room,
+                  };
+                } else {
+                  assetCreationObj[values.buildingname][values.roomname] = {
+                    name: values.roomname,
+                    label: values.roomlabel,
+                    type: 'ROOM',
+                    full: 0,
+                  };
+                }
+                console.log(assetCreationObj);
+                setTab({ buildingTab: 'hidden', roomTab: 'hidden', bedTab: '' });
+              }}
             >
               Next
             </button>
@@ -366,6 +235,24 @@ const FacilityFormContent = (props) => {
               Back
             </button>
             <button
+              onClick={() => {
+                if (!values.roomname) {
+                  assetCreationObj[values.building][values.room][values.bedname] = {
+                    name: values.bedname,
+                    label: values.bedlabel,
+                    type: 'BED',
+                    full: 0,
+                  };
+                } else {
+                  assetCreationObj[values.buildingname][values.roomname][values.bedname] =
+                    {
+                      name: values.bedname,
+                      label: values.bedlabel,
+                      type: 'BED',
+                      full: 0,
+                    };
+                }
+              }}
               className="absolute bottom-[7.5rem] right-[4rem] rounded bg-light-important px-4 py-2 text-auto-white hover:bg-auto-black hover:text-light-important"
               type="submit"
             >
@@ -376,6 +263,67 @@ const FacilityFormContent = (props) => {
       )}
     </Formik>
   );
-};
+}; */}
+
+
+// const schema1 = yup.object(
+//   {
+//     buildingname: yup.string().when('buildingname', (val, schema) => {
+//       if (val?.length > 0) {
+//         return yup.string().min(5, 'min 5').max(255, 'max 255').required('Required');
+//       } else {
+//         return yup.string().notRequired();
+//       }
+//     }),
+//     building: yup.array().nullable(),
+//     buildinglabel: yup.string().when('buildinglabel', (val, schema) => {
+//       if (val?.length > 0) {
+//         return yup.string().min(5, 'min 5').max(255, 'max 255').required('Required');
+//       } else {
+//         return yup.string().notRequired();
+//       }
+//     }),
+//     roomname: yup.string().when('roomname', (val, schema) => {
+//       if (val?.length > 0) {
+//         return yup.string().min(5, 'min 5').max(255, 'max 255').required('Required');
+//       } else {
+//         return yup.string().notRequired();
+//       }
+//     }),
+//     room: yup.array().nullable(),
+//     roomlabel: yup.string().when('roomlabel', (val, schema) => {
+//       if (val?.length > 0) {
+//         return yup.string().min(5, 'min 5').max(255, 'max 255').required('Required');
+//       } else {
+//         return yup.string().notRequired();
+//       }
+//     }),
+//     bedname: yup.string().when('bedname', (val, schema) => {
+//       if (val?.length > 0) {
+//         return yup.string().min(5, 'min 5').max(255, 'max 255').required('Required');
+//       } else {
+//         return yup.string().notRequired();
+//       }
+//     }),
+//     bed: yup.array().nullable(),
+//     bedlabel: yup.string().when('bedlabel', (val, schema) => {
+//       if (val?.length > 0) {
+//         return yup.string().min(5, 'min 5').max(255, 'max 255').required('Required');
+//       } else {
+//         return yup.string().notRequired();
+//       }
+//     }),
+//   },
+//   [
+//     ['buildingname', 'buildingname'],
+//     ['buildinglabel', 'buildinglabel'],
+//     ['roomname', 'roomname'],
+//     ['roomlabel', 'roomlabel'],
+//     ['bedname', 'bedname'],
+//     ['bedlabel', 'bedlabel'],
+//   ],
+// );
 
 export default FacilitiesContent;
+
+
