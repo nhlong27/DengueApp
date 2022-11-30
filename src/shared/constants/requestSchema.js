@@ -1,63 +1,29 @@
-export const user = {
-  email:'',
-  authority:'CUSTOMER_USER',
-  firstName:'',
-  lastName:'',
-}
-export const asset = {
-  name:'',
-  type:'',
-  label:''
-}
-export const device = {
-  name:'',
-  type:'',
-  label:''
-}
-export const customer ={
-  "title": "",
-  "city": "",
-  "address": "",
-  "phone": "",
-  "email": "",
-}
-
-export let FacilityProfile = {
-
-}
-export let BuildingProfile = {
-  id: {
-    id: '',
-    entityType: '',
-  },
-  name: '',
-  type: 'BUILDING',
-  label: '',
-  full: 0,
-  rooms: [],
-};
-export let RoomProfile = {
-  id:{
-    id:'',
-    entityType:''
-  },
-  name:'',
-  type:'ROOM',
-  label:'',
-  full:0,
-  beds:[]
-}
-export let BedProfile = {
-  id:{
-    id:'',
-    entityType:''
-  },
-  patientId:{
-    id:'',
-    entityType:''
-  },
-  name:'',
-  type:'BED',
-  label:'',
-  full:0
-}
+let countryList = {};
+let countries = [
+  'France',
+  'Vietnam',
+  'Malaysia',
+  'United States',
+  'England',
+  'Russia',
+  'China',
+  'Japan',
+  'Hongkong',
+  'Taiwan',
+];
+countries.forEach((country) => (countryList[`${country}`] = country));
+let cityList = {};
+let cities = [
+  'HCM City',
+  'Hanoi',
+  'Hue',
+  'Nha Trang',
+  'Hai Phong',
+  'Vung Tau',
+  'Can Tho',
+  'Vinh',
+  'Ha Long',
+  'Buon Ma Thuot',
+];
+cities.forEach((city) => (cityList[`${city}`] = city));
+export { countryList, cityList };

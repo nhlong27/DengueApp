@@ -1,10 +1,10 @@
 import React from 'react';
 import SearchCreate from './contents/facility/FacilitySearchCreate';
 import { Routes, Route } from 'react-router-dom';
-import PatientContent from './contents/PatientContent';
+import PatientContent from './contents/patient/PatientContent';
 import FacilitiesContent from './contents/facility/FacilitiesContent';
-import NursesContent from './contents/NursesContent';
-import DevicesContent from './contents/DevicesContent';
+import NursesContent from './contents/nurse/NursesContent';
+import DevicesContent from './contents/device/DevicesContent';
 
 const ContentContainer = () => {
   return (

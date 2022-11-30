@@ -198,7 +198,8 @@ class tbClient {
   }
 
   getAssets(
-    { textSearch, sortProperty, sortOrder } = {
+    { type, textSearch, sortProperty, sortOrder } = {
+      type: '',
       textSearch: '',
       sortOrder: '',
       sortProperty: '',
@@ -207,7 +208,7 @@ class tbClient {
     console.log('getAssets');
     return this.api
       .get(
-        `/api/tenant/assets?page=0&pageSize=10${textSearch}${sortOrder}${sortProperty}`,
+        `/api/tenant/assets?page=0&pageSize=10${type}${textSearch}${sortOrder}${sortProperty}`,
       )
       .then((response) => {
         response && console.log('return:');
@@ -409,6 +410,17 @@ class tbClient {
         return null;
       });
     return result;
+  }
+  async createRelation(params) {
+    console.log('createRelation');
+    await this.api
+      .post('/api/relation', params)
+      .then((response) => {
+        console.log('created relation');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   async findRelatedDevices(params) {

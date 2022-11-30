@@ -9,23 +9,28 @@ import * as nurseAPI from '@/shared/api/doctor/nurses';
 import * as deviceAPI from '@/shared/api/doctor/devices';
 import * as facilityAPI from '@/shared/api/doctor/facilities';
 
-export const db_doctor = {};
+export var db_doctor = {};
+export var assetCreationObj = {};
 
 const connectClient = async () => {
   console.log('connecting to server');
   let token = await client.connect();
   if (token) {
+    db_doctor.facilityList = {};
+    db_doctor.patientList = {};
+    db_doctor.deviceList = {};
+    db_doctor.nurseList = {};
+    console.log(db_doctor)
     db_doctor.patientList = await dashboardAPI.loadAndFilterPatients(client);
-    db_doctor.nurseList = await nurseAPI.loadAndFilterNurses(client);
-    db_doctor.deviceList = await deviceAPI.loadAndFilterDevices(client);
-    db_doctor.facilityList = await facilityAPI.loadAndFilterFacilities(client);
-    console.log(db_doctor);
+    // db_doctor.nurseList = await nurseAPI.loadAndFilterNurses(client);
+    await deviceAPI.loadAndFilterDevices(client);
+    await facilityAPI.loadAndFilterFacilities(client);
   }
 };
 
 function App() {
   useEffect(() => {
-    // connectClient();
+    connectClient();
   }, []);
   return (
     <div className="flex h-screen w-screen flex-auto">

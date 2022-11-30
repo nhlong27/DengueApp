@@ -3,7 +3,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 const style = {
@@ -16,22 +16,27 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  height: 600,
+  height: 580,
+  borderRadius: '10px',
 };
 
 export default function TransitionsModal(props) {
+  // React.useEffect(() => {
+  //   props.setTab({ customerTab: '', userTab: 'hidden', assignTab: '' });
+  // }, []);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <div>
-      <Button
-        className="bg-light-important p-4 hover:bg-auto-black hover:text-auto-white"
+      <button
+        className="rounded border bg-light-important px-5 py-2.5 text-auto-white hover:bg-auto-black hover:text-auto-white"
         onClick={handleOpen}
       >
-        Create new
-      </Button>
+        Create
+      </button>
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
