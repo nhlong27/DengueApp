@@ -33,7 +33,7 @@ const addPatient = async () => {
   let token = await client.connect();
   if (token) {
     await addOrUpdatePatient(client, assetCreationObj.patient);
-    db_doctor.patientList[`${assetCreationObj.name}`] = JSON.parse(
+    db_doctor.patientList[`${assetCreationObj.patient.title}`] = JSON.parse(
       JSON.stringify(assetCreationObj.patient),
     );
   }

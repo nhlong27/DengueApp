@@ -1,29 +1,34 @@
 <!DOCTYPE html>
-<html data-wf-domain="https://hippyaki.github.io/HealthConnect/" data-wf-page="5e30f06b05f796620b1ddc26" data-wf-site="5e30f06b05f79621331ddc25" >
+<html data-wf-page="5e30f06b05f796620b1ddc26" data-wf-site="5e30f06b05f79621331ddc25">
+  <!-- data-wf-domain="https://hippyaki.github.io/HealthConnect/" -->
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/asset/favicon/favicon.svg" />
+    <!-- <link rel="icon" type="image/svg+xml" href="/asset/favicon/favicon.svg" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <title>Dengue App</title>
 
-    <link
+    <!-- <link
       rel="apple-touch-icon"
       sizes="180x180"
       href="assets/favicon/apple-touch-icon.png"
-    />
+    /> -->
 
-    <link
+    <!-- <link
       rel="icon"
       type="image/png"
       sizes="32x32"
       href="assets/favicon/favicon-32x32.png"
-    />
-    <link
+    /> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/mos_files/mos.png" />
+    <!-- <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="assets/favicon/favicon-16x16.png"
-    />
+      href="assets/favicon/favicon-16x16.png" -->
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/mos_files/mos.png" />
+
     <link rel="manifest" href="assets/favicon/site.webmanifest" />
 
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
@@ -32,15 +37,45 @@
       rel="stylesheet"
       type="text/css"
     />
-    <link
+    <link href="./src/index.css" rel="stylesheet" />
+    <!-- <link
       href="https://assets.website-files.com/5e30f06b05f79621331ddc25/5e3b73da7535d74e3c7bdccf_medica.png"
       rel="shortcut icon"
       type="image/x-icon"
-    />
+    /> -->
     <link
       href="https://assets.website-files.com/5e30f06b05f79621331ddc25/5e3b73e0e2dafae7b5c75931_medica.png"
       rel="apple-touch-icon"
     />
+    <style>
+      body {
+        background-color: #f7f7ff;
+      }
+      /* .nav-mother {
+        position: relative;
+      } */
+      .bg {
+        background: black;
+      }
+      .bg2 {
+        background-color: #f7f7ff;
+      }
+      /* .navnav {
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+      } */
+      .text-white {
+        color: #f7f7ff;
+      }
+      .title {
+        color: #f7f7ff;
+      }
+      .text-white:hover {
+        color: #86d5ec;
+      }
+    </style>
   </head>
   <body>
     <!-- WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
@@ -57,7 +92,7 @@
       <div
         id="Header"
         data-w-id="50020eae-abb3-e75c-0b85-e210a1b2bf79"
-        class="header-wrapper"
+        class="header-wrapper nav-mother"
         style="opacity: 1"
       >
         <div
@@ -68,7 +103,7 @@
           data-w-id="50020eae-abb3-e75c-0b85-e210a1b2bf7b"
           data-easing2="ease"
           role="banner"
-          class="navbar w-nav"
+          class="navbar w-nav bg navnav"
         >
           <div class="container-default">
             <div class="w-layout-grid top-bar-wrapper">
@@ -78,13 +113,13 @@
               >
                 <ul role="list" class="contact-list">
                   <li class="top-item">
-                    <a href="tel:+91 00000 00000" class="contact-item w-inline-block">
+                    <a href="tel:(VN)+84 97 189 0499" class="contact-item w-inline-block">
                       <img
                         src="https://assets.website-files.com/5e30f06b05f79621331ddc25/5e30f15c05f796d5e61de195_phone-icon-top-bar.svg"
                         alt="Phone Icon - Medica Webflow Template"
                         class="contact-icon"
                       />
-                      <div>+91 00000 00000</div>
+                      <div class="text-white">(VN)+84 07 189 0499</div>
                     </a>
                   </li>
 
@@ -98,7 +133,7 @@
                         alt="Email Icon - Medica Webflow Template"
                         class="contact-icon"
                       />
-                      <div>info.healthconnect@pm.me</div>
+                      <div class="text-white">long.nguyen2706@hcmut.edu.vn</div>
                     </a>
                   </li>
                 </ul>
@@ -133,24 +168,44 @@
             </div>
           </div>
 
-          <div class="container-default">
+          <div class="container-default nav">
             <div class="w-layout-grid nav-menu-wrapper">
-              <div class="logo-details">
-                <i class="bx bx-donate-heart"></i>
-                <span class="logo_name">Health Connect</span>
+              <div
+                class="logo-details"
+                style="position: relative; width: 10rem; margin-left: 1rem"
+              >
+                <div
+                  class="transition-bg-image hero"
+                  style="
+                    background-image: url('assets/img/mos_files/mos.png');
+                    height: 7rem;
+                    width: 7rem;
+                    margin-left: -10rem;
+                    margin-bottom: 0.7rem;
+                  "
+                ></div>
+                <span
+                  class="logo_name title"
+                  style="font-size: 3rem; width: 10rem; font-family: 'Josefin Sans'"
+                  >Dengue App</span
+                >
               </div>
               <nav
                 role="navigation"
                 id="w-node-_50020eae-abb3-e75c-0b85-e210a1b2bf93-a1b2bf79"
                 class="nav-menu w-nav-menu"
+                style="display: flex; gap: 2rem"
               >
                 <a
                   href="/"
                   aria-current="page"
-                  class="nav-link-wrap w-nav-link w--current"
+                  class="nav-link-wrap w-nav-link w--current text-white"
+                  style="font-size: 1.2rem"
                   >Home</a
                 >
-                <a href="/about" class="nav-link-wrap w-nav-link">About Us</a>
+                <a href="/about" class="nav-link-wrap w-nav-link" style="color: white"
+                  >About Us</a
+                >
                 <div
                   data-delay="0"
                   data-hover="false"
@@ -176,7 +231,7 @@
                       aria-hidden="true"
                     ></div>
 
-                    <div>Doctors</div>
+                    <div class="text-white">Doctors</div>
                   </div>
                   <nav
                     class="dropdown-list w-dropdown-list"
@@ -207,7 +262,7 @@
                     >
                   </nav>
                 </div>
-                <div
+                <!-- <div
                   data-delay="0"
                   data-hover="false"
                   data-w-id="b327dadf-d0ed-17e5-c756-291e1b9d62c5"
@@ -230,9 +285,9 @@
                         transform-style: preserve-3d;
                       "
                       aria-hidden="true"
-                    ></div>
+                    ></div> -->
 
-                    <div>Services</div>
+                <!-- <div class="text-white">Services</div>
                   </div>
                   <nav
                     class="dropdown-list w-dropdown-list"
@@ -254,8 +309,8 @@
                       >Individual Service Template</a
                     >
                   </nav>
-                </div>
-                <div
+                </div> -->
+                <!-- <div
                   data-delay="0"
                   data-hover="false"
                   data-w-id="50020eae-abb3-e75c-0b85-e210a1b2bfa2"
@@ -280,7 +335,7 @@
                       aria-hidden="true"
                     ></div>
 
-                    <div>Blog</div>
+                    <div class="text-white">Blog</div>
                   </div>
                   <nav
                     class="dropdown-list w-dropdown-list"
@@ -310,7 +365,7 @@
                       >Blog Post Template</a
                     >
                   </nav>
-                </div>
+                </div> -->
                 <div
                   data-delay="0"
                   data-hover="false"
@@ -336,7 +391,7 @@
                       aria-hidden="true"
                     ></div>
 
-                    <div>Other</div>
+                    <div class="text-white">Other</div>
                   </div>
                   <nav
                     class="dropdown-list w-dropdown-list"
@@ -382,11 +437,14 @@
                     >
                   </nav>
                 </div>
-                <a href="pages/login/" class="button-primary default header w-nav-link"
-                  >Login</a
-                >
-                
-                
+                <div>
+                  <a href="pages/dashboard/doctor/index.html" class="button-primary default header w-nav-link"
+                    >Login</a
+                  >
+                  <a href="pages/signup/" class="button-primary default header w-nav-link"
+                    >Signup</a
+                  >
+                </div>
               </nav>
               <div
                 id="w-node-_50020eae-abb3-e75c-0b85-e210a1b2bfb0-a1b2bf79"
@@ -426,8 +484,10 @@
                     transform-style: preserve-3d;
                   "
                 >
-                  <div class="subheading accent">Hospital Center</div>
-                  <div class="sufix-line"></div>
+                  <div class="subheading accent" style="margin-bottom: 1.5rem">
+                    A Patient Monitoring System
+                  </div>
+                  <div class="sufix-line" style="margin-bottom: 1.5rem"></div>
                 </div>
                 <h1
                   data-w-id="8a354722-8be0-8511-7231-deb288a89c1a"
@@ -438,7 +498,7 @@
                     transform-style: preserve-3d;
                   "
                 >
-                  Healthcare for Family’s Health
+                  Healthcare solution for IoMT
                 </h1>
                 <p
                   data-w-id="92a9f4f6-a612-6cd3-7412-2fb1438e74fa"
@@ -448,6 +508,7 @@
                     transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg)
                       rotateY(0deg) rotateZ(0deg) skew(0deg);
                     transform-style: preserve-3d;
+                    margin-top: 1rem;
                   "
                 >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Non mauris
@@ -459,7 +520,7 @@
                     href="/contact"
                     class="button-primary large w-button"
                     style="opacity: 0"
-                    >Book an Appointment</a
+                    >Details</a
                   >
                 </div>
               </div>
@@ -479,6 +540,7 @@
                 <img
                   src="https://assets.website-files.com/5e30f06b05f79621331ddc25/5e310425e800ca41f276c5f9_background-object-1-hero.svg"
                   alt=""
+                  style="background-color: black"
                 />
               </div>
               <div
@@ -495,11 +557,12 @@
                 <img
                   src="https://assets.website-files.com/5e30f06b05f79621331ddc25/5e310615cf36f636714a14ee_background-object-2-hero.svg"
                   alt=""
+                  style="background-color: black"
                 />
               </div>
               <div
                 class="transition-bg-image hero"
-                style="background-image: url('assets/img/front-1.jpg')"
+                style="background-image: url('assets/img/iot.jpg')"
               ></div>
               <div
                 data-w-id="fb267484-8aea-7fc9-a44c-cb7dfe938c1e"
@@ -511,7 +574,7 @@
         </div>
       </div>
       <div class="section section-contact-bar wf-section">
-        <div class="contact-bar-wrapper">
+        <div class="contact-bar-wrapper bg">
           <div class="w-layout-grid contact-bar-grid">
             <div
               id="w-node-b1c16193-a8e4-9fba-a563-18b977742972-0b1ddc26"
@@ -525,10 +588,11 @@
                 class="contact-bar-icon"
               />
               <div class="contact-bar-text">
-                <div class="contact-bar-title">Contact Us</div>
-                <a href="tel:4048507080" class="contact-bar-link">(404) 850 - 7080</a
-                ><a href="mailto:info@medica.com" class="contact-bar-link"
-                  >info@medica.com</a
+                <div class="contact-bar-title text-white">Contact Us</div>
+                <a href="tel:4048507080" class="contact-bar-link text-white"
+                  >(+84) 123 1234</a
+                ><a href="mailto:info@medica.com" class="contact-bar-link text-white"
+                  >dengueapp@mail.com</a
                 >
               </div>
             </div>
@@ -544,10 +608,10 @@
                 class="contact-bar-icon"
               />
               <div class="contact-bar-text">
-                <div class="contact-bar-title">Open Hours</div>
-                <div class="contact-bar-item">Mon - Fri: 8:00am to 5:00pm</div>
-                <div class="contact-bar-item">Saturday: 9:00am to 3:30pm</div>
-                <div class="contact-bar-item">Sunday: 9:00am to 3:30pm</div>
+                <div class="contact-bar-title text-white">We accept feedbacsk</div>
+                <div class="contact-bar-item text-white">Mon - Fri: 8:00am to 5:00pm</div>
+                <div class="contact-bar-item text-white">Saturday: 9:00am to 3:30pm</div>
+                <div class="contact-bar-item text-white">Sunday: 9:00am to 3:30pm</div>
               </div>
             </div>
             <div
@@ -562,19 +626,19 @@
                 class="contact-bar-icon"
               />
               <div class="contact-bar-text">
-                <div class="contact-bar-title">Services</div>
+                <div class="contact-bar-title text-white">Solution Features</div>
                 <a
                   href="https://medica-webflow-template.webflow.io/services/cardiology"
-                  class="contact-bar-link"
-                  >Cardiology</a
+                  class="contact-bar-link text-white"
+                  >Patient Monitoring</a
                 ><a
                   href="https://medica-webflow-template.webflow.io/services/gastroenterologist"
-                  class="contact-bar-link"
-                  >Gastroenterologist</a
+                  class="contact-bar-link text-white"
+                  >Alarms</a
                 ><a
                   href="https://medica-webflow-template.webflow.io/services/orthopaedic"
-                  class="contact-bar-link"
-                  >Orthopaedic</a
+                  class="contact-bar-link text-white"
+                  >Management System</a
                 >
               </div>
             </div>
@@ -606,13 +670,22 @@
                   class="subheading-wrapper"
                   style="opacity: 0"
                 >
-                  <div class="subheading">About us</div>
-                  <div class="sufix-line"></div>
+                  <div
+                    class="subheading"
+                    style="color: rgb(50, 99, 248); margin-bottom: 1.5rem"
+                  >
+                    About us
+                  </div>
+                  <div class="sufix-line" style="margin-bottom: 1.5rem"></div>
                 </div>
                 <h2 data-w-id="e9c5233f-7146-6914-7283-06983f4a4e46" style="opacity: 0">
-                  Our Qualified Team is Ready to Help You!
+                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Possimus,
+                  pariatur.
                 </h2>
-                <p data-w-id="e9c5233f-7146-6914-7283-06983f4a4e48" style="opacity: 0">
+                <p
+                  data-w-id="e9c5233f-7146-6914-7283-06983f4a4e48"
+                  style="opacity: 0; margin-top: 1rem"
+                >
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Non mauris
                   nulla tincidunt fermentum. Sagittis pellentesque.
                 </p>
@@ -642,12 +715,16 @@
                 <img
                   src="https://assets.website-files.com/5e30f06b05f79621331ddc25/5e3119bab76b837d2e2d5a83_background-object-about-us.svg"
                   alt=""
+                  style="background-color: black"
                 />
               </div>
-              <div class="transition-bg-image about-us"></div>
+              <div
+                class="transition-bg-image about-us"
+                style="background-image: url('assets/img/aboutus.jpg')"
+              ></div>
               <div
                 data-w-id="e9c5233f-7146-6914-7283-06983f4a4e53"
-                style="display: block"
+                style="display: block; background-color: black"
                 class="transition-bg-solid about-us"
               ></div>
             </div>
@@ -676,9 +753,13 @@
                 <img
                   src="https://assets.website-files.com/5e30f06b05f79621331ddc25/5e31218be800ca63e977d7d8_background-object-why-us.svg"
                   alt=""
+                  style="background-color: black"
                 />
               </div>
-              <div class="transition-bg-image why-us"></div>
+              <div
+                class="transition-bg-image why-us"
+                style="background-image: url('assets/img/hospital.jpg')"
+              ></div>
               <div
                 data-w-id="adf76295-6499-d943-66f9-d1bce0d3c988"
                 style="display: block"
@@ -695,11 +776,19 @@
                   class="subheading-wrapper"
                   style="opacity: 0"
                 >
-                  <div class="subheading">Why Us</div>
-                  <div class="sufix-line"></div>
+                  <div
+                    class="subheading"
+                    style="margin-bottom: 1.5rem; color: rgba(56, 138, 252, 0.938)"
+                  >
+                    Why This Project
+                  </div>
+                  <div class="sufix-line" style="margin-bottom: 1.5rem"></div>
                 </div>
-                <h2 data-w-id="adf76295-6499-d943-66f9-d1bce0d3c97b" style="opacity: 0">
-                  Your Well-Being is our Main Priority.
+                <h2
+                  data-w-id="adf76295-6499-d943-66f9-d1bce0d3c97b"
+                  style="opacity: 0; margin-top: 1rem"
+                >
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit, rem.
                 </h2>
                 <p data-w-id="adf76295-6499-d943-66f9-d1bce0d3c97d" style="opacity: 0">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Non mauris
@@ -711,7 +800,7 @@
                     href="/about"
                     class="button-primary default w-button"
                     style="opacity: 0"
-                    >Why Us</a
+                    >Our motivation</a
                   >
                 </div>
               </div>
@@ -726,15 +815,15 @@
             class="subheading-wrapper center"
             style="opacity: 0"
           >
-            <div class="subheading">Our services</div>
+            <div class="subheading" style="margin-bottom: 1.5rem">User Roles</div>
           </div>
-          <h2
+          <!-- <h2
             data-w-id="93f9b489-ced5-0ace-74d6-81f5346e1d4c"
             class="header-h2 center"
             style="opacity: 0"
           >
             Specialties
-          </h2>
+          </h2> -->
           <p
             data-w-id="5094ce32-27a6-ff42-c7b8-e212401391f4"
             class="paragraph-default center"
@@ -756,7 +845,7 @@
                     alt="Pediatricians"
                     class="icon-card"
                   />
-                  <h3>Pediatricians</h3>
+                  <h3>Doctors</h3>
                   <p class="paragraph-default">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Non mauris
                     nulla tincidunt appet fermentum amet sit.
@@ -781,7 +870,7 @@
                     alt="Plastic Surgeons"
                     class="icon-card"
                   />
-                  <h3>Plastic Surgeons</h3>
+                  <h3>Patients</h3>
                   <p class="paragraph-default">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Non mauris
                     nulla tincidunt appet fermentum amet sit.
@@ -823,7 +912,7 @@
             </div>
           </div>
         </div>
-        <div class="mg-top-32px center">
+        <!-- <div class="mg-top-32px center">
           <a
             data-w-id="55fdd6d0-c5ae-07f4-d14e-f1928b17f777"
             href="/services"
@@ -831,9 +920,9 @@
             style="opacity: 0"
             >Our Services</a
           >
-        </div>
+        </div> -->
       </div>
-      <div class="section-banner wf-section">
+      <!-- <div class="section-banner wf-section">
         <div class="container-default w-container">
           <div class="w-layout-grid split-section-grid">
             <div
@@ -913,8 +1002,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="section wf-section">
+      </div> -->
+      <!-- <div class="section wf-section">
         <div class="container-default">
           <div
             data-w-id="763710a7-a155-451d-4f52-246cad77c97d"
@@ -1058,8 +1147,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="section section-contact-us wf-section">
+      </div> -->
+      <!-- <div class="section section-contact-us wf-section">
         <div class="w-layout-grid grid-contact-us">
           <div class="form-wrapper">
             <h2 data-w-id="63e07f26-0ee3-c4ab-8f9d-b5bc872f79dd" style="opacity: 0">
@@ -1228,7 +1317,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <a
         href="#Header"
         data-w-id="1bec2f37-7ae7-d738-3f07-ac161009b7ec"
@@ -1245,22 +1334,42 @@
           alt="Chevron Icon - Medica Webflow Template"
           class="arrow-scroll-up"
       /></a>
-      <div class="footer-wrapper">
+
+      <div class="footer-wrapper bg">
         <div class="container-default">
-          <div class="w-layout-grid footer-top-grid">
-            <img
+          <div class="w-layout-grid footer-top-grid" style="height:10rem">
+            <!-- <img
               src="https://assets.website-files.com/5e30f06b05f79621331ddc25/5e326b2ece191136a59cf714_logo-white.svg"
               data-w-id="5559221c-41b9-c7f7-236f-c0cb4682a9ad"
               id="w-node-_5559221c-41b9-c7f7-236f-c0cb4682a9ad-4682a9aa"
               alt="Medica Webflow Template - Logo"
               class="footer-logo"
               style="opacity: 0"
-            />
+            /> -->
+            <div style="display:flex; justify-content:start;align-items:center; width:15rem; margin-top:-3rem">
+              <div
+                style="
+                  background-image: url('assets/img/mos_files/mos.png');
+                  background-size: contain ;
+                  height: 7rem;
+                  width: 7rem;
+                  margin-left: -4rem;
+                  margin-bottom: 0.7rem;
+                "
+              ></div>
+              <div
+                class="logo_name title"
+                style="font-size: 3rem; width: 10rem; font-family: 'Josefin Sans'"
+              >
+                Dengue App
+              </div>
+            </div>
+
             <div
               id="w-node-_5559221c-41b9-c7f7-236f-c0cb4682a9ae-4682a9aa"
               data-w-id="5559221c-41b9-c7f7-236f-c0cb4682a9ae"
               class="social-media-footer"
-              style="opacity: 0"
+              style="opacity: 0; "
             >
               <a href="#" class="social-media-link w-inline-block"
                 ><img
@@ -1280,13 +1389,13 @@
               /></a>
             </div>
           </div>
-          <div class="w-layout-grid footer-columns-grid">
+          <div class="w-layout-grid footer-columns-grid" style="display:flex; justify-content: end">
             <div
               data-w-id="5559221c-41b9-c7f7-236f-c0cb4682a9b6"
               class="footer-column"
-              style="opacity: 0"
+              style="opacity: 0; margin-right:4rem"
             >
-              <h4 class="footer-title">Menu</h4>
+              <h4 class="footer-title" style="color:white">Menu</h4>
               <ul role="list" class="footer-menu">
                 <li class="footer-menu-item">
                   <a href="/" aria-current="page" class="footer-link w--current">Home</a>
@@ -1297,7 +1406,7 @@
                 <li class="footer-menu-item">
                   <a href="/services" class="footer-link">Services</a>
                 </li>
-                <li class="footer-menu-item">
+                <!-- <li class="footer-menu-item">
                   <a href="/doctors-templates/doctors-template-1" class="footer-link"
                     >Doctor Template 1</a
                   >
@@ -1315,10 +1424,10 @@
                 </li>
                 <li class="footer-menu-item">
                   <a href="/contact" class="footer-link">Contact Us</a>
-                </li>
+                </li> -->
               </ul>
             </div>
-            <div
+            <!-- <div
               data-w-id="5559221c-41b9-c7f7-236f-c0cb4682a9c9"
               class="footer-column"
               style="opacity: 0"
@@ -1348,13 +1457,13 @@
                   <a href="/utility-pages/changelog" class="footer-link">Changelog</a>
                 </li>
               </ul>
-            </div>
+            </div> -->
             <div
               data-w-id="5559221c-41b9-c7f7-236f-c0cb4682a9dc"
               class="footer-column"
-              style="opacity: 0"
+              style="opacity: 0; margin-right:8rem"
             >
-              <h4 class="footer-title">Contact Us</h4>
+              <h4 class="footer-title" style="color:white">Contact Us</h4>
               <ul role="list" class="footer-contact">
                 <li class="footer-menu-item">
                   <a href="tel:(404)874-4870" class="footer-link-box w-inline-block"
@@ -1364,7 +1473,7 @@
                       class="footer-contact-icon"
                       width="24"
                     />
-                    <div class="footer-link">(404) 874 - 4870</div></a
+                    <div class="footer-link">(+84) 97 189 0498</div></a
                   >
                 </li>
                 <li class="footer-menu-item">
@@ -1375,7 +1484,7 @@
                       class="footer-contact-icon address"
                     />
                     <div class="footer-address">
-                      9663 Fulton Drive Carol Stream, IL 60188
+                      Random Address
                     </div>
                   </div>
                 </li>
@@ -1387,12 +1496,12 @@
                       class="footer-contact-icon"
                       width="24"
                     />
-                    <div class="footer-link">info@medica.com</div></a
+                    <div class="footer-link">nhlong2706@gmail.com</div></a
                   >
                 </li>
               </ul>
             </div>
-            <div
+            <!-- <div
               data-w-id="5559221c-41b9-c7f7-236f-c0cb4682a9ef"
               class="footer-column"
               style="opacity: 0"
@@ -1412,10 +1521,10 @@
                   <div class="button-secondary-text">(404) 874 - 4800</div></a
                 >
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
-        <div class="footer-bottom">
+        <!-- <div class="footer-bottom">
           <p
             data-w-id="5559221c-41b9-c7f7-236f-c0cb4682a9fa"
             class="copyright"
@@ -1425,7 +1534,7 @@
             <a href="https://brixtemplates.com/" target="_blank">BRIX Templates</a> |
             &nbsp;<a href="https://webflow.com/">Powered by Webflow</a>
           </p>
-        </div>
+        </div> -->
       </div>
     </div>
     <script

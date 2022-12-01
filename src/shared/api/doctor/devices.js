@@ -18,3 +18,7 @@ export const addOrUpdateDevice = async (client, params) => {
 export const deleteDevice = async (client, deviceId) => {
   await client.deleteDevice(deviceId);
 };
+
+export const openWebsocket = async (client, callback, params) => {
+  await client.subscribe(params, callback);
+}

@@ -1,4 +1,7 @@
-import React from 'react';
+import { client } from '@/shared/api/initClient_tenant';
+import React, { useContext, useState } from 'react';
+import { MySocket } from '../../Socket';
+import TimeSeries from '../../TimeSeries';
 
 const MainContentCard = (
   { component, setInfoOpen } = {
@@ -7,6 +10,7 @@ const MainContentCard = (
     setIsDevice: null,
   },
 ) => {
+  const [isOpenTimeSeries, setOpenTimeSeries] = useState(false);
   return (
     <div className="z-10 mb-8 grid w-[100%] grid-cols-2 gap-4  divide-y-2 divide-gray-400 rounded-lg bg-auto-white p-4 shadow-sm shadow-light-important ring-2 ring-gray-500 transition-all duration-1000 ease-in-out hover:shadow-lg hover:shadow-light-important">
       <div className="col-span-2 flex flex-col items-start justify-start">
@@ -18,6 +22,14 @@ const MainContentCard = (
           Id: {component.name}
         </div>
         <div className="px-4 text-[14px]">Assigned</div>
+        <button
+          onClick={() => setOpenTimeSeries((state) => !state)}
+          className="px-4 text-[14px]"
+        >
+          Listen
+        </button>
+        {isOpenTimeSeries && <TimeSeries client={client} />}
+        <MySocket client={client} />
       </div>
       <button
         onClick={() => {

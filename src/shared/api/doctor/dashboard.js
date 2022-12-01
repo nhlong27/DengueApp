@@ -37,10 +37,10 @@ export const addOrUpdatePatient = async (client, params) => {
   const customer = await client.createUpdateCustomer(randomObj); //already returns response.data
   db_doctor.patientList[`${customer.title}`] = { ...customer, user: {} };
 
-  const assignedAsset = await client.getAssetById(params.user.assign.facility);
+  const assignedAsset = await client.getAssetById(params.user.assign.facility.id.id);
   const assignedDevice = await client.assignDevice(
     customer.id.id,
-    params.user.assign.device,
+    params.user.assign.device.id.id,
   );
   randomObj = {
     customerId: { ...customer.id },

@@ -3,7 +3,7 @@ import jwt from 'jwt-decode';
 
 const api = (host, token = null) =>
   axios.create({
-    baseURL: `http://${host}`,
+    baseURL: `https://${host}`,
     responseType: 'json',
     headers: {
       'X-Authorization': `Bearer ${token}`,
@@ -633,7 +633,7 @@ class tbClient {
   }
 
   //websocket
-  subscribe(params, callback) {
+  subscribe(params, callback = null) {
     const entityId = params.entityId;
     const cmdId = params.cmdId || 10;
 

@@ -2,7 +2,7 @@ import React from 'react'
 
 
 const MainContentCard = (
-  { component, setInfoOpen } = {
+  { component, setInfoOpen, setIsPatient } = {
     component: '',
     setInfoOpen: null,
     setIsPatient: null,
