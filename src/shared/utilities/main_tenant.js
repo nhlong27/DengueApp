@@ -1,12 +1,12 @@
 import {client} = from '../../shared/api/initClient_tenant';
 // require('dotenv').config()
 import {USERNAME, HOST, PASSWORD} = from '../../shared/constants/credentials.js';
-import * as dashboardAPI from '../../shared/api/doctor/dashboard';
-import * as nurseAPI from '../../shared/api/doctor/nurses';
-import * as facilityAPI from '../../shared/api/doctor/facilities';
-import * as deviceAPI from '../../shared/api/doctor/devices';
-import {addPatient, addNurse, addDevice, addFacility} from '../../shared/utilities/addEntity';
-import {updatePatient, updateDevice, updateNurse, updateFacility } from '../../shared/utilities/updateEntity';
+import * as dashboardAPI from '../api/doctor/dashboard';
+import * as nurseAPI from '../api/doctor/nurses';
+import * as facilityAPI from '../api/doctor/facilities';
+import * as deviceAPI from '../api/doctor/devices';
+import {addPatient, addNurse, addDevice, addFacility} from './addEntity';
+import {updatePatient, updateDevice, updateNurse, updateFacility } from './updateEntity';
 
 // const now = Date.now();
 // const mtd = now-3600000;

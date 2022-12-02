@@ -4,8 +4,8 @@ module.exports = {
     './src/**/*.{js,jsx,ts,tsx,vue,html}',
     './pages/**/*.{js,jsx,ts,tsx,vue,html}',
   ],
-  mode: 'jit', // <--- enable JIT
-  purge: ['./src/**/*.{vue,js,ts,jsx,tsx,html}', './pages/**/*.{vue,js,ts,jsx,tsx,html}'],
+  // mode: 'jit', // <--- enable JIT
+  // purge: ['./src/**/*.{vue,js,ts,jsx,tsx,html}', './pages/**/*.{vue,js,ts,jsx,tsx,html}'],
   theme: {
     extend: {
       colors: {
