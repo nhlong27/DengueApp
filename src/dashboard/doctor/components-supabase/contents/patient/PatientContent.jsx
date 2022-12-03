@@ -7,11 +7,11 @@ import MainContent from './MainContent';
 const PatientContent = () => {
   return (
     <>
-      <div className="flex h-[10%] items-center justify-between pl-4 pr-8 shadow-lg">
-        <PatientSearchCreate />
+      <div className="flex items-center justify-start p-2 shadow-sm">
+        <PatientSearchCreate value={value} setValue={setValue} />
       </div>
       <div className="scrollbar relative flex-grow overflow-x-hidden overflow-y-scroll p-8">
-        <MainContent />
+        {/* <MainContent /> */}
       </div>
     </>
   );

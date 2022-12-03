@@ -6,6 +6,7 @@ import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { GrSchedulePlay } from 'react-icons/gr';
 import { BiMessageSquareDots } from 'react-icons/bi';
 import { IoMdNotificationsOutline } from 'react-icons/io';
+import { InfinitySpin } from 'react-loader-spinner';
 
 const Navbar = () => {
   const { session } = useContext(AppContext);
@@ -30,20 +31,35 @@ const Navbar = () => {
       <div className="p-4 text-center text-[28px] font-extrabold tracking-widest text-blue-600">
         Dashboard
       </div>
-      <div className="relative flex gap-4 p-4 text-[22px] justify-center items-center">
-        <button><GrSchedulePlay /></button>
-        <button><BiMessageSquareDots /></button>
-        <button><IoMdNotificationsOutline /></button>
-        <span className='text-[18px] p-2 flex justify-center items-center rounded-2xl ring-2 ring-cyan-100'>{user.email}</span>
-        <img
+      <div className="relative flex items-center justify-center gap-4 p-4 text-[22px]">
+        <button>
+          <GrSchedulePlay />
+        </button>
+        <button>
+          <BiMessageSquareDots />
+        </button>
+        <button>
+          <IoMdNotificationsOutline />
+        </button>
+        <span className="flex items-center justify-center rounded-2xl p-2 text-[18px] ring-2 ring-cyan-100">
+          {user.email}
+        </span>
+        <button
           onClick={(e) => {
             setDropDown((state) => !state);
             e.stopPropagation();
           }}
-          className="ml-2 ring-2 ring-cyan-100 inline-block h-8 w-8 rounded-full bg-auto-black hover:opacity-70"
-          alt=""
-          src={avatar_url}
-        ></img>
+        >
+          {avatar_url ? (
+            <img
+              className="ml-2 inline-block h-8 w-8 rounded-full bg-auto-black ring-2 ring-cyan-100 hover:opacity-70"
+              alt=""
+              src={avatar_url}
+            ></img>
+          ) : (
+            <InfinitySpin width="100" color="#475569" />
+          )}
+        </button>
         {isOpen && <DropDownMenu />}
       </div>
     </nav>
@@ -79,17 +95,18 @@ export const DropDownMenu = (props) => {
           Support
         </a>
 
-        <form method="POST" action="#" role="none">
-          <button
-            type="submit"
-            className="block w-full border-t-2 border-gray-100 px-4 py-2 text-left text-sm text-gray-700 hover:bg-slate-200"
-            role="menuitem"
-            tabIndex={-1}
-            id="menu-item-3"
-          >
-            Sign out
-          </button>
-        </form>
+        <button
+          type="button"
+          className="block w-full border-t-2 border-gray-100 px-4 py-2 text-left text-sm text-gray-700 hover:bg-slate-200"
+          role="menuitem"
+          tabIndex={-1}
+          id="menu-item-3"
+          onClick={async () => {
+            let { error } = await supabase.auth.signOut();
+          }}
+        >
+          Sign out
+        </button>
       </div>
     </div>
   );

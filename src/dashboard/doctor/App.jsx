@@ -56,10 +56,6 @@ function App() {
           <Sidebar />
           <div
             className=" flex flex-grow flex-col"
-            // style={{
-            //   backgroundImage:
-            //     'linear-gradient(rgba(0, 0, 255, 0.2), rgba(255, 255, 255, 0.9)), url(../../../assets/img/login.jpg)',
-            // }}
           >
             <Navbar />
             <main className="flex h-[90%] w-[100%] flex-auto">

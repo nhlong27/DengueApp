@@ -21,27 +21,12 @@ const style = {
 };
 
 export default function TransitionsModal(props) {
-  // React.useEffect(() => {
-  //   props.setTab({ customerTab: '', userTab: 'hidden', assignTab: '' });
-  // }, []);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   return (
     <div>
-      <button
-        className="rounded border bg-light-important px-5 py-2.5 text-auto-white hover:bg-auto-black hover:text-auto-white"
-        onClick={handleOpen}
-      >
-        Create
-      </button>
-
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
+        open={props.open}
         closeAfterTransition
         BackdropComponent={Backdrop}
         disableEnforceFocus
@@ -49,7 +34,7 @@ export default function TransitionsModal(props) {
           timeout: 500,
         }}
       >
-        <Fade in={open}>
+        <Fade in={props.open}>
           <Box sx={style}>{props.children}</Box>
         </Fade>
       </Modal>

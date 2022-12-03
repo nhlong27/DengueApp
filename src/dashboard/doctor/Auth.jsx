@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { useNavigate } from 'react-router';
 import Account from './components-supabase/Account';
+import { InfinitySpin } from 'react-loader-spinner';
 
 const loginSchema = yup.object({
   username: yup.string().required().max(15).min(5),
@@ -20,6 +21,7 @@ const signupSchema = yup.object({
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [credentials, getCredentials] = useState({});
 
   let imgStyle = '';
   if (isSignUp) {
@@ -30,11 +32,11 @@ const Auth = () => {
 
   return (
     <div className=" flex h-screen w-screen items-center justify-center bg-black">
-      <div className="relative grid h-[80%] w-[60%] grid-cols-2  rounded-xl border-2 border-black bg-gradient-to-t from-white to-cyan-50 ring-8  ring-blue-600  ring-offset-4 ring-offset-black">
+      <div className="relative grid h-[80%] w-[60%] grid-cols-2  rounded-xl border-2 border-black bg-gradient-to-t from-white to-cyan-50 ">
         <Login setIsSignUp={setIsSignUp} schema={loginSchema} />
         <Signup setIsSignUp={setIsSignUp} schema={signupSchema} />
         <div
-          className={`${imgStyle} absolute top-0 z-30 h-[100%] w-[51%] overflow-hidden rounded-xl ring-8 ring-blue-600 transition-all duration-1000 ease-in-out`}
+          className={`${imgStyle} absolute top-0 z-30 h-[100%] w-[51%] overflow-hidden rounded-xl ring-2 ring-blue-600 transition-all duration-1000 ease-in-out`}
         >
           <img
             className="h-[100%] w-[100%] "
@@ -56,11 +58,11 @@ const Login = (props) => {
       const { error } = await supabase.auth.signInWithPassword(credentials);
       if (error) throw error;
       console.log('login success!');
-      navigate('/pages/dashboard/doctor/index.html');
     } catch (error) {
       console.log(error.error_description || error.message);
     } finally {
-      setLoading(false);
+        setLoading(false);
+        navigate('/pages/dashboard/doctor/index.html');
     }
   };
   return (
@@ -122,7 +124,10 @@ const Login = (props) => {
           </Formik>
           <div className="absolute bottom-0 mb-8 border-t-4 border-l-gray-900 pt-4">
             {loading ? (
-              <div>Logging in...</div>
+              <div>
+                <span>Logging in...</span>
+                <InfinitySpin width="100" color="#475569" />
+              </div>
             ) : (
               <>
                 <div className="font-bold">Don't have an account?</div>
@@ -154,7 +159,6 @@ const Signup = (props) => {
   const navigate = useNavigate();
 
   const handleSignUp = async (credentials) => {
-    console.log(credentials);
     try {
       setLoading(true);
       let { data, error } = await supabase.auth.signUp({
@@ -163,12 +167,16 @@ const Signup = (props) => {
       });
       if (error) throw error;
       console.log('signup success!');
-      console.log(data);
 
+      await supabase.from('DOCTOR').insert([
+        {
+          D_Ssn: data.user.id,
+          Fname: credentials.fname,
+          Lname: credentials.lname,
+        },
+      ]);
+      console.log('initialize doctor success!');
       alert('Activate your account by clicking the link in your email');
-      // const { data } = await supabase
-      //   .from('DOCTOR')
-      //   .insert([{ Fname: credentials.fname, Lname:  credentials.lname }]);
     } catch (error) {
       console.log(error.error_description || error.message);
     }
@@ -288,7 +296,19 @@ const Signup = (props) => {
           </Formik>
           <div className="absolute bottom-0 mb-8 border-t-4 border-l-gray-900 pt-4">
             {loading ? (
-              <div>Signing up...</div>
+              <div>
+                Signing up...
+                <InfinitySpin width="20" color="#475569" />
+                Activate your account by clicking the link in the
+                <a
+                  className="text-blue-600"
+                  href="https://mail.google.com/mail/u/0/?tab=wm#inbox"
+                >
+                  {' '}
+                  email
+                </a>
+                .
+              </div>
             ) : (
               <>
                 <div className="font-bold">Already have an account?</div>

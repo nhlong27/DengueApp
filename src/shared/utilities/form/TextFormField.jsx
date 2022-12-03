@@ -6,7 +6,7 @@ const TextFormField = ({ field, form, ...props }) => {
   const errorText = getIn(form.touched, field.name) && getIn(form.errors, field.name);
   return (
     <TextField
-      style={{width:300}}
+      style={{ width: 300  }}
       margin="normal"
       helperText={errorText}
       error={!!errorText}
