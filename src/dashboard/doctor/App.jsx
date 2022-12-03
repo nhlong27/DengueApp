@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 // import ContentContainer from './components-supabase/ContentContainer';
 import Navbar from './components-supabase/Navbar';
 import Sidebar from './components-supabase/Sidebar';
-import Chatbox from './components/Chatbox';
-// import ContentContainer from './components/ContentContainer';
+import Chatbox from './components-supabase/Chatbox';
+import ContentContainer from './components-supabase/ContentContainer';
 // import Navbar from './components/Navbar';
 // import Sidebar from './components/Sidebar';
 // import * as dashboardAPI from '@/shared/api/doctor/dashboard';
@@ -17,7 +17,7 @@ import Auth from './Auth';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 // export var db_doctor = {};
 // export var assetCreationObj = {};
-const AppContext = createContext();
+export const AppContext = createContext();
 
 // const connectClient = async () => {
 // //   console.log('connecting to server');
@@ -52,18 +52,18 @@ function App() {
       {!session ? (
         <Auth />
       ) : (
-        <div className="flex h-screen w-screen flex-auto bg-cover  ">
+        <div className="flex h-screen w-screen flex-auto bg-cyan-50">
           <Sidebar />
           <div
-            className=" flex flex-grow flex-col bg-cover"
-            style={{
-              backgroundImage:
-                'linear-gradient(rgba(0, 0, 255, 0.2), rgba(255, 255, 255, 0.9)), url(../../../assets/img/login.jpg)',
-            }}
+            className=" flex flex-grow flex-col"
+            // style={{
+            //   backgroundImage:
+            //     'linear-gradient(rgba(0, 0, 255, 0.2), rgba(255, 255, 255, 0.9)), url(../../../assets/img/login.jpg)',
+            // }}
           >
             <Navbar />
             <main className="flex h-[90%] w-[100%] flex-auto">
-              {/* <ContentContainer /> */}
+              <ContentContainer />
               <Chatbox />
             </main>
           </div>

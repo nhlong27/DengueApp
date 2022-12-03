@@ -23,21 +23,21 @@ const Auth = () => {
 
   let imgStyle = '';
   if (isSignUp) {
-    imgStyle = '-left-[1rem]';
+    imgStyle = '-left-[0.5rem]';
   } else {
     imgStyle = 'left-[28.6rem]';
   }
 
   return (
-    <div className=" flex h-screen w-screen items-center justify-center bg-gradient-to-r from-black via-gray-600 to-black">
-      <div className="relative grid h-[80%] w-[60%] grid-cols-2  overflow-hidden rounded-xl border-2 border-black bg-gradient-to-t from-white to-cyan-50">
+    <div className=" flex h-screen w-screen items-center justify-center bg-black">
+      <div className="relative grid h-[80%] w-[60%] grid-cols-2  rounded-xl border-2 border-black bg-gradient-to-t from-white to-cyan-50 ring-8  ring-blue-600  ring-offset-4 ring-offset-black">
         <Login setIsSignUp={setIsSignUp} schema={loginSchema} />
         <Signup setIsSignUp={setIsSignUp} schema={signupSchema} />
         <div
-          className={`${imgStyle} absolute top-0 z-30 h-[100%] w-[51%] overflow-hidden rounded-xl transition-all duration-1000 ease-in-out`}
+          className={`${imgStyle} absolute top-0 z-30 h-[100%] w-[51%] overflow-hidden rounded-xl ring-8 ring-blue-600 transition-all duration-1000 ease-in-out`}
         >
           <img
-            className="h-[100%] w-[100%]"
+            className="h-[100%] w-[100%] "
             src="../../../assets/img/login.jpg"
             alt="Login"
           />
