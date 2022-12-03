@@ -19,13 +19,13 @@
 
   .scrollbar::-webkit-scrollbar-track {
     border-radius: 100vh;
-    background: #f7f4ed;
+    background: #ECFEFF;
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
-    background: #f7f4ed;
+    background: #ECFEFF;
     border-radius: 100vh;
-    border: 3px solid #f6f7ed;
+    border: 3px solid #ECFEFF;
   }
 
   .scrollbar::-webkit-scrollbar-thumb:hover {

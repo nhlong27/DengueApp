@@ -2,34 +2,61 @@ import { client } from '@/shared/api/initClient_tenant';
 import React, { useContext, useState } from 'react';
 import { MySocket } from '../../Socket';
 import TimeSeries from '../../TimeSeries';
+import { TbTemperatureCelsius } from 'react-icons/tb';
+import { SiOxygen } from 'react-icons/';
+import {GiMedicalDrip} from 'react-icons/gi'
+import { BiHeart } from 'react-icons/bi';
 
 const MainContentCard = (
-  { component, setInfoOpen } = {
+  { open, component, setInfoOpen, setIsDevice} = {
+    open:null,
     component: '',
     setInfoOpen: null,
     setIsDevice: null,
   },
 ) => {
-  const [isOpenTimeSeries, setOpenTimeSeries] = useState(false);
+  // const [isOpenTimeSeries, setOpenTimeSeries] = useState(false);
   return (
-    <div className="z-10 mb-8 grid w-[100%] grid-cols-2 gap-4  divide-y-2 divide-gray-400 rounded-lg bg-auto-white p-4 shadow-sm shadow-light-important ring-2 ring-gray-500 transition-all duration-1000 ease-in-out hover:shadow-lg hover:shadow-light-important">
-      <div className="col-span-2 flex flex-col items-start justify-start">
-        <div className="p-2 text-[18px] font-extrabold">{component.label}</div>
-        <div className="px-4 text-[12px] font-semibold text-light-important">
-          Type: {component.type}
+    <div className="hover:shadow-xm z-10 mb-8 grid w-[100%] grid-cols-2  gap-4 divide-y-2 divide-gray-400 rounded-3xl bg-cyan-100 p-4 transition-all duration-300 ease-in-out hover:ring-2 hover:ring-gray-300">
+      <div className="col-span-2 flex items-center justify-start">
+        <div className="flex w-[30%] flex-col items-start justify-start">
+          <div className="p-2 text-[18px] font-extrabold">{component.label}</div>
+          <div className="px-4 text-[22px] font-semibold tracking-widest text-black">
+            {component.Label}
+          </div>
+          <div className="px-4 text-[16px] font-semibold text-blue-600">
+            {component.Type}
+          </div>
+          {component.Assign === 'No' ? (
+            <div className="px-4 text-[14px] font-bold text-gray-400">
+              Assigned: {component.Assign}
+            </div>
+          ) : (
+            <div className="px-4 text-[14px] font-bold text-red-400">
+              Assigned: {component.Assign}
+            </div>
+          )}
+          {/* {isOpenTimeSeries && <TimeSeries client={client} />}
+        <MySocket client={client} /> */}
         </div>
-        <div className="px-4 text-[12px] font-semibold text-light-important">
-          Id: {component.name}
-        </div>
-        <div className="px-4 text-[14px]">Assigned</div>
-        <button
-          onClick={() => setOpenTimeSeries((state) => !state)}
-          className="px-4 text-[14px]"
-        >
-          Listen
-        </button>
-        {isOpenTimeSeries && <TimeSeries client={client} />}
-        <MySocket client={client} />
+        {open ? (
+          <div className="ml-auto flex h-[100%] w-[100%] items-center justify-center gap-[5rem] opacity-0">
+            <div className="h-[100%] ">
+              <TbTemperatureCelsius size={30} /> Telemetry 1
+            </div>
+            <div className="h-[100%] "><GiMedicalDrip size={30}/>Telemetry 2</div>
+            <div className="h-[100%] "><BiHeart size={30} />Telemetry 3</div>
+          </div>
+        ) : (
+          <div className="ml-auto flex h-[100%] w-[100%] items-center justify-center gap-[5rem]">
+            <div className="h-[100%] ">
+              <TbTemperatureCelsius size={30} />
+              Telemetry 1
+            </div>
+            <div className="h-[100%] "><GiMedicalDrip size={30}/>Telemetry 2</div>
+            <div className="h-[100%] "><BiHeart size={30} />Telemetry 3</div>
+          </div>
+        )}
       </div>
       <button
         onClick={() => {

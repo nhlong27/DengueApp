@@ -9,22 +9,22 @@ import { IoMdNotificationsOutline } from 'react-icons/io';
 import { InfinitySpin } from 'react-loader-spinner';
 
 const Navbar = () => {
-  const { session } = useContext(AppContext);
+  // const { session } = useContext(AppContext);
   const [username, setUsername] = useState('');
   const { avatar_url, setAvatarUrl } = useState('');
   const [isOpen, setDropDown] = useState(false);
-  const { user } = session;
+  // const { user } = session;
   // console.log(session);
-  const getProfile = async () => {
-    let { data } = await supabase
-      .from('profiles')
-      .select(`Email`)
-      .eq('id', user.id)
-      .single();
-    if (data) {
-      setUsername(data.Email);
-    }
-  };
+  // const getProfile = async () => {
+  //   let { data } = await supabase
+  //     .from('profiles')
+  //     .select(`Email`)
+  //     .eq('id', user.id)
+  //     .single();
+  //   if (data) {
+  //     setUsername(data.Email);
+  //   }
+  // };
   useEffect(() => {}, []);
   return (
     <nav className="flex h-[10%] w-[100%] items-center justify-between bg-cyan-50 p-8 shadow-sm">
@@ -42,7 +42,7 @@ const Navbar = () => {
           <IoMdNotificationsOutline />
         </button>
         <span className="flex items-center justify-center rounded-2xl p-2 text-[18px] ring-2 ring-cyan-100">
-          {user.email}
+          {/* {user.email} */}
         </span>
         <button
           onClick={(e) => {
@@ -69,7 +69,7 @@ const Navbar = () => {
 export const DropDownMenu = (props) => {
   return (
     <div
-      className={`w-45 absolute top-[4rem] right-[2rem] z-20 origin-top-right rounded-lg bg-white shadow-lg ring-2 ring-black ring-opacity-5`}
+      className={`w-[13rem] p-4 absolute top-[4rem] right-[2rem] z-20 origin-top-right rounded-lg bg-black text-white shadow-lg ring-2 ring-white ring-opacity-100`}
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="menu-button"
@@ -77,19 +77,19 @@ export const DropDownMenu = (props) => {
     >
       <div className="py-1" role="none">
         <a
-          className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-slate-200"
+          className="block w-full px-4 py-2 text-left text-sm  hover:bg-slate-200 hover:text-black"
           href="/pages/dashboard/doctor/account"
         >
           Profile
         </a>
         <a
-          className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-slate-200"
+          className="block w-full px-4 py-2 text-left text-sm hover:bg-slate-200 hover:text-black"
           href="#"
         >
           Account Settings
         </a>
         <a
-          className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-slate-200"
+          className="block w-full px-4 py-2 text-left text-sm hover:bg-slate-200 hover:text-black"
           href="#"
         >
           Support
@@ -97,7 +97,7 @@ export const DropDownMenu = (props) => {
 
         <button
           type="button"
-          className="block w-full border-t-2 border-gray-100 px-4 py-2 text-left text-sm text-gray-700 hover:bg-slate-200"
+          className="block w-full border-t-2 border-gray-100 px-4 py-2 text-left text-sm hover:bg-slate-200 hover:text-black"
           role="menuitem"
           tabIndex={-1}
           id="menu-item-3"

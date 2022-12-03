@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Field, Form, Formik, setNestedObjectValues } from 'formik';
 import { Typography } from '@mui/material';
 import TransitionsModal from '@/shared/utilities/Modal';
@@ -13,7 +13,6 @@ import { AppContext } from '@/dashboard/doctor/App';
 import { InfinitySpin } from 'react-loader-spinner';
 
 const device_schema = yup.object({
-  id: yup.string().nullable(),
   label: yup.string().min(1).max(30),
   type: yup.string().min(1).max(30),
 });
@@ -22,10 +21,8 @@ const DeviceSearchCreate = (props) => {
   const {session} = useContext(AppContext);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [close, setClose] = useState(false);
-  const handleClose = () => setClose(false);
   const handleOpen = () => setOpen(true);
-
+  
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
@@ -62,7 +59,7 @@ const DeviceSearchCreate = (props) => {
             <AiOutlineCloseCircle size={30} />
           </button>
           <FacilityFormContent
-            optionList={null}
+
             schema={device_schema}
             handleSubmit={handleSubmit}
             loading={loading}
@@ -74,10 +71,7 @@ const DeviceSearchCreate = (props) => {
 };
 
 const FacilityFormContent = (props) => {
-  const [isSelected, setIsSelected] = useState(false);
-  const [isCreated, setIsCreated] = useState(false);
-  // console.log('List of options');
-  // console.log(props.optionList);
+
   return (
     <Formik
       validateOnChange={false}
@@ -85,7 +79,6 @@ const FacilityFormContent = (props) => {
       initialValues={{
         label: '',
         type: '',
-        id: '',
       }}
       onSubmit={(values) => {
         props.handleSubmit({ ...values });
@@ -98,13 +91,13 @@ const FacilityFormContent = (props) => {
               Add a device
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              Please select an existing device. Or create a new one.
+              Please add a label and the type of the device.
             </Typography>
-            <div className="mt-4">
+            {/* <div className="mt-4">
               {!props.optionList && (
                 <Field
                   style={{ height: 20, width: 200, margin: 0 }}
-                  options={null}
+                  options={deviceList}
                   name="id"
                   component={SelectFormField}
                   id="standard-select"
@@ -146,8 +139,8 @@ const FacilityFormContent = (props) => {
                     }}
                   />
                 ))}
-            </div>
-            <button
+            </div> */}
+            {/* <button
               onClick={() => {
                 setIsCreated(true);
                 setIsSelected(false);
@@ -155,8 +148,7 @@ const FacilityFormContent = (props) => {
               className="mt-8 rounded bg-blue-600 p-2 text-white transition-all duration-500 hover:px-4"
             >
               Create new
-            </button>
-            {isCreated && !isSelected ? (
+            </button> */}
               <div className={`mt-6`}>
                 <Field
                   name="label"
@@ -176,7 +168,6 @@ const FacilityFormContent = (props) => {
                   helperText={`Please indicate the type of your device`}
                 />
               </div>
-            ) : null}
 
             {props.loading ? (
               <div className="absolute bottom-[2rem] right-[3rem]">

@@ -18,9 +18,9 @@ const SelectFormField = ({ field, form, label, options, ...props }) => {
       {label && <InputLabel>{label}</InputLabel>}
       <Select style={{ width: 200 }} {...field} {...props}>
         {options &&
-          Object.entries(options).map((option, index) => (
-            <MenuItem key={index} value={option[1]}>
-              {option[0]}
+         options.map((option, index) => (
+            <MenuItem key={index} value={option.R_Number}>
+              {option.R_Number}
             </MenuItem>
           ))}
       </Select>

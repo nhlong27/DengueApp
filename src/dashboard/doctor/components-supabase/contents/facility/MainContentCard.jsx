@@ -1,79 +1,84 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AiOutlineDown } from 'react-icons/ai';
+import { AiOutlineUp } from 'react-icons/ai';
+import { MdMeetingRoom } from 'react-icons/md';
+import { MdBedroomChild } from 'react-icons/md';
 
 const MainContentCard = (
-  { component, setInfoOpen, setIsRoom } = {
+  { open, component, setInfoOpen, setIsRoom } = {
+    open: null,
     component: '',
     setInfoOpen: null,
     setIsRoom: null,
   },
 ) => {
-  const [isOpen, setOpen] = useState(false);
-  let style = '';
-  if (isOpen) {
-    style = '-mt-2';
-  } else style = '-mt-[8rem] opacity-0 invisible';
-  if (component.rooms) {
-    return (
-      <>
-        <div className="z-10 grid w-[100%] grid-cols-2 gap-4 divide-y-2  divide-gray-400 rounded-lg bg-auto-white p-4 shadow-sm shadow-light-important ring-2 ring-gray-500 transition-all duration-1000 ease-in-out hover:shadow-lg hover:shadow-light-important mb-8">
-          <div className="col-span-2 flex flex-col items-start justify-start">
-            <div className="p-2 text-[18px] font-extrabold">{component.label}</div>
-            <div className="px-4 text-[12px] font-semibold text-light-important">
-              Type: {component.type}
+  const [isRoomContainer, setIsRoomContainer] = useState(false);
+  let styles = isRoomContainer? 'visible opacity-100' : '-mt-[6rem] invisible opacity-0'
+  return (
+    <div className="w-[100%] bg-cyan-100 z-0 relative rounded-3xl">
+      <div className="hover:shadow-xm relative z-10  grid w-[100%] grid-cols-3 rounded-3xl bg-cyan-100 transition-all duration-300 ease-in-out ring-2 ring-gray-300">
+        <div className="col-span-1 flex items-center justify-start">
+          <div className="flex w-[30%] flex-col items-start justify-start">
+            <div className="px-4 text-[22px] font-semibold tracking-widest text-black">
+              <MdMeetingRoom /> <span>{component.R_Number}</span>
             </div>
-            <div className="px-4 text-[14px]">Full</div>
           </div>
-          <button
-            onClick={() => {
-              setOpen((state) => !state);
-            }}
-            className="col-span-1 rounded bg-cyan-100 bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200 focus:bg-cyan-200 focus:text-auto-black "
-          >
-            Rooms
-          </button>
-          <button className="col-span-1 rounded bg-cyan-100 bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200">
-            Update
-          </button>
+          {/* {open ? (
+          <div className="ml-auto flex h-[100%] w-[100%] items-center justify-center gap-[5rem] opacity-0">
+            <div className="h-[100%] ">Telemetry 1</div>
+            <div className="h-[100%] ">Telemetry 2</div>
+            <div className="h-[100%] ">Telemetry 3</div>
+          </div>
+        ) : (
+          <div className="ml-auto flex h-[100%] w-[100%] items-center justify-center gap-[5rem]">
+            <div className="h-[100%] ">Telemetry 1</div>
+            <div className="h-[100%] ">Telemetry 2</div>
+            <div className="h-[100%] ">Telemetry 3</div>
+          </div>
+        )} */}
         </div>
-        <div
-          className={`${style} transition-full relative z-0 col-span-2 ml-6 w-[100%]  rounded-xl bg-light-important bg-opacity-25 duration-300 ease-in-out`}
+        <button className="col-span-1 rounded bg-cyan-100 bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200">
+          Update
+        </button>
+
+        <button
+          onClick={() => {
+            setIsRoomContainer((state) => !state);
+          }}
+          className="relative z-10 col-span-1 rounded bg-cyan-100 bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200 focus:rounded-r-3xl focus:bg-cyan-200 focus:text-auto-black "
         >
-          {Object.values(component.rooms).map((room, index) => {
-            return <CardBody setIsRoom={setIsRoom} setInfoOpen={setInfoOpen} key={index} component={room} />;
-          })}
-        </div>
-      </>
-    );
-  } else return null;
+          {isRoomContainer ? <AiOutlineDown className="ml-auto" size={30} color="black" /> : <AiOutlineUp className="ml-auto" size={30} color="black" />}
+        </button>
+      </div>
+      <RoomContainer room={component} styles={styles} setOpen={setInfoOpen}/>
+    </div>
+
+    // <button
+    //     onClick={() => {
+    //       setInfoOpen(true);
+    //       setIsRoom(component);
+    //     }}
+    //     className="col-span-1 rounded bg-cyan-100 bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200 focus:bg-cyan-200 focus:text-auto-black "
+    //   >
+    //     <AiOutlineDown className='ml-auto' size={30} color='black'/>
+    //   </button>
+  );
 };
 
-const CardBody = ({ component, setInfoOpen, setIsRoom } = { component: '', setInfoOpen: null, setIsRoom: null }) => {
-  if (component.beds) {
-    return (
-      <>
-        <div className="ml-12 grid w-[93%] grid-cols-2 gap-4 divide-y-2 divide-gray-400  rounded-lg bg-auto-white p-2 shadow-sm shadow-light-important ring-2 ring-gray-500 transition-all duration-1000 ease-in-out hover:shadow-lg hover:shadow-light-important -mt-8">
-          <div className="col-span-2 flex items-center justify-between">
-            <div className="p-1 text-[18px] font-extrabold">{component.label}</div>
-            <div className="px-2 text-[12px] font-semibold text-light-important">
-              Type: {component.type}
-            </div>
-            <div className="px-2 text-[14px]">Full</div>
-          </div>
-          <button
-            onClick={() => {
-              setInfoOpen(true);
-              setIsRoom(component);
-            }}
-            className="col-span-1 rounded bg-cyan-100 bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200"
-          >
-            Beds
-          </button>
-          <button className="col-span-1 rounded bg-cyan-100 bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200">
-            Update
-          </button>
-        </div>
-      </>
-    );
-  } else return null;
+const RoomContainer = (props) => {
+  return (
+    <div
+      className={`${props.styles} mx-auto my-4 flex w-[90%] flex-wrap gap-8 rounded-3xl bg-cyan-100 transition-all duration-500`}
+    >
+      {Object.values(props.room.beds).map((bed, index) => (
+        <button onClick={()=>{
+          props.setOpen(true);
+        }} className="min-w-[10%] w-[15%] rounded-3xl bg-gray-300 p-2 text-center hover:bg-gray-400" key={index}>
+          <MdBedroomChild className='inline-block mr-2' />
+          <span>{bed.B_Number}</span>
+        </button>
+      ))}
+    </div>
+  );
 };
 export default MainContentCard;

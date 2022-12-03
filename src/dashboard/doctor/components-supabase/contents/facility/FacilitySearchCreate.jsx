@@ -1,354 +1,197 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import * as yup from 'yup';
 import { Field, Form, Formik, setNestedObjectValues } from 'formik';
 import { Typography } from '@mui/material';
 import TransitionsModal from '@/shared/utilities/Modal';
 import SelectFormField from '@/shared/utilities/form/SelectFormField';
 import TextFormField from '@/shared/utilities/form/TextFormField';
-import { db_doctor, assetCreationObj } from '@/dashboard/doctor/App';
-import { client } from '@/shared/api/initClient_tenant';
-import { addOrUpdateFacilities } from '@/shared/api/doctor/facilities';
 import SearchBar from '../../SearchBar';
+import { supabase } from '@/shared/api/supabase/supabaseClient';
+import { InfinitySpin } from 'react-loader-spinner';
+import { AppContext } from '@/dashboard/doctor/App';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { BiRefresh } from 'react-icons/bi';
 
 var tabSelectedInput = {};
 const facility_schema = yup.object({
-  existing: yup.object().nullable(),
-  name: yup.string().min(5).max(15),
-  label: yup.string().min(5).max(15),
+  id: yup.string().min(1).max(30),
+  number: yup.string().min(1).max(30),
 });
 
-const addAsset = async () => {
-  console.log('connecting to server');
-  let token = await client.connect();
-  if (token) {
-    let { name, label } = assetCreationObj.building;
-    let randomObj = {};
-    let building = {};
-    let room = {};
-    let bed = {};
-    if (!db_doctor.facilityList[`${name}`]) {
-      randomObj = {
-        name: name,
-        label: label,
-        type: 'BUILDING',
-      };
-      building = await addOrUpdateFacilities(client, randomObj);
-      db_doctor.facilityList[`${name}`] = { ...building, rooms: {} }; //better be ...building so we can get the Id if needed later
+const FacilitySearchCreate = (props) => {
+  // const { session } = useContext(AppContext);
+  const [loading, setLoading] = useState(false);
+  const [roomLoading, setRoomLoading] = useState(false);
+  const [rooms, setRooms] = useState([]);
+  const [open1, setOpen1] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const handleOpen1 = () => setOpen1(true);
+  const handleOpen2 = () => setOpen2(true);
+  const handleRoomLoad = async () => {
+    try {
+      setRoomLoading(true);
+      let { data: ROOM, error } = await supabase.from('ROOM').select('*');
+      if (error) throw error;
+      setRooms(ROOM);
+      console.log('get rooms for create bed success!');
+    } catch (error) {
+      console.log(error.error_description || error.message);
+    } finally {
+      setRoomLoading(false);
     }
+  };
+  const handleSubmit = async (values) => {
+    try {
+      setLoading(true);
+      if (values.id !== '') {
+        await supabase
+          .from('BED')
+          .insert([{ B_Number: values.number, R_Number: values.id, Fac_Number: values.id }]);
+      } else {
+        await supabase
+          .from('FACILITY')
+          .insert([{ Fac_Number: values.number}]);
 
-    let r = { ...assetCreationObj.building.room };
-    if (!db_doctor.facilityList[`${name}`].rooms[`${r.name}`]) {
-      randomObj = {
-        name: `${building.name}_${r.name}`,
-        label: r.label,
-        type: 'ROOM',
-      };
-      room = await addOrUpdateFacilities(client, randomObj);
-      let params = {
-        from: {
-          id: db_doctor.facilityList[`${name}`]
-            ? db_doctor.facilityList[`${name}`].id.id
-            : building.id.id,
-          entityType: 'ASSET',
-        },
-        to: {
-          id: room.id.id,
-          entityType: 'ASSET',
-        },
-        type: 'Contains',
-        typeGroup: 'COMMON',
-        additionalInfo: {},
-      };
-      await client.createRelation(params);
-      db_doctor.facilityList[`${name}`].rooms[`${r.name}`] = { ...room, beds: {} };
+        const { data, error } = await supabase
+          .from('ROOM')
+          .insert([{ R_Number: values.number, Fac_Number : values.number }]);
+        }
+      console.log('add success!');
+      if (error) throw error;
+    } catch (error) {
+      console.log(error.error_description || error.message);
+    } finally {
+      setLoading(false);
+      setOpen1(false);
+      setOpen2(false);
     }
-
-    let b = { ...assetCreationObj.building.room.bed };
-    if (!db_doctor.facilityList[`${name}`].rooms[`${r.name}`].beds[`${b.name}`]) {
-      randomObj = {
-        name: `${building.name}_${room.name}_${b.name}`,
-        label: b.label,
-        type: 'BED',
-      };
-      bed = await addOrUpdateFacilities(client, randomObj);
-      let params = {
-        from: {
-          id: db_doctor.facilityList[`${name}`].rooms[`${r.name}`]
-            ? db_doctor.facilityList[`${name}`].rooms[`${r.name}`].id.id
-            : room.id.id,
-          entityType: 'ASSET',
-        },
-        to: {
-          id: bed.id.id,
-          entityType: 'ASSET',
-        },
-        type: 'Contains',
-        typeGroup: 'COMMON',
-        additionalInfo: {},
-      };
-      // console.log(params);
-      await client.createRelation(params);
-      db_doctor.facilityList[`${name}`].rooms[`${r.name}`].beds[`${b.name}`] = {
-        ...bed,
-      };
-    }
-  }
-  console.log('db_doctor after adding asset');
-  console.log(db_doctor);
-  assetCreationObj.building = {};
-};
-
-const FacilitySearchCreate = () => {
-  const [isTab, setTab] = useState({
-    buildingTab: '',
-    roomTab: 'hidden',
-    bedTab: 'hidden',
-  });
-  const [value, setValue] = useState({});
-  console.log('tabSelectedInput:');
-  console.log(tabSelectedInput);
-  let tempValue = '';
-  if (isTab.buildingTab === '') {
-    assetCreationObj.building = value.existing
-      ? { room: {}, ...value.existing }
-      : { room: {}, ...value };
-    tabSelectedInput = { ...db_doctor.facilityList };
-  } else if (isTab.roomTab === '') {
-    assetCreationObj.building['room'] = value.existing
-      ? { bed: {}, ...value.existing }
-      : { bed: {}, ...value };
-    tabSelectedInput = value.existing
-      ? { ...tabSelectedInput[`${value.existing.name}`].rooms }
-      : null;
-    tempValue = value.existing.name;
-  } else {
-    assetCreationObj.building['room']['bed'] = value.existing
-      ? { ...value.existing }
-      : { ...value };
-    tabSelectedInput = value.existing
-      ? { ...tabSelectedInput[`${value.existing.name}`].beds }
-      : null;
-  }
-
+  };
   return (
     <>
-      <SearchBar />
-      <TransitionsModal setTab={setTab}>
-        <div className={isTab.buildingTab}>
-          <div className="relative pt-1">
-            <div className="mb-2 flex items-center justify-between">
-              <div>
-                <span className="inline-block rounded bg-auto-white py-1 px-2 text-xs font-semibold uppercase text-light-important">
-                  Step 1
-                </span>
-              </div>
-            </div>
-            <div className="mb-4 flex h-2 overflow-hidden rounded bg-auto-white text-xs">
-              <div
-                className={`flex w-[30%] flex-col justify-center whitespace-nowrap bg-light-important text-center text-white shadow-none`}
-              ></div>
-            </div>
-          </div>
-          <FacilityFormContent
-            optionList={tabSelectedInput}
-            schema={facility_schema}
-            type="Building"
-            setTab={setTab}
-            setTabValue={{ buildingTab: 'hidden', roomTab: '', bedTab: 'hidden' }}
-            buttonName="Next"
-            setValue={setValue}
-          />
-        </div>
-        <div className={isTab.roomTab}>
-          <div className="relative pt-1">
-            <div className="mb-2 flex items-center justify-between">
-              <div>
-                <span className="inline-block rounded bg-auto-white py-1 px-2 text-xs font-semibold uppercase text-light-important">
-                  Step 2
-                </span>
-              </div>
-            </div>
-            <div className="mb-4 flex h-2 overflow-hidden rounded bg-auto-white text-xs">
-              <div
-                className={`flex w-[66%] flex-col justify-center whitespace-nowrap bg-light-important text-center text-white shadow-none`}
-              ></div>
-            </div>
-          </div>
-          <FacilityFormContent
-            optionList={tabSelectedInput}
-            schema={facility_schema}
-            type="Room"
-            setTab={setTab}
-            setTabValue={{ buildingTab: 'hidden', roomTab: 'hidden', bedTab: '' }}
-            buttonName="Next"
-            setValue={setValue}
-          />
-          <button
-            className="absolute bottom-[4.5rem] left-[4rem] rounded bg-light-important px-4 py-2 text-auto-white hover:bg-auto-black hover:text-light-important"
-            type="button"
-            onClick={() =>
-              setTab(() => ({ buildingTab: '', roomTab: 'hidden', bedTab: 'hidden' }))
-            }
-          >
-            Back
-          </button>
-        </div>
-        <div className={isTab.bedTab}>
-          <div className="relative pt-1">
-            <div className="mb-2 flex items-center justify-between">
-              <div>
-                <span className="inline-block rounded bg-auto-white py-1 px-2 text-xs font-semibold uppercase text-light-important">
-                  Step 3
-                </span>
-              </div>
-            </div>
-            <div className="mb-4 flex h-2 overflow-hidden rounded bg-auto-white text-xs">
-              <div
-                className={`flex w-[100%] flex-col justify-center whitespace-nowrap bg-light-important text-center text-white shadow-none`}
-              ></div>
-            </div>
-          </div>
-          <FacilityFormContent
-            optionList={tabSelectedInput}
-            schema={facility_schema}
-            type="Bed"
-            buttonName="Submit"
-            setValue={setValue}
-          />
+      <div className="ml-6 flex h-[80%] w-[50%] items-center justify-center rounded-[3rem] bg-black p-2 shadow-lg">
+        <SearchBar value={props.value} setValue={props.setValue} />
+      </div>
+      <div className="ml-6 flex h-[80%] w-[15%]  items-center justify-center rounded-l-[3rem] bg-blue-600 py-2 shadow-lg">
+        <button
+          className="duration-600 w-[100%] rounded-[3rem] bg-blue-600 text-[18px] tracking-wider text-white transition-all hover:text-[20px] hover:tracking-[1px]"
+          onClick={handleOpen1}
+        >
+          Create Room
+        </button>
 
+        <TransitionsModal open={open1}>
           <button
-            className="absolute bottom-[4.5rem] left-[4rem] rounded bg-light-important px-4 py-2 text-auto-white hover:bg-auto-black hover:text-light-important"
-            type="button"
-            onClick={() =>
-              setTab(() => ({ buildingTab: 'hidden', roomTab: '', bedTab: 'hidden' }))
-            }
+            onClick={() => setOpen1(false)}
+            className="absolute -top-[1rem] -right-[1rem] rounded-full bg-white"
           >
-            Back
+            <AiOutlineCloseCircle size={30} />
           </button>
-        </div>
-      </TransitionsModal>
+          <FacilityFormContent
+            optionList={null}
+            schema={facility_schema}
+            handleSubmit={handleSubmit}
+            loading={loading}
+          />
+        </TransitionsModal>
+      </div>
+      <div className="flex h-[80%] w-[15%]  items-center justify-center rounded-r-[3rem] bg-blue-600 py-2 shadow-lg">
+        <button
+          className="duration-600 w-[100%] rounded-[3rem] bg-blue-600 text-[18px] tracking-wider text-white transition-all hover:text-[20px] hover:tracking-[1px]"
+          onClick={() => {
+            handleOpen2();
+            handleRoomLoad();
+          }}
+        >
+          Create Bed
+        </button>
+
+        {roomLoading ? (
+          <div className="fixed flex h-screen w-screen items-center justify-center">
+            <InfinitySpin width="500" color="#475569" />
+          </div>
+        ) : (
+          <TransitionsModal open={open2}>
+            <button
+              onClick={() => setOpen2(false)}
+              className="absolute -top-[1rem] -right-[1rem] rounded-full bg-white"
+            >
+              <AiOutlineCloseCircle size={30} />
+            </button>
+            <FacilityFormContent
+              optionList={rooms}
+              schema={facility_schema}
+              handleSubmit={handleSubmit}
+              loading={loading}
+            />
+          </TransitionsModal>
+        )}
+      </div>
+      <button
+        className="ml-6 duration-600 p-3 max-w-[10%] rounded-[3rem] bg-gray-300 text-[18px] tracking-wider text-white transition-all hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400"
+        onClick={() => {
+        }}
+      >
+        <BiRefresh size={30} color='black' />
+      </button>
     </>
   );
 };
 
 const FacilityFormContent = (props) => {
-  const [isSelected, setIsSelected] = useState(false);
-  const [isCreated, setIsCreated] = useState(false);
-  console.log('List of options');
-  console.log(props.optionList);
   return (
     <Formik
       validateOnChange={false}
       validationSchema={props.schema}
       initialValues={{
-        name: '',
-        label: '',
-        existing: Object.values(props.optionList)[0],
+        number: '',
+        id: '',
       }}
       onSubmit={(values) => {
-        props.setValue({ ...values });
-        if (props.setTab) {
-          props.setTab(() => {
-            return props.setTabValue;
-          });
-        }
+        props.handleSubmit({ ...values });
       }}
     >
       {({ values }) => (
         <Form>
           <div>
             <Typography id="transition-modal-title" variant="h6" component="h2">
-              Choose a {props.type}
+              {props.optionList ? 'Add a bed' : 'Add a room'}
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              Please select an existing {props.type}. Or create a new one.
+              Please add the number of the
+              {props.optionList ? ' bed' : ' room'}
             </Typography>
-            {!props.optionList && (
+            {props.optionList ? (
               <Field
-                options={null}
-                name="existing"
+                options={props.optionList}
+                name="id"
                 component={SelectFormField}
                 id="standard-select"
-                label="None available"
+                label="Select a room"
                 defaultValue=""
-                select
                 variant="standard"
               />
-            )}
-            {props.optionList &&
-              (!isCreated ? (
-                <Field
-                  options={props.optionList}
-                  name="existing"
-                  component={SelectFormField}
-                  id="standard-select"
-                  label="Select one"
-                  select
-                  variant="standard"
-                  onOpen={() => {
-                    setIsCreated(false);
-                    setIsSelected(true);
-                  }}
-                  onChange={(e) => {
-                    values.existing = e.target.value;
-                  }}
-                />
-              ) : (
-                <Field
-                  options={props.optionList}
-                  name="existing"
-                  select
-                  component={SelectFormField}
-                  id="standard-select"
-                  label="None"
-                  defaultValue=""
-                  variant="standard"
-                  onOpen={() => {
-                    setIsCreated(false);
-                    setIsSelected(true);
-                  }}
-                />
-              ))}
-            <button
-              onClick={() => {
-                setIsCreated(true);
-                setIsSelected(false);
-              }}
-              className="absolute top-[11rem] right-[4rem] rounded bg-auto-white p-2 hover:text-light-important hover:ring-2  hover:ring-gray-700"
-            >
-              Create a new <span className="text-light-important">{props.type}</span>
-            </button>
-            {isCreated && !isSelected ? (
-              <div className="mt-6">
-                <Field
-                  name="name"
-                  component={TextFormField}
-                  required
-                  id="name-required"
-                  label={`${props.type} Id`}
-                  helperText={`Please type the id of your ${props.type}`}
-                />
-                <Field
-                  name="label"
-                  component={TextFormField}
-                  required
-                  id="label-required"
-                  label={`${props.type} Name`}
-                  helperText={`Please type the name of your ${props.type}`}
-                />
-              </div>
             ) : null}
-            <button
-              className="absolute bottom-[4.5rem] right-[4rem] rounded bg-light-important px-4 py-2 text-auto-white hover:bg-auto-black hover:text-light-important  "
-              type="submit"
-              onClick={() => {
-                if (props.buttonName === 'Submit') {
-                  setTimeout(addAsset, 1000);
-                }
-              }}
-            >
-              {props.buttonName}
-            </button>
+            <div className="mt-6">
+              <Field
+                name="number"
+                component={TextFormField}
+                required
+                id="number-required"
+                label={`${props.optionList ? 'Bed number' : 'Room number'}`}
+              />
+            </div>
+            {props.loading ? (
+              <div className="absolute bottom-[2rem] right-[3rem]">
+                <InfinitySpin width="300" color="#475569" />
+              </div>
+            ) : (
+              <button
+                className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
+                type="submit"
+              >
+                Submit
+              </button>
+            )}
           </div>
         </Form>
       )}

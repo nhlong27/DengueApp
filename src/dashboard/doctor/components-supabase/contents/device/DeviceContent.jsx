@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DeviceSearchCreate from './DeviceSearchCreate';
-// import MainContent from './MainContent';
+import MainContent from './MainContent';
 
 const DeviceContent = () => {
   const [value, setValue] = useState('');
@@ -10,7 +10,7 @@ const DeviceContent = () => {
         <DeviceSearchCreate value={value} setValue={setValue} />
       </div>
       <div className="scrollbar relative flex-grow overflow-x-hidden overflow-y-scroll p-8">
-        {/* <MainContent /> */}
+        <MainContent />
       </div>
     </>
   );
