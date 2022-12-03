@@ -17,6 +17,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         doctor: resolve(__dirname, 'pages/dashboard/doctor/index.html'),
+        patient: resolve(__dirname, 'pages/dashboard/patient/index.html'),
       },
     },
   },

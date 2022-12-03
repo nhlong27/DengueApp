@@ -1,146 +1,182 @@
-import React, { useEffect, useState } from 'react';
-import * as yup from 'yup';
+import React, { useContext, useEffect, useState } from 'react';
 import { Field, Form, Formik, setNestedObjectValues } from 'formik';
 import { Typography } from '@mui/material';
 import TransitionsModal from '@/shared/utilities/Modal';
 import SelectFormField from '@/shared/utilities/form/SelectFormField';
 import TextFormField from '@/shared/utilities/form/TextFormField';
-import { db_doctor, assetCreationObj } from '@/dashboard/doctor/App';
 import { client } from '@/shared/api/initClient_tenant';
+import * as yup from 'yup';
 import SearchBar from '../../SearchBar';
-import { addOrUpdateNurse } from '@/shared/api/doctor/nurses';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { supabase } from '@/shared/api/supabase/supabaseClient';
+import { AppContext } from '@/dashboard/doctor/App';
+import { InfinitySpin } from 'react-loader-spinner';
+import MultipleSelectChip from '@/shared/utilities/form/MultiSelect';
+import { BiRefresh } from 'react-icons/bi';
 
-const user_schema = yup.object({
-  email: yup.string().min(5).max(15),
-  firstName: yup.string().min(5).max(15),
-  lastName: yup.string().min(5).max(15),
-  facility: yup.object().nullable(),
+const nurse_schema = yup.object({
+  fname: yup.string().min(1).max(30),
+  lname: yup.string().min(1).max(30),
 });
 
-const addNurse = async () => {
-  console.log('connecting to server');
-  let token = await client.connect();
-  if (token) {
-    await addOrUpdateNurse(client, assetCreationObj.nurse);
-    db_doctor.patientList[`${assetCreationObj.nurse.email}`] = JSON.parse(
-      JSON.stringify(assetCreationObj.nurse),
-    );
-  }
-  console.log('db_doctor after adding nurse');
-  console.log(db_doctor);
-  assetCreationObj.nurse = {};
-};
+const NurseSearchCreate = (props) => {
+  const { session } = useContext(AppContext);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [rooms, setRooms] = useState([]);
+  const [roomLoading, setRoomLoading] = useState(false);
 
-const NurseSearchCreate = () => {
-  const [value, setValue] = useState({});
-
-
-  assetCreationObj.nurse = {}
-  assetCreationObj.nurse = {firstName: value.firstName, lastName: value.lastName, email: value.email, assign: {facility: {...value.facility}}}
-
+  const handleOpen = () => setOpen(true);
+  const handleRoomLoad = async () => {
+    try {
+      setRoomLoading(true);
+      let { data: ROOM, error } = await supabase.from('ROOM').select('*');
+      if (error) throw error;
+      setRooms(ROOM);
+      console.log('get rooms for assigning nurse success!');
+    } catch (error) {
+      console.log(error.error_description || error.message);
+    } finally {
+      setRoomLoading(false);
+    }
+  };
+  const handleSubmit = async (values) => {
+    try {
+      setLoading(true);
+      let now = Date.now();
+      await supabase.from('PERSON').insert([{ Per_Ssn: now, D_Ssn: session.user.id }]);
+      await supabase
+        .from('NURSE')
+        .insert([{ Fname: values.fname, Lname: values.lname, Per_Ssn: now }]);
+      let { data: NURSE, error } = await supabase
+        .from('NURSE')
+        .select('*')
+        .eq('Per_Ssn', now);
+      for (let room of values.rooms) {
+        await supabase
+          .from('IS_ASSIGNED_TO')
+          .insert([{ N_Ssn: NURSE[0].N_Ssn, R_Number: room }]);
+      }
+      if (error) throw error;
+      console.log('add nurse success!');
+    } catch (error) {
+      console.log(error.error_description || error.message);
+    } finally {
+      console.log('remember to send mail later');
+      // let { data, error } = await supabase.auth.signInWithOtp({
+      //   email: 'iamfallers@gmail.com',
+      // });
+      setLoading(false);
+      setOpen(false);
+    }
+  };
 
   return (
     <>
-      <SearchBar />
-      <TransitionsModal>
-        <FacilityFormContent
-          optionList={{ ...db_doctor.roomList }}
-          schema={user_schema}
-          buttonName="Submit"
-          setValue={setValue}
-        />
-      </TransitionsModal>
+      <div className="ml-8 flex h-[80%] w-[50%] items-center justify-center rounded-[3rem] bg-black p-2 shadow-lg">
+        <SearchBar value={props.value} setValue={props.setValue} />
+      </div>
+      <div className="ml-8 flex h-[80%] w-[15%] items-center justify-center rounded-[3rem] bg-blue-600 py-2 shadow-lg">
+        <button
+          className="duration-600  rounded bg-blue-600 text-[18px] tracking-widest text-white transition-all hover:text-[20px] hover:tracking-[4px]"
+          onClick={() => {
+            handleOpen();
+            handleRoomLoad();
+          }}
+        >
+          Create
+        </button>
+        {roomLoading ? (
+          <div className="fixed flex h-screen w-screen items-center justify-center">
+            <InfinitySpin width="500" color="#475569" />
+          </div>
+        ) : (
+          <TransitionsModal open={open}>
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute -top-[1rem] -right-[1rem] rounded-full bg-white"
+            >
+              <AiOutlineCloseCircle size={30} />
+            </button>
+            <FacilityFormContent
+              optionList={rooms}
+              schema={nurse_schema}
+              handleSubmit={handleSubmit}
+              loading={loading}
+            />
+          </TransitionsModal>
+        )}
+      </div>
+      <button
+        className="duration-600 ml-6 max-w-[10%] rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400"
+        onClick={() => {}}
+      >
+        <BiRefresh size={30} color="black" />
+      </button>
     </>
   );
 };
 
 const FacilityFormContent = (props) => {
-  console.log('Lists of facilities');
-  console.log(props.optionList);
+  const [rooms, setRooms] = React.useState([]);
   return (
     <Formik
       validateOnChange={false}
       validationSchema={props.schema}
       initialValues={{
-        firstName: '',
-        lastName: '',
-        email: '',
-        facility: '',
+        fname: '',
+        lname: '',
       }}
       onSubmit={(values) => {
-        props.setValue({ ...values });
+        props.handleSubmit({ ...values, rooms: rooms });
       }}
     >
       {({ values }) => (
         <Form>
-          <div>
+          <div className="flex flex-col items-start justify-start">
             <Typography id="transition-modal-title" variant="h6" component="h2">
-              Add and assign a nurse to a room
+              Add a nurse
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              Nurses assigned to a room can monitor all occupied patients
+              Please type the first and last name of the nurse
             </Typography>
-            <Field
-              name="email"
-              component={TextFormField}
-              required
-              id="email-required"
-              label={`Patient's email`}
-              helperText={`Please type the correct email syntax`}
-            />
-            <Field
-              name="firstName"
-              component={TextFormField}
-              required
-              id="firstName-required"
-              label={`First Name`}
-              helperText={`Please type the first name of your patient`}
-            />
-            <Field
-              name="lastName"
-              component={TextFormField}
-              required
-              id="lastName-required"
-              label={`Last Name`}
-              helperText={`Please type the last name of your patient`}
-            />
-            {!props.optionList && (
+            <div className={`mt-6`}>
               <Field
-                options={null}
-                name="facility"
-                component={SelectFormField}
-                id="standard-select"
-                label="None available"
-                defaultValue=""
-                select
-                variant="standard"
+                name="fname"
+                component={TextFormField}
+                required
+                id="fname-required"
+                label={`First Name`}
+                helperText={`Please type the first name`}
               />
-            )}
-            {props.optionList && (
               <Field
-                options={props.optionList}
-                name="facility"
-                component={SelectFormField}
-                id="facility-select"
-                label="Assign a building - room - bed"
-                select
-                variant="standard"
-                onChange={(e) => {
-                  values.facility = e.target.value;
-                }}
+                name="lname"
+                component={TextFormField}
+                required
+                id="lname-required"
+                label={`Last Name`}
+                placeholder={`Temperature Sensor`}
+                helperText={`Please indicate the last name`}
               />
+              <MultipleSelectChip
+                personName={rooms}
+                setPersonName={setRooms}
+                names={props.optionList}
+              />
+            </div>
+
+            {props.loading ? (
+              <div className="absolute bottom-[2rem] right-[3rem]">
+                <InfinitySpin width="300" color="#475569" />
+              </div>
+            ) : (
+              <button
+                className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
+                type="submit"
+              >
+                Submit
+              </button>
             )}
-            <button
-              className="absolute bottom-[4.5rem] right-[4rem] rounded bg-light-important px-4 py-2 text-auto-white hover:bg-auto-black hover:text-light-important  "
-              type="submit"
-              onClick={() => {
-                if (props.buttonName === 'Submit') {
-                  setTimeout(addNurse, 1000);
-                }
-              }}
-            >
-              {props.buttonName}
-            </button>
           </div>
         </Form>
       )}

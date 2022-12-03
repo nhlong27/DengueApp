@@ -1,10 +1,11 @@
-import React from 'react';
-import { HOST } from '@/shared/constants/credentials';
+import React, {useState} from 'react';
 import TransitionsModal from '@/shared/utilities/Modal';
 import PatientSearchCreate from './PatientSearchCreate';
-import MainContent from './MainContent';
+// import MainContent from './MainContent';
+import {BsPeopleFill} from 'react-icons/bs';
 
 const PatientContent = () => {
+  const [value, setValue] = useState('')
   return (
     <>
       <div className="flex items-center justify-start p-2 shadow-sm">

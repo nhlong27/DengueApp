@@ -11,6 +11,7 @@ import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { AppContext } from '@/dashboard/doctor/App';
 import { InfinitySpin } from 'react-loader-spinner';
+import { BiRefresh } from 'react-icons/bi';
 
 const device_schema = yup.object({
   label: yup.string().min(1).max(30),
@@ -59,13 +60,18 @@ const DeviceSearchCreate = (props) => {
             <AiOutlineCloseCircle size={30} />
           </button>
           <FacilityFormContent
-
             schema={device_schema}
             handleSubmit={handleSubmit}
             loading={loading}
           />
         </TransitionsModal>
       </div>
+      <button
+        className="duration-600 ml-6 max-w-[10%] rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white transition-all hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400 hover:bg-gray-400"
+        onClick={() => {}}
+      >
+        <BiRefresh size={30} color="black" />
+      </button>
     </>
   );
 };

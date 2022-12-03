@@ -4,6 +4,7 @@ import '@/index.css';
 import App from './App';
 import Auth from './Auth';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import MagicLink from './MagicLink'
 
 ReactDOM.render(
   // <React.StrictMode>
