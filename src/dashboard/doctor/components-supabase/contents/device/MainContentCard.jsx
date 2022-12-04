@@ -17,7 +17,7 @@ const MainContentCard = (
 ) => {
   // const [isOpenTimeSeries, setOpenTimeSeries] = useState(false);
   return (
-    <div className="hover:shadow-xm z-10 mb-8 grid w-[100%] grid-cols-2  gap-4 divide-y-2 divide-gray-400 rounded-3xl bg-cyan-100 p-4 transition-all duration-300 ease-in-out hover:ring-2 hover:ring-gray-300">
+    <div className="shadow-lg z-10 mb-8 grid w-[100%] grid-cols-2  gap-4 divide-y-2 divide-gray-400 rounded-3xl bg-cyan-100 p-4 transition-all duration-300 ease-in-out hover:ring-2 hover:ring-gray-300">
       <div className="col-span-2 flex items-center justify-start">
         <div className="flex w-[30%] flex-col items-start justify-start">
           <div className="px-4 text-[22px] font-semibold tracking-widest text-black">

@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
 import TransitionsModal from '@/shared/utilities/Modal';
 import PatientSearchCreate from './PatientSearchCreate';
-// import MainContent from './MainContent';
-import {BsPeopleFill} from 'react-icons/bs';
+import MainContent from './MainContent';
 
+
+//Big model with selection
+//Assign bed, device
+//Magic link through email
 const PatientContent = () => {
   const [value, setValue] = useState('')
   return (
@@ -12,7 +15,7 @@ const PatientContent = () => {
         <PatientSearchCreate value={value} setValue={setValue} />
       </div>
       <div className="scrollbar relative flex-grow overflow-x-hidden overflow-y-scroll p-8">
-        {/* <MainContent /> */}
+        <MainContent />
       </div>
     </>
   );

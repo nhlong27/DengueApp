@@ -38,7 +38,7 @@ const MainContent = () => {
     return (
       <>
         <div
-          className={`${style2} flex flex-wrap items-center justify-around gap-4 transition-all duration-700`}
+          className={`${style2} flex min-h-[99%] flex-wrap items-center justify-around gap-4 rounded-3xl bg-gray-300 p-8 transition-all duration-700`}
         >
           {content.map((nurse, index) => {
             return (

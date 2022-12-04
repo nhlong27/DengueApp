@@ -35,7 +35,11 @@ export default function TransitionsModal(props) {
         }}
       >
         <Fade in={props.open}>
-          <Box sx={style}>{props.children}</Box>
+          {props.style ? (
+            <Box sx={{...style, ...props.style}}>{props.children}</Box>
+          ) : (
+            <Box sx={style}>{props.children}</Box>
+          )}
         </Fade>
       </Modal>
     </div>

@@ -50,7 +50,7 @@ const MainContent = () => {
     return (
       <>
         <div
-          className={`${style2} flex flex-col items-center justify-start gap-16 transition-all duration-700`}
+          className={`${style2} flex flex-col items-center justify-start gap-16 transition-all duration-700 p-8 rounded-3xl bg-gray-300 min-h-[99%]`}
         >
           {Object.values(content).map((room, index) => {
             return (

@@ -1,17 +1,30 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react';
 import MainContentCard from './MainContentCard';
-import { db_doctor } from '@/dashboard/doctor/App';
-
+import { InfinitySpin } from 'react-loader-spinner';
+import { supabase } from '@/shared/api/supabase/supabaseClient';
 
 const MainContent = () => {
-  const [avai, setAvai] = useState(false);
-  useEffect(() => {
-    if (db_doctor.patientList) {
-      setAvai(true);
-    }
-  }, [db_doctor.patientList]);
+  const [content, setContent] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isOpen, setOpen] = useState(false);
   const [isPatient, setIsPatient] = useState({});
+  const handleLoad = async () => {
+    try {
+      setLoading(true);
+      let { data: PATIENT, error } = await supabase.from('PATIENT').select('*');
+      if (error) throw error;
+      console.log('load patients success!');
+      setContent(PATIENT);
+    } catch (error) {
+      console.log(error.error_description || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(async () => {
+    handleLoad();
+  }, []);
+
   let style1 = '';
   let style2 = '';
   if (isOpen) {
@@ -21,16 +34,17 @@ const MainContent = () => {
     style1 = '-mr-[32rem] opacity-0';
     style2 = 'w-[100%]';
   }
-  if (avai) {
+  if (!loading) {
     return (
       <>
         <div
-          className={`${style2} flex flex-wrap items-start justify-around transition-all duration-500`}
+          className={`${style2} flex min-h-[99%] flex-col items-center justify-start gap-4 rounded-3xl bg-gray-300 p-8 transition-all duration-700`}
         >
-          {Object.values(db_doctor.patientList).map((patient, index) => {
+          {content.map((patient, index) => {
             return (
               <MainContentCard
                 setInfoOpen={setOpen}
+                open={isOpen}
                 key={index}
                 component={patient}
                 setIsPatient={setIsPatient}
@@ -40,33 +54,30 @@ const MainContent = () => {
         </div>
 
         <div
-          className={` ${style1} absolute top-0 right-0 z-20 h-[100%] w-[50%]  rounded-l-lg bg-auto-white shadow-lg shadow-light-important transition-all duration-500 ease-in-out`}
+          className={` ${style1} absolute top-0 right-0 z-20 h-[100%] w-[50%]  rounded-l-lg bg-auto-white shadow-lg transition-all duration-500 ease-in-out`}
         >
           <div className="flex w-[100%] flex-col items-center justify-start gap-4 p-4">
             <button
               onClick={() => {
                 setOpen(false);
               }}
-              className="absolute top-[14rem] -left-[2.8rem] rounded bg-light-important p-4 font-bold text-auto-white shadow-lg hover:bg-cyan-300 hover:text-white"
+              className="absolute top-[14rem] -left-[2.8rem] rounded bg-blue-600 p-4 font-bold text-white shadow-lg hover:bg-blue-800 hover:text-white"
             >
               Close
             </button>
-            <div className="flex w-[100%] flex-row items-center justify-between bg-white text-large font-extrabold text-auto-black shadow-sm">
+            <div className="flex w-[100%] flex-row items-center justify-between bg-auto-white text-large font-extrabold text-auto-black shadow-sm">
               Patient Details
             </div>
-
             {isPatient && (
-              <div className="flex w-[100%] flex-row items-center justify-between rounded bg-auto-white p-2 shadow-lg shadow-gray-200 ring-2 ring-gray-200 hover:bg-white hover:ring-2 hover:ring-gray-300">
-                <div>{isPatient.title}</div>
-                <div>Country: {isPatient.country}</div>
-                <div>City: {isPatient.city}</div>
-                <div>Address: {isPatient.address}</div>
-                <div>Phone number: {isPatient.phone}</div>
-                <div>Email: {isPatient.user.email}</div>
-                <div>First name: {isPatient.user.firstName}</div>
-                <div>Last Name: {isPatient.user.lastName}</div>
-                <div>Device id: {isPatient.user.assign.device.id}</div>
-                <div>Facility id: {isPatient.user.assign.facility.id}</div>
+              <div className="flex flex-row flex-wrap items-center justify-between rounded bg-auto-white p-2 shadow-lg shadow-gray-200 ring-2 ring-gray-200 hover:bg-white hover:ring-2 hover:ring-gray-300">
+                <>
+                  <div className="text-[18px] font-bold tracking-wider">
+                    {isPatient.Fname}
+                  </div>
+                  <div className="text-[18px] font-bold tracking-wider">
+                    {isPatient.Lname}
+                  </div>
+                </>
               </div>
             )}
           </div>
@@ -74,9 +85,12 @@ const MainContent = () => {
       </>
     );
   } else {
-    return <div>Loading content...</div>;
+    return (
+      <div className="flex items-center justify-center">
+        <InfinitySpin width="300" color="#475569" />;
+      </div>
+    );
   }
 };
 
-
-export default MainContent
+export default MainContent;

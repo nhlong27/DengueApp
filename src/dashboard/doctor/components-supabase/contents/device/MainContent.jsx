@@ -39,7 +39,7 @@ const MainContent = () => {
     return (
       <>
         <div
-          className={`${style2} flex flex-wrap items-start justify-around transition-all duration-700`}
+          className={`${style2} flex min-h-[99%] flex-wrap items-start justify-around rounded-3xl bg-gray-300 p-8 transition-all duration-700`}
         >
           {content.map((device, index) => {
             return (
