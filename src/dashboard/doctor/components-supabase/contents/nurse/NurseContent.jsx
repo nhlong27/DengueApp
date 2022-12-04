@@ -6,14 +6,15 @@ import NurseSearchCreate from './NurseSearchCreate';
 //Room Multiselect V
 //Invite through email V
 const NurseContent = () => {
-  const [value, setValue] = useState('');
+  const [refresh, setRefresh] = useState(false);
+  const [search, setSearch] = useState('');
   return (
     <>
       <div className="flex items-center justify-start p-2 shadow-sm">
-        <NurseSearchCreate value={value} setValue={setValue} />
+        <NurseSearchCreate search={search} setSearch={setSearch} setRefresh={setRefresh} />
       </div>
       <div className="scrollbar relative flex-grow overflow-x-hidden overflow-y-scroll p-8">
-        <MainContent />
+        <MainContent refresh={refresh} />
       </div>
     </>
   );

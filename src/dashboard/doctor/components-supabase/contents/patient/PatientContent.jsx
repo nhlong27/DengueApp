@@ -8,14 +8,15 @@ import MainContent from './MainContent';
 //Assign bed, device
 //Magic link through email
 const PatientContent = () => {
-  const [value, setValue] = useState('')
+  const [refresh, setRefresh] = useState(false);
+  const [search, setSearch] = useState('');
   return (
     <>
       <div className="flex items-center justify-start p-2 shadow-sm">
-        <PatientSearchCreate value={value} setValue={setValue} />
+        <PatientSearchCreate search={search} setSearch={setSearch} setRefresh={setRefresh} />
       </div>
       <div className="scrollbar relative flex-grow overflow-x-hidden overflow-y-scroll p-8">
-        <MainContent />
+        <MainContent refresh={refresh}/>
       </div>
     </>
   );

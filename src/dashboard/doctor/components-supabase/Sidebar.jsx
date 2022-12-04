@@ -9,12 +9,12 @@ import { IoMdNotificationsOutline } from 'react-icons/io';
 import { AiOutlineLeft } from 'react-icons/ai';
 import { AiOutlineRight } from 'react-icons/ai';
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   const [isOpen, setOpen] = useState(false);
-  const open = isOpen ? 'w-[15%]  rounded-r-lg' : 'w-[5%] rounded-3xl ml-4';
+  const open = isOpen ? 'w-[15%]  rounded-r-lg' : 'w-[5%] my-4 rounded-2xl ml-4';
   return (
     <div
-      className={`${open} relative flex  shrink-0 flex-col bg-black transition-all duration-500`}
+      className={`${open} relative flex min-w-[5rem] shrink-0 flex-col bg-black transition-all duration-500`}
     >
       <Link
         to="/pages/dashboard/doctor/index.html"
@@ -52,42 +52,42 @@ const Sidebar = () => {
           <div className="ml-8 mr-12 border-t-2 border-auto-white p-4"></div>
           <div className="mr-2 flex flex-col gap-2 pb-8 ">
             <Link
-              to="/pages/dashboard/doctor/index.html"
+             onClick={()=>props.setLocation('Dashboard')} to="/pages/dashboard/doctor/index.html"
               className="duration-400 my-2 flex items-center justify-start py-2  px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white "
             >
-              <RxDashboard />
+              <RxDashboard size={20} />
               <span className="mx-auto">Dashboard</span>
             </Link>
             <Link
-              to="/pages/dashboard/doctor/facilities"
+             onClick={()=>props.setLocation('Facilities')} to="/pages/dashboard/doctor/facilities"
               className="duration-400 my-2 flex items-center justify-start py-2  px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white"
             >
-              <TbBuildingHospital />
+              <TbBuildingHospital size={20} />
               <span className="mx-auto">Facilities</span>
             </Link>
             <Link
-              to="/pages/dashboard/doctor/nurses"
+             onClick={()=>props.setLocation('Nurses')} to="/pages/dashboard/doctor/nurses"
               className="duration-400 my-2 flex items-center justify-start py-2  px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white"
             >
-              <RiNurseLine />
+              <RiNurseLine size={22} />
               <span className="mx-auto">Nurses</span>
             </Link>
             <Link
-              to="/pages/dashboard/doctor/devices"
+             onClick={()=>props.setLocation('Devices')} to="/pages/dashboard/doctor/devices"
               className="duration-400 my-2 flex items-center justify-start py-2  px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white"
             >
-              <TbDeviceWatch />
+              <TbDeviceWatch size={24} />
               <span className="mx-auto">Devices</span>
             </Link>
           </div>
           <div className="ml-8 mr-12 border-t-2 border-auto-white p-4"></div>
           <div className="mr-2 flex flex-col gap-2 pb-8">
             <div className="duration-400 justify my-2  flex items-center p-4  py-2 px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white">
-              <MdOutlineSchedule />
+              <MdOutlineSchedule size={20} />
               <span className="mx-auto">Schedule</span>
             </div>
             <div className="duration-400 justify- my-2 flex items-center p-4 py-2 px-8  text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white">
-              <IoMdNotificationsOutline size={20} />
+              <IoMdNotificationsOutline size={24} />
               <span className="mx-auto">Notifs</span>
             </div>
           </div>
@@ -101,44 +101,44 @@ const Sidebar = () => {
             <AiOutlineRight color="white" size={20} />
           </button>
           <div className="ml-[1.4rem] mr-12 border-t-2 border-auto-white p-4"></div>
-          <div className="mr-2 flex flex-col gap-2 pb-8 ">
+          <div className="mr-0 flex flex-col gap-2 pb-8">
             <Link
-              to="/pages/dashboard/doctor/index.html"
+             onClick={()=>props.setLocation('Dashboard')} to="/pages/dashboard/doctor/index.html"
               className="duration-400 my-2 flex items-center justify-center py-2 text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white "
             >
-              <RxDashboard />
+              <RxDashboard size={23} />
               {/* <span className="hidden">Dashboard</span> */}
             </Link>
             <Link
-              to="/pages/dashboard/doctor/facilities"
+             onClick={()=>props.setLocation('Facilities')} to="/pages/dashboard/doctor/facilities"
               className="duration-400 my-2 flex items-center justify-center py-2   text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
             >
-              <TbBuildingHospital />
+              <TbBuildingHospital size={24} />
               {/* <span className="hidden">Facilities</span> */}
             </Link>
             <Link
-              to="/pages/dashboard/doctor/nurses"
+             onClick={()=>props.setLocation('Nurses')} to="/pages/dashboard/doctor/nurses"
               className="duration-400 my-2 flex items-center justify-center py-2   text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
             >
-              <RiNurseLine />
+              <RiNurseLine size={23} />
               {/* <span className="hidden">Nurses</span> */}
             </Link>
             <Link
-              to="/pages/dashboard/doctor/devices"
+             onClick={()=>props.setLocation('Devices')} to="/pages/dashboard/doctor/devices"
               className="duration-400 my-2 flex items-center justify-center py-2   text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
             >
-              <TbDeviceWatch />
+              <TbDeviceWatch size={25} />
               {/* <span className="hidden">Devices</span> */}
             </Link>
           </div>
           <div className="ml-[1.4rem] mr-12 border-t-2 border-auto-white p-4"></div>
-          <div className="mr-2 flex flex-col gap-2 pb-8">
+          <div className="mr-0 flex flex-col gap-2 pb-8">
             <div className="duration-400 justify p-center  my-2 flex items-center justify-center py-2  text-[20px]  tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white">
-              <MdOutlineSchedule />
+              <MdOutlineSchedule size={25} />
               {/* <span className="hidden">Schedule</span> */}
             </div>
             <div className="duration-400 justify- p-center my-2 flex items-center justify-center py-2  text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white">
-              <IoMdNotificationsOutline />
+              <IoMdNotificationsOutline size={25} />
               {/* <span className="hidden">Notifs</span> */}
             </div>
           </div>

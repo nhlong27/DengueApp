@@ -8,7 +8,7 @@ import TextFormField from '@/shared/utilities/form/TextFormField';
 import SearchBar from '../../SearchBar';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { InfinitySpin } from 'react-loader-spinner';
-import { AppContext } from '@/dashboard/doctor/App';
+// import { AppContext } from '@/dashboard/doctor/App';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { BiRefresh } from 'react-icons/bi';
 
@@ -19,7 +19,6 @@ const facility_schema = yup.object({
 });
 
 const FacilitySearchCreate = (props) => {
-  // const { session } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
   const [roomLoading, setRoomLoading] = useState(false);
   const [rooms, setRooms] = useState([]);
@@ -69,7 +68,7 @@ const FacilitySearchCreate = (props) => {
   return (
     <>
       <div className="ml-6 flex h-[80%] w-[50%] items-center justify-center rounded-[3rem] bg-black p-2 shadow-lg">
-        <SearchBar value={props.value} setValue={props.setValue} />
+        <SearchBar search={props.search} setSearch={props.setSearch} />
       </div>
       <div className="ml-6 flex h-[80%] w-[15%]  items-center justify-center rounded-l-[3rem] bg-blue-600 py-2 shadow-lg">
         <button
@@ -128,7 +127,7 @@ const FacilitySearchCreate = (props) => {
       </div>
       <button
         className="duration-600 ml-6 max-w-[10%] rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400"
-        onClick={() => {}}
+        onClick={() => props.setRefresh(state=>!state)}
       >
         <BiRefresh size={30} color="black" />
       </button>

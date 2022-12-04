@@ -2,29 +2,36 @@ import React, { useState, useEffect } from 'react';
 import MainContentCard from './MainContentCard';
 import { InfinitySpin } from 'react-loader-spinner';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
+import { client } from '@/shared/api/initClient_tenant';
 
-const MainContent = () => {
+
+
+const MainContent = (props) => {
   // const [avai, setAvai] = useState(false);
-  const [content, setContent] = useState([])
+  const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const [isDevice, setIsDevice] = useState({});
+  
   const handleLoad = async () => {
     try {
       setLoading(true);
       let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
       if (error) throw error;
       console.log('load device success!');
-      setContent(DEVICE)
+      setContent(DEVICE);
     } catch (error) {
       console.log(error.error_description || error.message);
     } finally {
       setLoading(false);
     }
   };
+
+
   useEffect(async () => {
     handleLoad();
-  }, []);
+
+  }, [props.refresh]);
 
   let style1 = '';
   let style2 = '';
@@ -37,7 +44,7 @@ const MainContent = () => {
   }
   if (!loading) {
     return (
-      <>
+      <div className="absolute w-[95%] h-screen">
         <div
           className={`${style2} flex min-h-[99%] flex-wrap items-start justify-around rounded-3xl bg-gray-300 p-8 transition-all duration-700`}
         >
@@ -57,7 +64,7 @@ const MainContent = () => {
         <div
           className={` ${style1} absolute top-0 right-0 z-20 h-[100%] w-[50%]  rounded-l-lg bg-auto-white shadow-lg transition-all duration-500 ease-in-out`}
         >
-          <div className="flex w-[100%] flex-col items-center justify-start gap-4 p-4">
+          <div className="sticky top-0 right-0 flex w-[100%] flex-col items-center justify-start gap-4 p-4">
             <button
               onClick={() => {
                 setOpen(false);
@@ -70,21 +77,25 @@ const MainContent = () => {
               Device Details
             </div>
             {isDevice && (
-              <div className="flex w-[100%] flex-row items-center justify-between rounded bg-auto-white p-2 shadow-lg shadow-gray-200 ring-2 ring-gray-200 hover:bg-white hover:ring-2 hover:ring-gray-300">
-                <div className="text-[18px] font-bold tracking-wider">
-                  {isDevice.Label}
+              <>
+                <div className="flex w-[100%] flex-row items-center justify-between rounded bg-auto-white p-2 shadow-lg shadow-gray-200 ring-2 ring-gray-200 hover:bg-white hover:ring-2 hover:ring-gray-300">
+                  <div className="text-[18px] font-bold tracking-wider">
+                    {isDevice.Label}
+                  </div>
+                  <div className="text-blue-600">{isDevice.Type}</div>
+
+                  {isDevice.Assign === 'No' ? (
+                    <div className="text-gray-500">Not assigned</div>
+                  ) : (
+                    <div className="text-red-500">Not assigned</div>
+                  )}
                 </div>
-                <div className="text-blue-600">{isDevice.Type}</div>
-                {isDevice.Assign === 'No' ? (
-                  <div className="text-gray-500">Not assigned</div>
-                ) : (
-                  <div className="text-red-500">Not assigned</div>
-                )}
-              </div>
+                <div className="text-blue-600">Access Token: {isDevice.Token}</div>
+              </>
             )}
           </div>
         </div>
-      </>
+      </div>
     );
   } else {
     return (

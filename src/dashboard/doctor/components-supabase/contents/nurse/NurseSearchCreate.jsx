@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import SearchBar from '../../SearchBar';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
-import { AppContext } from '@/dashboard/doctor/App';
+// import { AppContext } from '@/dashboard/doctor/App';
 import { InfinitySpin } from 'react-loader-spinner';
 import MultipleSelectChip from '@/shared/utilities/form/MultiSelect';
 import { BiRefresh } from 'react-icons/bi';
@@ -20,7 +20,17 @@ const nurse_schema = yup.object({
 });
 
 const NurseSearchCreate = (props) => {
-  const { session } = useContext(AppContext);
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [rooms, setRooms] = useState([]);
@@ -74,7 +84,7 @@ const NurseSearchCreate = (props) => {
   return (
     <>
       <div className="ml-8 flex h-[80%] w-[50%] items-center justify-center rounded-[3rem] bg-black p-2 shadow-lg">
-        <SearchBar value={props.value} setValue={props.setValue} />
+        <SearchBar search={props.search} setSearch={props.setSearch} />
       </div>
       <div className="ml-8 flex h-[80%] w-[15%] items-center justify-center rounded-[3rem] bg-blue-600 py-2 shadow-lg">
         <button
@@ -109,7 +119,7 @@ const NurseSearchCreate = (props) => {
       </div>
       <button
         className="duration-600 ml-6 max-w-[10%] rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400"
-        onClick={() => {}}
+        onClick={() => props.setRefresh(state=>!state)}
       >
         <BiRefresh size={30} color="black" />
       </button>

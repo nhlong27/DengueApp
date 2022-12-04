@@ -11,7 +11,7 @@ const device1 = {
 };
 
 
-export const MySocket = ({ client }) => {
+export const MySocket = ({ client, deviceId }) => {
   const [connected, setConnected] = useState(false);
 
   const openSocket = async () => {
@@ -20,13 +20,13 @@ export const MySocket = ({ client }) => {
     if (token) {
       setConnected(true);
 
-      client.subscribe(device1, async function (response) {
+      client.subscribe(deviceId, async function (response) {
         if (response && response.data) {
-          console.log('device1', response.data);
+          console.log(`${deviceId}`, response.data);
         }
       });
     } else {
-      setTimeout(() => openSocket(), 5000);
+      setTimeout(() => openSocket(), 3000);
     }
   };
 

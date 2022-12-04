@@ -298,12 +298,29 @@ class tbClient {
         console.log(error);
       });
   }
+  
+  getDeviceCredentials( deviceId
+  ) {
+    console.log('getDeviceCredentials');
+    return this.api
+      .get(
+        `/api/device/${deviceId}/credentials`,
+      )
+      .then((response) => {
+        response && console.log('return:');
+        console.log(response.data);
+        return response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
-  async createUpdateDevice(params) {
+  async createUpdateDevice(params, accessToken = null) {
     if (params.id) console.log('updateDevice');
     else console.log('createDevice');
     const result = await this.api
-      .post(`/api/device`, params) //accessToken will be auto generated
+      .post(`/api/device${accessToken}`, params) //accessToken will be auto generated
       .then((response) => {
         response && console.log('return:');
         console.log(response.data);

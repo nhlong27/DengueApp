@@ -1,18 +1,42 @@
 import React from 'react';
 import { useRef, useState, useEffect } from 'react';
 import { useContext } from 'react';
-import { AppContext } from '../App';
+// import { AppContext } from '../App';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { GrSchedulePlay } from 'react-icons/gr';
 import { BiMessageSquareDots } from 'react-icons/bi';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { InfinitySpin } from 'react-loader-spinner';
+// import {useLocation} from 'react-router-dom'
 
-const Navbar = () => {
+const Navbar = (props) => {
   // const { session } = useContext(AppContext);
   const [username, setUsername] = useState('');
   const { avatar_url, setAvatarUrl } = useState('');
   const [isOpen, setDropDown] = useState(false);
+  const [title, setTitle] = useState('Dashboard');
+  // const location = useLocation();
+  // switch(location.pathname){
+  //   case '/pages/dashboard/doctor/facilities':
+  //     setTitle('Facilities')
+  //     break;
+  //   case '/pages/dashboard/doctor/nurses':
+  //     setTitle('Nurses')
+  //     break;
+  //   case '/pages/dashboard/doctor/devices':
+  //     setTitle('Devices')
+  //     break;
+  //   case '/pages/dashboard/doctor/schedules':
+  //     setTitle('Schedules')
+  //     break;
+  //   case '/pages/dashboard/doctor/notifs':
+  //     setTitle('Notifications')
+  //     break;
+  //   default:
+  //     setTitle('Dashboard')
+  // }
+
+
   // const { user } = session;
   // console.log(session);
   // const getProfile = async () => {
@@ -28,8 +52,8 @@ const Navbar = () => {
   useEffect(() => {}, []);
   return (
     <nav className="flex h-[10%] w-[100%] items-center justify-between bg-cyan-50 p-8 shadow-sm">
-      <div className="p-4 text-center text-[28px] font-extrabold tracking-widest text-blue-600">
-        Dashboard
+      <div className="p-4 text-center text-[28px] font-extrabold tracking-[5px] text-blue-600">
+        {props.location}
       </div>
       <div className="relative flex items-center justify-center gap-4 p-4 text-[22px]">
         <button>

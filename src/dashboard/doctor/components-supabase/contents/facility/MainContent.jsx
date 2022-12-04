@@ -5,7 +5,7 @@ import { supabase } from '@/shared/api/supabase/supabaseClient';
 
 let loadFacility = {}
 
-const MainContent = () => {
+const MainContent = (props) => {
   const [content, setContent] = useState({});
   const [loading, setLoading] = useState(true);
   const [isOpen, setOpen] = useState(false);
@@ -35,7 +35,7 @@ const MainContent = () => {
   };
   useEffect(async () => {
     handleLoad();
-  }, []);
+  }, [props.refresh]);
 
   let style1 = '';
   let style2 = '';
@@ -48,7 +48,7 @@ const MainContent = () => {
   }
   if (!loading) {
     return (
-      <>
+      <div className='absolute w-[95%] h-screen'>
         <div
           className={`${style2} flex flex-col items-center justify-start gap-16 transition-all duration-700 p-8 rounded-3xl bg-gray-300 min-h-[99%]`}
         >
@@ -68,7 +68,7 @@ const MainContent = () => {
         <div
           className={` ${style1} absolute top-0 right-0 z-20 h-[100%] w-[50%]  rounded-l-lg bg-auto-white shadow-lg transition-all duration-500 ease-in-out`}
         >
-          <div className="flex w-[100%] flex-col items-center justify-start gap-4 p-4">
+          <div className="flex w-[100%] flex-col items-center justify-start gap-4 p-4 sticky top-0 right-0">
             <button
               onClick={() => {
                 setOpen(false);
@@ -92,7 +92,7 @@ const MainContent = () => {
             )}
           </div>
         </div>
-      </>
+      </div>
     );
   } else {
     return (
