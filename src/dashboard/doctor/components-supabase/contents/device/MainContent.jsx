@@ -34,7 +34,6 @@ const MainContent = (props) => {
   // useEffect(async () => {
   //   handleLoad();
   // }, [props.refresh]);
-  console.log(devices)
 
   let style1 = '';
   let style2 = '';
