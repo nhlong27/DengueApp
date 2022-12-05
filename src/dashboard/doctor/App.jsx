@@ -30,7 +30,7 @@ function App() {
       {!session ? (
         <Auth />
       ) : (
-        <div className="flex h-screen w-screen flex-auto bg-cyan-50">
+        <div className="flex h-screen w-screen flex-auto bg-auto-white">
           <Sidebar setLocation={setLocation} />
           <div className=" flex flex-grow flex-col">
             <Navbar location={location} />

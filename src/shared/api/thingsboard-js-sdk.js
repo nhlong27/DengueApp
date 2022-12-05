@@ -685,6 +685,9 @@ class tbClient {
       webSocket = null;
       callback(null);
     };
+    // if (params.close){
+    //   webSocket.close();
+    // }
   }
 
   getUser() {
@@ -697,6 +700,7 @@ class tbClient {
         console.log(error);
       });
   }
+
 }
 
 export default tbClient;

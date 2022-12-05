@@ -35,3 +35,5 @@ V Refresh
 - Already existed (token, fname, lname, ...) --> Announce error
 - Show and hide sensitive information
 V Sticky info 
+- Local storage
+- Manually Open & Close websocket

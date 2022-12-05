@@ -51,7 +51,7 @@ const Navbar = (props) => {
   // };
   useEffect(() => {}, []);
   return (
-    <nav className="flex h-[10%] w-[100%] items-center justify-between bg-cyan-50 p-8 shadow-sm">
+    <nav className="flex h-[10%] w-[100%] items-center justify-between bg-auto-white p-8 shadow-sm">
       <div className="p-4 text-center text-[28px] font-extrabold tracking-[5px] text-blue-600">
         {props.location}
       </div>
