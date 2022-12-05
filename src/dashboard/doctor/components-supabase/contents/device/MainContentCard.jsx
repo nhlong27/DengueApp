@@ -6,10 +6,10 @@ import { TbTemperatureCelsius } from 'react-icons/tb';
 import { GiMedicalDrip } from 'react-icons/gi';
 import { BiHeart } from 'react-icons/bi';
 import { GrDevice } from 'react-icons/gr';
-import { telemetryTable, handleTelemetry } from '../../ContentContainer';
-
-const now = Date.now();
-const mtd = now - 3600000;
+// import { telemetries, handleTelemetry } from '../../ContentContainer';
+import { ContentContainerContext } from '../../ContentContainer';
+// const now = Date.now();
+// const mtd = now - 3600000;
 
 const MainContentCard = (
   { open, component, setInfoOpen, setIsDevice } = {
@@ -20,44 +20,12 @@ const MainContentCard = (
   },
 ) => {
   // const [close, setClose] = useState(false)
-  const [change, setChange] = useState(false)
-  const openSocket = async () => {
-    let token = await client.connect();
-    let params = {
-      cmdId: 10,
-      entityId: component.D_Id,
-      startTs: mtd,
-      endTs: now,
-      // close: close
-    };
-    if (token) {
-      client.subscribe(params, async function (response) {
-        if (response && response.data) {
-          console.log(response)
-          handleTelemetry(
-            component.D_Id,
-            response.data.temperature[0][1],
-            response.data.SpO2[0][1],
-            response.data.HrtPressure[0][1],
-            true,
-          );
-          setChange(state=>!state)
-          // telemetryTable[`${component.D_Id}`] = {
-          //   temperature: response.data.temperature[0][1],
-          //   SpO2: response.data.SpO2[0][1],
-          //   HrtPressure: response.data.HrtPressure[0][1],
-          //   connected: true,
-          // };
-        }
-      });
-    } else {
-      setTimeout(() => openSocket(), 3000);
-    }
-  };
+  // const [change, setChange] = useState(false)
+  const {telemetries} = useContext(ContentContainerContext)
 
-  useEffect(() => {
-    openSocket();
-  }, []);
+  // useEffect(() => {
+    // openSocket();
+  // }, []);
   // const [isOpenTimeSeries, setOpenTimeSeries] = useState(false);
   return (
     <div className="z-10 grid w-[100%] grid-cols-3 gap-4 divide-y-2 divide-gray-400 rounded-lg bg-auto-white p-4 shadow-lg transition-all duration-300 ease-in-out hover:bg-white hover:ring-2 hover:ring-gray-300">
@@ -65,8 +33,8 @@ const MainContentCard = (
         <div className="flex w-[30%] flex-col items-start justify-start">
           <div className="relative px-4 text-[22px] font-semibold tracking-widest text-black">
             <GrDevice />
-            {telemetryTable[`${component.D_Id}`] &&
-            telemetryTable[`${component.D_Id}`].connected ? (
+            {telemetries[`${component.D_Id}`] &&
+            telemetries[`${component.D_Id}`].connected ? (
               <div className="absolute top-0 -right-[4rem] text-[14px] text-green-500">
                 Connected
               </div>
@@ -100,8 +68,8 @@ const MainContentCard = (
                 <TbTemperatureCelsius size={40} color="blue" />{' '}
               </div>
               <div className="text-[20px] font-extrabold tracking-[5px] text-purple-600">
-                {telemetryTable[`${component.D_Id}`] &&
-                  telemetryTable[`${component.D_Id}`].temperature}
+                {telemetries[`${component.D_Id}`] &&
+                  telemetries[`${component.D_Id}`].temperature}
               </div>
             </div>
             <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
@@ -109,8 +77,8 @@ const MainContentCard = (
                 <GiMedicalDrip size={40} color="blue" />
               </div>
               <div className="text-[20px] font-extrabold tracking-[5px] text-cyan-600">
-                {telemetryTable[`${component.D_Id}`] &&
-                  telemetryTable[`${component.D_Id}`].SpO2}
+                {telemetries[`${component.D_Id}`] &&
+                  telemetries[`${component.D_Id}`].SpO2}
               </div>
             </div>
             <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
@@ -118,8 +86,8 @@ const MainContentCard = (
                 <BiHeart size={40} color="blue" />
               </div>
               <div className="text-[20px] font-extrabold tracking-[5px] text-yellow-600">
-                {telemetryTable[`${component.D_Id}`] &&
-                  telemetryTable[`${component.D_Id}`].HrtPressure}
+                {telemetries[`${component.D_Id}`] &&
+                  telemetries[`${component.D_Id}`].HrtPressure}
               </div>
             </div>
           </div>
@@ -130,8 +98,8 @@ const MainContentCard = (
                 <TbTemperatureCelsius size={40} color="blue" />
               </div>
               <div className="text-[40px] font-extrabold tracking-[5px] text-purple-600">
-                {telemetryTable[`${component.D_Id}`] &&
-                  telemetryTable[`${component.D_Id}`].temperature}
+                {telemetries[`${component.D_Id}`] &&
+                  telemetries[`${component.D_Id}`].temperature}
               </div>
             </div>
             <div className="flex h-[100%] w-[20%] flex-col items-center justify-between p-2">
@@ -139,8 +107,8 @@ const MainContentCard = (
                 <GiMedicalDrip size={40} color="blue" />
               </div>
               <div className="text-[40px] font-extrabold tracking-[5px] text-cyan-600">
-                {telemetryTable[`${component.D_Id}`] &&
-                  telemetryTable[`${component.D_Id}`].SpO2}
+                {telemetries[`${component.D_Id}`] &&
+                  telemetries[`${component.D_Id}`].SpO2}
               </div>
             </div>
             <div className="flex h-[100%] w-[20%] flex-col items-center justify-between p-2">
@@ -148,8 +116,8 @@ const MainContentCard = (
                 <BiHeart size={40} color="blue" />
               </div>
               <div className="text-[40px] font-extrabold tracking-[5px] text-yellow-600">
-                {telemetryTable[`${component.D_Id}`] &&
-                  telemetryTable[`${component.D_Id}`].HrtPressure}
+                {telemetries[`${component.D_Id}`] &&
+                  telemetries[`${component.D_Id}`].HrtPressure}
               </div>
             </div>
           </div>

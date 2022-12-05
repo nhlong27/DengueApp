@@ -1,39 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import MainContentCard from './MainContentCard';
 import { InfinitySpin } from 'react-loader-spinner';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { client } from '@/shared/api/initClient_tenant';
-import { handleTelemetry } from '../../ContentContainer';
-
+// import { handleTelemetry } from '../../ContentContainer';
+import { ContentContainerContext } from '../../ContentContainer';
 
 const MainContent = (props) => {
   // const [avai, setAvai] = useState(false);
-  const [content, setContent] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // const [content, setContent] = useState([]);
+  // const [loading, setLoading] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const [isDevice, setIsDevice] = useState({});
-  
-  const handleLoad = async () => {
-    try {
-      setLoading(true);
-      let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
-      if (error) throw error;
-      console.log('load device success!');
-      for (let device of DEVICE){
-        handleTelemetry(device.D_Id, 0, 0, 0, false);
-      }
-      setContent(DEVICE);
-    } catch (error) {
-      console.log(error.error_description || error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {devices} = useContext(ContentContainerContext)
+  // const handleLoad = async () => {
+  //   try {
+  //     setLoading(true);
+  //     let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
+  //     if (error) throw error;
+  //     console.log('load device success!');
+  //     for (let device of DEVICE){
+  //       handleTelemetry(device.D_Id, 0, 0, 0, false);
+  //     }
+  //     setContent(DEVICE);
+  //   } catch (error) {
+  //     console.log(error.error_description || error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
 
-  useEffect(async () => {
-    handleLoad();
-  }, [props.refresh]);
+  // useEffect(async () => {
+  //   handleLoad();
+  // }, [props.refresh]);
+  console.log(devices)
 
   let style1 = '';
   let style2 = '';
@@ -44,13 +45,13 @@ const MainContent = (props) => {
     style1 = '-mr-[32rem] opacity-0';
     style2 = 'w-[100%]';
   }
-  if (!loading) {
+  // if (!loading) {
     return (
       <div className="absolute w-[95%] h-screen">
         <div
           className={`${style2} flex min-h-[99%] flex-wrap items-start justify-around rounded-lg bg-gray-300 p-8 transition-all duration-700`}
         >
-          {content.map((device, index) => {
+          {devices.map((device, index) => {
             return (
               <MainContentCard
                 setInfoOpen={setOpen}
@@ -99,13 +100,13 @@ const MainContent = (props) => {
         </div>
       </div>
     );
-  } else {
-    return (
-      <div className="flex items-center justify-center">
-        <InfinitySpin width="300" color="#475569" />;
-      </div>
-    );
-  }
+  // } else {
+  //   return (
+  //     <div className="flex items-center justify-center">
+  //       <InfinitySpin width="300" color="#475569" />;
+  //     </div>
+  //   );
+  // }
 };
 
 export default MainContent;

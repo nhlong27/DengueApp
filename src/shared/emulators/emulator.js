@@ -36,7 +36,7 @@ client.on('connect', function () {
   );
   // Schedules telemetry data upload once per second
   console.log('Uploading temperature and SpO2 data once per second...');
-  setInterval(publishTelemetry, 1000);
+  setInterval(publishTelemetry, 3000);
 });
 
 // Uploads telemetry data using 'v1/devices/me/telemetry' MQTT topic

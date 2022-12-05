@@ -17,6 +17,7 @@ import { BiRefresh } from 'react-icons/bi';
 const nurse_schema = yup.object({
   fname: yup.string().min(1).max(30),
   lname: yup.string().min(1).max(30),
+  email: yup.string().min(1).max(30),
 });
 
 const NurseSearchCreate = (props) => {
@@ -57,7 +58,9 @@ const NurseSearchCreate = (props) => {
       await supabase.from('PERSON').insert([{ Per_Ssn: now, D_Ssn: session.user.id }]);
       await supabase
         .from('NURSE')
-        .insert([{ Fname: values.fname, Lname: values.lname, Per_Ssn: now }]);
+        .insert([
+          { Fname: values.fname, Lname: values.lname, Per_Ssn: now, Email: values.email },
+        ]);
       let { data: NURSE, error } = await supabase
         .from('NURSE')
         .select('*')
@@ -119,7 +122,7 @@ const NurseSearchCreate = (props) => {
       </div>
       <button
         className="duration-600 ml-6 max-w-[10%] rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400"
-        onClick={() => props.setRefresh(state=>!state)}
+        onClick={() => props.setRefresh((state) => !state)}
       >
         <BiRefresh size={30} color="black" />
       </button>
@@ -136,6 +139,7 @@ const FacilityFormContent = (props) => {
       initialValues={{
         fname: '',
         lname: '',
+        email: '',
       }}
       onSubmit={(values) => {
         props.handleSubmit({ ...values, rooms: rooms });
@@ -152,14 +156,18 @@ const FacilityFormContent = (props) => {
             </Typography>
             <div className={`mt-6`}>
               <Field
+                style={{ width: 150, marginRight:20 }}
                 name="fname"
                 component={TextFormField}
                 required
+                variant="filled"
                 id="fname-required"
                 label={`First Name`}
                 helperText={`Please type the first name`}
               />
               <Field
+                variant="filled"
+                style={{ width: 200 }}
                 name="lname"
                 component={TextFormField}
                 required
@@ -167,6 +175,15 @@ const FacilityFormContent = (props) => {
                 label={`Last Name`}
                 placeholder={`Temperature Sensor`}
                 helperText={`Please indicate the last name`}
+              />
+              <Field
+                name="email"
+                component={TextFormField}
+                required
+                id="email-required"
+                label={`Email`}
+                placeholder={`nurse@mail.com`}
+                helperText={`Please type the email`}
               />
               <MultipleSelectChip
                 personName={rooms}

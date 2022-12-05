@@ -37,3 +37,4 @@ V Refresh
 V Sticky info 
 - Local storage
 - Manually Open & Close websocket
+- breadcrumbs

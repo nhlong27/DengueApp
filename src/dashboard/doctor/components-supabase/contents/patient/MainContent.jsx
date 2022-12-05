@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import MainContentCard from './MainContentCard';
+import { DashboardTable } from './MainContentCard';
 import { InfinitySpin } from 'react-loader-spinner';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
+import {AiOutlineLeft} from 'react-icons/ai'
 
 const MainContent = (props) => {
   const [content, setContent] = useState([]);
@@ -31,13 +32,13 @@ const MainContent = (props) => {
     style1 = '';
     style2 = 'w-[40%]';
   } else {
-    style1 = '-mr-[32rem] opacity-0';
+    style1 = '-mr-[64rem] opacity-0';
     style2 = 'w-[100%]';
   }
   if (!loading) {
     return (
-      <div className='absolute w-[95%] h-screen'>
-        <div
+      <div className="absolute h-screen w-[95%] rounded bg-gray-300 p-2">
+        {/* <div
           className={`${style2} flex min-h-[99%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-8 transition-all duration-700`}
         >
           {content.map((patient, index) => {
@@ -51,33 +52,53 @@ const MainContent = (props) => {
               />
             );
           })}
-        </div>
-
+        </div> */}
+        <DashboardTable
+          rows={content}
+          setInfoOpen={setOpen}
+          open={isOpen}
+          setIsPatient={setIsPatient}
+        />
         <div
-          className={` ${style1} absolute top-0 right-0 z-20 h-[100%] w-[50%]  rounded-l-lg bg-auto-white shadow-2xl transition-all duration-500 ease-in-out`}
+          className={` ${style1} absolute top-0 right-0 z-20 min-h-[100%] w-[100%]  rounded-l-lg bg-white shadow-2xl transition-all duration-500 ease-in-out ring-black ring-2`}
         >
-          <div className="flex w-[100%] flex-col items-center justify-start gap-4 p-4 sticky top-0 right-0">
-            <button
-              onClick={() => {
-                setOpen(false);
-              }}
-              className="absolute top-[14rem] -left-[2.8rem] rounded bg-blue-600 p-4 font-bold text-white shadow-lg hover:bg-blue-800 hover:text-white"
-            >
-              Close
-            </button>
-            <div className="flex w-[100%] flex-row items-center justify-between bg-auto-white text-large font-extrabold text-auto-black shadow-sm">
-              Patient Details
+          <div className=" flex w-[100%] flex-col items-center justify-start gap-4 p-4">
+            <div className="flex w-[100%] flex-row items-center justify-start bg-white text-large font-extrabold text-auto-black shadow-sm">
+              <button
+                onClick={() => {
+                  setOpen(false);
+                }}
+                className="rounded p-2 font-bold  "
+              >
+                <AiOutlineLeft className="hover:text-gray-300" color="black" size={30} />
+              </button>
+              <span>Patient Details</span>
             </div>
             {isPatient && (
-              <div className="flex flex-row flex-wrap items-center justify-between rounded bg-auto-white p-2 shadow-lg shadow-gray-200 ring-2 ring-gray-200 hover:bg-white hover:ring-2 hover:ring-gray-300">
-                <>
-                  <div className="text-[18px] font-bold tracking-wider">
-                    {isPatient.Fname}
+              <div className="grid w-[100%] grid-cols-4 gap-8">
+                <div className="col-span-1  grid h-[20rem] min-w-[15rem] grid-cols-2 grid-rows-5 gap-4 divide-y-2 divide-gray-400 rounded bg-white p-4 ring-2 ring-gray-300">
+                  <div className="col-span-2 row-span-4 flex flex-col items-center justify-between">
+                    <div className="row-span-3 mt-4 h-[70%] w-[80%] rounded-full bg-gray-400">
+                      Avatar
+                    </div>
+                    <div className="flex w-[30%] items-center justify-center">
+                      <div className="text-[22px] font-semibold tracking-widest text-black"></div>
+                      <div className="text-[22px] font-semibold tracking-widest text-black">
+                        {isPatient.Fname}
+                      </div>
+                      <div className="text-[22px] font-semibold tracking-widest text-black">
+                        {isPatient.Lname}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-[18px] font-bold tracking-wider">
-                    {isPatient.Lname}
-                  </div>
-                </>
+                  <button className="col-span-1 rounded bg-cyan-100 bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200 focus:bg-cyan-200 focus:text-auto-black ">
+                    Update
+                  </button>
+                  <button className="col-span-1 rounded bg-cyan-100 bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200">
+                    Delete
+                  </button>
+                </div>
+                <div className="col-span-3 rounded ring-2 ring-gray-300"></div>
               </div>
             )}
           </div>
