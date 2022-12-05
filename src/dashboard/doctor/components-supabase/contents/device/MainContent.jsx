@@ -31,9 +31,6 @@ const MainContent = (props) => {
   // };
 
 
-  // useEffect(async () => {
-  //   handleLoad();
-  // }, [props.refresh]);
 
   let style1 = '';
   let style2 = '';

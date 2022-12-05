@@ -25,6 +25,7 @@ const now = Date.now();
 const mtd = now - 3600000;
 
 const ContentContainer = () => {
+  const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
   const [devices, setDevices] = useState([]);
   const [telemetries, setTelemetries] = useState({});
@@ -57,7 +58,7 @@ const ContentContainer = () => {
     };
     // if (token) {
     client.subscribe(params, async function (response) {
-      if (response && response.data) {
+      if (response && response.data.temperature) {
         setTelemetries({
           ...telemetries,
           [deviceId]: {
@@ -76,7 +77,7 @@ const ContentContainer = () => {
 
   useEffect(() => {
     handleLoad();
-  }, []);
+  }, [refresh]);
 
   if (!loading) {
     return (
@@ -88,7 +89,7 @@ const ContentContainer = () => {
             <Route path="/index.html" element={<PatientContent />} />
             <Route path="/facilities" element={<FacilityContent />} />
             <Route path="/nurses" element={<NurseContent />} />
-            <Route path="/devices" element={<DeviceContent />} />
+            <Route path="/devices" element={<DeviceContent refresh={refresh} setRefresh={setRefresh}/>} />
           </Routes>
         </div>
       </ContentContainerContext.Provider>
