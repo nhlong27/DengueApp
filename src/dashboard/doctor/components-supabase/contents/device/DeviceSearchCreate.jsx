@@ -46,6 +46,10 @@ const DeviceSearchCreate = (props) => {
             name: values.label,
             type: values.type,
             label: values.label,
+            deviceProfileId: {
+              id: '3e29a7f0-750f-11ed-81cb-3bc720ab387f',
+              entityType: 'DEVICE_PROFILE'
+            },
             additionalInfo: {},
           },
           `?accessToken=${values.token}`,

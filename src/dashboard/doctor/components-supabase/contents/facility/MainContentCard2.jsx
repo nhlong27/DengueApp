@@ -55,7 +55,7 @@ export const StatisticsCard = (props) => {
   const [isRoomContainer, setIsRoomContainer] = useState(false);
 
   return (
-    <Card style={{ fontSize: 50 }}>
+    <Card sx={{ backgroundColor: '#F7F7FF', fontSize:50 }}>
       <CardHeader
         title={`${props.component.R_Number}`}
         action={
@@ -73,7 +73,6 @@ export const StatisticsCard = (props) => {
             <Box component="span" sx={{ fontWeight: 600, color: 'text.primary' }}>
               Additional Info:
             </Box>
-          
           </Typography>
         }
         titleTypographyProps={{
@@ -88,7 +87,7 @@ export const StatisticsCard = (props) => {
         onClick={() => {
           setIsRoomContainer((state) => !state);
         }}
-        className="relative z-10 col-span-1 rounded bg-auto-white bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200 focus:rounded-r-lg focus:bg-white focus:text-auto-black "
+        className="relative z-10 col-span-1 rounded bg-auto-white bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200 focus:rounded-r-lg focus:text-auto-black "
       >
         {isRoomContainer ? (
           <AiOutlineUp className="ml-auto" size={30} color="black" />
@@ -100,13 +99,11 @@ export const StatisticsCard = (props) => {
       <CardContent sx={{ pt: (theme) => `${theme.spacing(3)} !important` }}>
         <Grid container spacing={[5, 0]}>
           {isRoomContainer ? (
-              <DepositWithdraw
-                bedData={props.component.beds}
-                nurseData={props.component.nurses}
-              />
-          ) : (
-              null
-          )}
+            <DepositWithdraw
+              bedData={props.component.beds}
+              nurseData={props.component.nurses}
+            />
+          ) : null}
         </Grid>
       </CardContent>
     </Card>
@@ -133,6 +130,7 @@ export const DepositWithdraw = (props) => {
         flexDirection: ['column', 'column', 'row'],
         width: 1000,
         border: 1,
+        backgroundColor: '#F7F7FF'
       }}
     >
       <Box sx={{ width: '100%' }}>

@@ -66,7 +66,7 @@ export const DashboardTable = (props) => {
   const { telemetries } = useContext(ContentContainerContext);
 
   return (
-    <Card>
+    <Card sx={{ backgroundColor: '#F7F7FF' }}>
       <TableContainer>
         <Table sx={{ minWidth: 800 }} aria-label="table in dashboard">
           <TableHead>
@@ -115,24 +115,37 @@ export const DashboardTable = (props) => {
                       '& .MuiChip-label': { fontWeight: 500 },
                     }}
                   />
+                  <button
+                    onClick={() => {
+                      props.setInfoOpen(true);
+                      props.setIsPatient(row);
+                    }}
+                    className="my-auto mt-4 rounded-lg p-2 ring-2 ring-gray-200"
+                  >
+                    Details
+                  </button>
                 </TableCell>
                 <TableCell sx={{ py: (theme) => `${theme.spacing(0.5)} !important` }}>
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+                    <Typography sx={{ fontWeight: 500, fontSize: '1.3rem !important' }}>
                       <BsPeopleFill />
                       {row.Fname}
                     </Typography>
-                    <Typography variant="caption">{row.Lname}</Typography>
+                    <Typography sx={{ fontSize: '1rem' }} variant="caption">
+                      {row.Lname}
+                    </Typography>
                   </Box>
                 </TableCell>
-                <TableCell>{row.Email}</TableCell>
-                <TableCell>{row.D_Id}</TableCell>
+                <TableCell sx={{ fontSize: '1rem' }}>{row.Email}</TableCell>
+                <TableCell sx={{ fontSize: '1rem' }}>{row.D_Id}</TableCell>
                 <TableCell sx={{ py: (theme) => `${theme.spacing(0.5)} !important` }}>
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
+                    <Typography sx={{ fontWeight: 500, fontSize: '1.3rem !important' }}>
                       {row.B_Number}
                     </Typography>
-                    <Typography variant="caption">{'Bed number'}</Typography>
+                    <Typography sx={{ fontSize: '0.8rem' }} variant="caption">
+                      {'Bed number'}
+                    </Typography>
                   </Box>
                 </TableCell>
                 <TableCell color="purple">
@@ -150,17 +163,7 @@ export const DashboardTable = (props) => {
                     {telemetries[`${row.D_Id}`] && telemetries[`${row.D_Id}`].HrtPressure}
                   </span>
                 </TableCell>
-                <TableCell>
-                  <button
-                    onClick={() => {
-                      props.setInfoOpen(true);
-                      props.setIsPatient(row);
-                    }}
-                    className="my-auto rounded-lg p-2 ring-2 ring-gray-200"
-                  >
-                    Details
-                  </button>
-                </TableCell>
+                {/* <TableCell></TableCell> */}
               </TableRow>
             ))}
           </TableBody>

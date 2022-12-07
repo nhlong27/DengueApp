@@ -61,7 +61,7 @@ import { RiNurseFill } from 'react-icons/ri';
 
 export const DashboardTable = (props) => {
   return (
-    <Card>
+    <Card sx={{ backgroundColor: '#F7F7FF' }}>
       <TableContainer>
         <Table sx={{ minWidth: 800 }} aria-label="table in dashboard">
           <TableHead>

@@ -45,7 +45,7 @@ const MainContent = (props) => {
     return (
       <div className="absolute w-[95%] h-screen">
         <div
-          className={`${style2} flex min-h-[99%] flex-wrap items-start justify-around rounded-lg bg-gray-300 p-8 transition-all duration-700`}
+          className={`${style2} flex min-h-[99%] flex-wrap gap-4 items-start justify-around rounded-lg bg-gray-300 p-8 transition-all duration-700`}
         >
           {devices.map((device, index) => {
             return (
@@ -61,7 +61,7 @@ const MainContent = (props) => {
         </div>
 
         <div
-          className={` ${style1} absolute top-0 right-0 z-20 h-[100%] w-[50%]  rounded-l-lg bg-auto-white shadow-2xl transition-all duration-500 ease-in-out`}
+          className={` ${style1} absolute top-0 right-0 z-20 min-h-[100%] w-[50%]  rounded-l-lg bg-auto-white shadow-2xl transition-all duration-500 ease-in-out`}
         >
           <div className="sticky top-0 right-0 flex w-[100%] flex-col items-center justify-start gap-4 p-4">
             <button

@@ -58,7 +58,7 @@ const ContentContainer = () => {
     };
     // if (token) {
     client.subscribe(params, async function (response) {
-      if (response && response.data.temperature) {
+      if (response.data.SpO2 && response.data.temperature && response.data.HrtPressure) {
         setTelemetries({
           ...telemetries,
           [deviceId]: {
