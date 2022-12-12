@@ -7,7 +7,7 @@ import MainContent from './MainContent';
 //Big model with selection
 //Assign bed, device
 //Magic link through email
-const PatientContent = () => {
+const PatientContent = (props) => {
   const [refresh, setRefresh] = useState(false);
   const [search, setSearch] = useState('');
   return (
@@ -16,7 +16,7 @@ const PatientContent = () => {
         <PatientSearchCreate search={search} setSearch={setSearch} setRefresh={setRefresh} />
       </div>
       <div className="scrollbar relative flex-grow overflow-x-hidden overflow-y-scroll p-8">
-        <MainContent refresh={refresh}/>
+        <MainContent refresh={refresh} setIsChart = {props.setIsChart} />
       </div>
     </>
   );

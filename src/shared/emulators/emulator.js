@@ -1,4 +1,4 @@
-const HOST = 'thingsboard.cloud'
+const HOST = 'thingsboard.cloud';
 // import {HOST, USERNAME, PASSWORD} from '../constants/credentials'
 //Requires node.js and mqtt library installed.
 var mqtt = require('mqtt');
@@ -8,8 +8,8 @@ const thingsboardHost = HOST;
 
 // Reads the access token from arguments
 const accessToken = process.argv[2];
-const minTemperature = 35,
-  maxTemperature = 40,
+const minTemperature = 36,
+  maxTemperature = 41,
   minSpO2 = 95,
   maxSpO2 = 100,
   minHrtPressure = 60,
@@ -36,7 +36,7 @@ client.on('connect', function () {
   );
   // Schedules telemetry data upload once per second
   console.log('Uploading temperature and SpO2 data once per second...');
-  setInterval(publishTelemetry, 3000);
+  setInterval(publishTelemetry, 2000);
 });
 
 // Uploads telemetry data using 'v1/devices/me/telemetry' MQTT topic

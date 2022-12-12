@@ -15,7 +15,7 @@ https://vercel.com/guides/do-vercel-serverless-functions-support-websocket-conne
 ## Add
 - Read the guide 
 + Facilities
-V Devices -> access tokens + HOST to configure devices
+<!-- V Devices -> access tokens + HOST to configure devices -->
 + Nurses -> Invite, Assign available (room assigned?) 
 + Patients -> Invite, Assign available (bed, device assigned?)
 # Maintaining
@@ -28,13 +28,22 @@ V Devices -> access tokens + HOST to configure devices
 - Unassigned, Update, Delete
 
 # Extra
-V Refresh 
+<!-- V Refresh  -->
 - Keep session
 - Invite (server api)
 - Remaster UI/UX 
 - Already existed (token, fname, lname, ...) --> Announce error
 - Show and hide sensitive information
-V Sticky info 
+<!-- V Sticky info  -->
 - Local storage
 - Manually Open & Close websocket
 - breadcrumbs
+
+# To do Now
+<!-- Build emulator -->
+<!-- Research database  -->
+<!-- Build table -->
+- Test real time line graph
+Test Status function
+Test time 
+Try Spark

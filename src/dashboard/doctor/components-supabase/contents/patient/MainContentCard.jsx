@@ -15,6 +15,7 @@ import { BsPeopleFill } from 'react-icons/bs';
 // import { telemetries } from '../../ContentContainer';
 import { useEffect } from 'react';
 import { ContentContainerContext } from '../../ContentContainer';
+import { supabase } from '@/shared/api/supabase/supabaseClient';
 
 // const MainContentCard = (
 //   { open, component, setInfoOpen, setIsPatient } = {
@@ -56,15 +57,30 @@ import { ContentContainerContext } from '../../ContentContainer';
 
 const statusObj = {
   // applied: { color: 'info' },
-  critical: { color: 'error' },
+  Febrile: { color: 'error' },
   none: { color: 'primary' },
-  warning: { color: 'warning' },
-  good: { color: 'success' },
+  Incubation: { color: 'warning' },
+  Recovery: { color: 'success' },
 };
 
 export const DashboardTable = (props) => {
   const { telemetries } = useContext(ContentContainerContext);
-
+  const reload = async () => {
+    for (let row of props.rows) {
+      console.log(row);
+      if (row.D_Id) {
+        const { data: TELEMETRY, error } = await supabase
+          .from('TELEMETRY')
+          .select('*')
+          .eq('D_Id', row.D_Id);
+        console.log(TELEMETRY);
+        row.Status = TELEMETRY[TELEMETRY.length - 1].Status;
+      }
+    }
+  };
+  useEffect(() => {
+    reload();
+  }, []);
   return (
     <Card sx={{ backgroundColor: '#F7F7FF' }}>
       <TableContainer>

@@ -53,7 +53,9 @@ const PatientSearchCreate = (props) => {
   const handleDeviceLoad = async () => {
     try {
       setDeviceLoading(true);
-      let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
+
+      // I could use devices from useContext
+      let { data: DEVICE, error } = await supabase.from('DEVICE').select('*').eq('Assign', 'No');
       if (error) throw error;
       let deviceList = DEVICE.map((ele) => ele.Label);
       setDevices(deviceList);
@@ -87,9 +89,10 @@ const PatientSearchCreate = (props) => {
       let now = Date.now();
       await supabase.from('PERSON').insert([{ Per_Ssn: now, D_Ssn: session.user.id }]);
       let { data: DEVICE } = await supabase
-        .from('DEVICE')
-        .select('*')
-        .eq('Label', values.label);
+      .from('DEVICE')
+      .select('*')
+      .eq('Label', values.label);
+      await supabase.from('DEVICE').update({ Assign: 'Yes' }).eq('D_Id',DEVICE.D_Id);
       let { data: BED, error } = await supabase
         .from('BED')
         .select('*')

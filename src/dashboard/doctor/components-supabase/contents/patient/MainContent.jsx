@@ -17,12 +17,16 @@ import { GiMedicalDrip } from 'react-icons/gi';
 import { BiHeart } from 'react-icons/bi';
 import { GrDevice } from 'react-icons/gr';
 import { ContentContainerContext } from '../../ContentContainer';
+import BasicSelect from '@/shared/utilities/form/BasicSelect';
+// import { LineChart } from './SingleLineChart';
 
 const MainContent = (props) => {
   const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isOpen, setOpen] = useState(false);
   const [isPatient, setIsPatient] = useState({});
+  const { devices } = useContext(ContentContainerContext);
+
   const handleLoad = async () => {
     try {
       setLoading(true);
@@ -74,7 +78,7 @@ const MainContent = (props) => {
           setIsPatient={setIsPatient}
         />
         <div
-          className={` ${style1} absolute top-0 right-0 z-20 min-h-[100%] w-[100%]  rounded-l-lg bg-auto-white shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
+          className={` ${style1} absolute top-0 right-0 z-20 min-h-[50%] w-[100%]  rounded-l-lg bg-auto-white shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
         >
           <div className=" flex w-[100%] flex-col items-center justify-start gap-4 p-4">
             <div className="flex w-[100%] flex-row items-center justify-start bg-auto-white text-large font-extrabold text-auto-black shadow-sm">
@@ -113,7 +117,18 @@ const MainContent = (props) => {
                   </button>
                 </div>
                 <div className="col-span-3 rounded ring-2 ring-gray-300">
-                  <StatisticsCard component={isPatient} />
+                  <StatisticsCard
+                    component={isPatient}
+                    devices={devices
+                      .filter((device) => device.Assign === 'No')
+                      .map((device) => device.Label)}
+                  />
+                </div>
+                <div className="col-span-3 rounded ring-2 ring-gray-300">
+                  <div>
+                    {/* <LineChart component={isPatient} /> */} 
+                    <button onClick={()=>props.setIsChart(true)} className='p-4 ring-2 ring-gray-300 text-center'>Open Chart</button>
+                    </div>
                 </div>
               </div>
             )}
@@ -131,7 +146,28 @@ const MainContent = (props) => {
 };
 
 const StatisticsCard = (props) => {
+  const [device, setDevice] = useState('');
   const { telemetries } = useContext(ContentContainerContext);
+
+  const handleAssign = async () => {
+    try {
+      let now = Date.now();
+      const { data: DEVICE, error } = await supabase
+        .from('DEVICE')
+        .select('*')
+        .eq('Label', device);
+      await supabase
+        .from('PATIENT')
+        .update({ D_Id: DEVICE[0].D_Id })
+        .eq('P_Ssn', props.component.P_Ssn);
+      await supabase.from('DEVICE').update({ Assign: 'Yes' }).eq('D_Id', DEVICE[0].D_Id);
+      // await supabase.from('TELEMETRY').insert([{ D_Id: DEVICE[0].D_Id, Time: now }]);
+      if (error) throw error;
+      console.log('assign device success!');
+    } catch (error) {
+      console.log(error.error_description || error.message);
+    }
+  };
   return (
     <Card sx={{ height: '100%', backgroundColor: '#F7F7FF' }}>
       <CardHeader
@@ -147,21 +183,37 @@ const StatisticsCard = (props) => {
           </IconButton>
         }
         subheader={
-          <Typography variant="body2">
-            <div className="mb-2 grid grid-cols-2 grid-rows-1 border-b-2 border-gray-300">
+          <>
+            <div className="mb-2 grid grid-cols-3 grid-rows-1 border-b-2 border-gray-300">
               {props.component.B_Number ? (
-                <div className="text-green-300">
+                <div className="col-span-1 text-green-300">
                   Assigned to bed: {props.component.B_Number}
                 </div>
               ) : (
-                <div className="text-red-300">Unassigned to any bed</div>
+                <div className="col-span-1 text-red-300">Unassigned to any bed</div>
               )}
               {props.component.D_Id ? (
-                <div className="text-green-300">
+                <div className="col-span-2 text-green-300">
                   Device assigned: {props.component.D_Id}
                 </div>
               ) : (
-                <div className="text-red-300">No assigned device</div>
+                <div className="col-span-2 flex justify-start text-red-300">
+                  No assigned device
+                  <BasicSelect
+                    input={device}
+                    setInput={setDevice}
+                    name={'Assign a device'}
+                    list={props.devices}
+                    style={{ width: 150, height: 50 }}
+                    variant="filled"
+                  />
+                  <button
+                    className="rounded text-center text-blue-600 ring-2 ring-gray-300"
+                    onClick={() => handleAssign()}
+                  >
+                    Assign
+                  </button>
+                </div>
               )}
             </div>
             <div className="mb-2 grid grid-cols-4 grid-rows-1 border-b-2 border-gray-300">
@@ -175,21 +227,7 @@ const StatisticsCard = (props) => {
               <div>District: {props.component.District}</div>
               <div>Street: {props.component.Street}</div>
             </div>
-            {/* <Box
-                component="span"
-                sx={{ fontWeight: 600, color: 'text.primary', justifySelf:'start' }}
-              >
-              </Box>{' '}
-              <br />
-              <Box
-                component="span"
-                sx={{ fontWeight: 600, color: 'text.primary', justifySelf:'end' }}
-              >
-              </Box> */}
-            {/* <Box component="span" sx={{ fontWeight: 600, color: 'text.primary' }}>
-              First name: {props.component.Fname}
-            </Box> */}
-          </Typography>
+          </>
         }
         titleTypographyProps={{
           sx: {
