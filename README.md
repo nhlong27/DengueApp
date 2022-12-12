@@ -50,4 +50,4 @@ https://www.reddit.com/r/vuejs/comments/r0fbfw/eli5_why_is_vite_so_much_faster_t
 https://vercel.com/guides/do-vercel-serverless-functions-support-websocket-connections
 
 
-![Project Screenshot](https://github.com/nhlong27/dengueapp/assets/project-screenshot.png?raw=true)
+![Project Screenshot](assets/project-screenshot.png?raw=true)
