@@ -39,7 +39,7 @@ function App() {
             <main className="z-10 flex h-[90%] w-[100%] flex-auto">
               <ContentContainer setIsChart={setIsChart} />
               <div className=" flex w-[25%] flex-col items-center justify-start overflow-y-scroll bg-auto-white shadow-lg">
-                {/* <Chatbox /> */}
+                <Chatbox />
               </div>
             </main>
             <div

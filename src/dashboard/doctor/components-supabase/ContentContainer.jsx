@@ -27,7 +27,7 @@ const mtd = now - 3600000;
 const ContentContainer = (props) => {
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [devices, setDevices] = useState([{ dummyValue: 0 }]);
+  const [devices, setDevices] = useState([{ dummyValue: 0 }, { dummyValue2: 0 }]);
   const [telemetries, setTelemetries] = useState({
     randomId: {
       temperature: 0,
