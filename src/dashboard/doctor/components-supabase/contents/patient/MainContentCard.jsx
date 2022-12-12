@@ -125,8 +125,8 @@ export const DashboardTable = (props) => {
                     label={row.Status}
                     color={statusObj[row.Status].color}
                     sx={{
-                      height: 24,
-                      fontSize: '0.75rem',
+                      height: 26,
+                      fontSize: '1rem',
                       textTransform: 'capitalize',
                       '& .MuiChip-label': { fontWeight: 500 },
                     }}
