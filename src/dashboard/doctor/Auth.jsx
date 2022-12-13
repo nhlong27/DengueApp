@@ -39,9 +39,9 @@ const Auth = () => {
           className={`${imgStyle} absolute top-0 z-30 h-[100%] w-[51%] overflow-hidden rounded-xl ring-2 ring-blue-600 transition-all duration-1000 ease-in-out`}
         >
           <img
-            className="h-[100%] w-[100%] "
-            src="assets/img/login.jpg"
-            alt="Login"
+            className="h-[100%] w-[100%] bg-gradient-to-tr from-black to-gray-600"
+            src="../../../assets/img/login.jpg"
+            alt=""
           />
         </div>
       </div>
@@ -61,8 +61,8 @@ const Login = (props) => {
     } catch (error) {
       console.log(error.error_description || error.message);
     } finally {
-        setLoading(false);
-        navigate('/pages/dashboard/doctor/index.html');
+      setLoading(false);
+      navigate('/pages/dashboard/doctor/index.html');
     }
   };
   return (
