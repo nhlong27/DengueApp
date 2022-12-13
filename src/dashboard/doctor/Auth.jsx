@@ -40,7 +40,7 @@ const Auth = () => {
         >
           <img
             className="h-[100%] w-[100%] "
-            src="../../../assets/img/login.jpg"
+            src="assets/img/login.jpg"
             alt="Login"
           />
         </div>
