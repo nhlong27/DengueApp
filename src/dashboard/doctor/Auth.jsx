@@ -32,7 +32,7 @@ const Auth = () => {
 
   return (
     <div className=" flex h-screen w-screen items-center justify-center bg-black">
-      <div className="relative grid h-[80%] w-[60%] grid-cols-2  rounded-xl border-2 border-black bg-gradient-to-t from-white to-cyan-50 ">
+      <div className="relative grid h-[80%] w-[60%] grid-cols-2  rounded-xl border-2 border-black bg-auto-white">
         <Login setIsSignUp={setIsSignUp} schema={loginSchema} />
         <Signup setIsSignUp={setIsSignUp} schema={signupSchema} />
         <div
@@ -109,7 +109,7 @@ const Login = (props) => {
                   </div>
                   <div className="absolute right-0 mt-4 flex flex-col items-end justify-start gap-2">
                     <button
-                      className=" rounded bg-blue-600 px-6 py-2 text-auto-white hover:bg-blue-800 hover:font-bold hover:text-light-important "
+                      className=" rounded bg-blue-600 px-6 py-2 text-auto-white hover:bg-blue-700 hover:font-bold ring-2 ring-black "
                       type="submit"
                       onClick={() => {
                         handleLogIn({ ...values });
@@ -141,7 +141,7 @@ const Login = (props) => {
                   Sign up
                 </button>
                 <button
-                  className=" rounded bg-white px-6 py-2 text-blue-600 hover:font-bold"
+                  className=" rounded bg-auto-white px-6 py-2 text-blue-600 hover:font-bold"
                   type="submit"
                 >
                   <a href="../../../index.html">Or back to home page</a>
@@ -280,7 +280,7 @@ const Signup = (props) => {
                   </div>
                   <div className="absolute right-[10rem] mt-4 flex flex-col items-end justify-start gap-2">
                     <button
-                      className=" rounded bg-blue-600 px-6 py-2 text-auto-white hover:bg-blue-800 hover:font-bold hover:text-light-important "
+                      className=" rounded bg-blue-600 px-6 py-2 text-auto-white hover:bg-blue-700 hover:font-bold ring-2 ring-black"
                       type="submit"
                       onClick={() => {
                         console.log({ ...values });
@@ -322,7 +322,7 @@ const Signup = (props) => {
                   Log in
                 </button>
                 <button
-                  className=" rounded bg-white px-6 py-2 text-blue-600 hover:font-bold"
+                  className=" rounded bg-auto-white px-6 py-2 text-blue-600 hover:font-bold"
                   type="submit"
                 >
                   <a href="../../../index.html">Or back to home page</a>
