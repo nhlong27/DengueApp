@@ -63,7 +63,7 @@ const MainContent = (props) => {
         </div> */}
         
         <div
-          className={` ${style1} absolute top-0 right-0 z-20 min-h-[100%] w-[100%]  rounded-l-lg bg-white shadow-2xl transition-all duration-500 ease-in-out ring-black ring-2`}
+          className={` ${style1} absolute top-0 right-0 min-h-[100%] w-[100%]  rounded-l-lg bg-white shadow-2xl transition-all duration-500 ease-in-out ring-black ring-2`}
         >
           <div className=" flex w-[100%] flex-col items-center justify-start gap-4 p-4">
             <div className="flex w-[100%] flex-row items-center justify-start bg-white text-large font-extrabold text-auto-black shadow-sm">

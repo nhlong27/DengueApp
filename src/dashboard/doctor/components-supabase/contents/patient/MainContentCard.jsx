@@ -136,7 +136,7 @@ export const DashboardTable = (props) => {
                       props.setInfoOpen(true);
                       props.setIsPatient(row);
                     }}
-                    className="my-auto mt-4 rounded-lg p-2 ring-2 ring-gray-200"
+                    className="my-auto mt-4 rounded-lg p-2 ring-2 ring-gray-200 hover:ring-black"
                   >
                     Details
                   </button>

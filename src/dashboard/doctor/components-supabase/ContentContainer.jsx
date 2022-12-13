@@ -169,12 +169,13 @@ const ContentContainer = (props) => {
       <ContentContainerContext.Provider
         value={{ devices, setDevices, telemetries, setTelemetries }}
       >
-        <div className="flex w-[75%] flex-auto shrink flex-col">
+        <div className="flex w-[75%] flex-auto flex-col">
           <Routes>
             <Route
               path="/index.html"
               element={<PatientContent setIsChart={props.setIsChart} />}
             />
+            <Route path="/account" element={<Account session={props.session} />} />
             <Route path="/facilities" element={<FacilityContent />} />
             <Route path="/nurses" element={<NurseContent />} />
             <Route

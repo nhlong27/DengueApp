@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
+import { InfinitySpin } from 'react-loader-spinner';
+// import Avatar from './Avatar';
 
 const Account = ({ session }) => {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState(null);
-  const [website, setWebsite] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
 
   useEffect(() => {
@@ -17,9 +20,9 @@ const Account = ({ session }) => {
       const { user } = session;
 
       let { data, error, status } = await supabase
-        .from('profiles')
-        .select(`username, website, avatar_url`)
-        .eq('id', user.id)
+        .from('DOCTOR')
+        .select(`Username, Avatar_url, Fname, Lname`)
+        .eq('D_Ssn', user.id)
         .single();
 
       if (error && status !== 406) {
@@ -27,9 +30,10 @@ const Account = ({ session }) => {
       }
 
       if (data) {
-        setUsername(data.username);
-        setWebsite(data.website);
-        setAvatarUrl(data.avatar_url);
+        setUsername(data.Username);
+        setLastName(data.Lname);
+        setFirstName(data.Fname);
+        setAvatarUrl(data.Avatar_url);
       }
     } catch (error) {
       alert(error.message);
@@ -46,14 +50,15 @@ const Account = ({ session }) => {
       const { user } = session;
 
       const updates = {
-        id: user.id,
-        username,
-        website,
-        avatar_url,
-        updated_at: new Date(),
+        D_Ssn: user.id,
+        Username: username,
+        Fname: firstName,
+        Lname: lastName,
+        Avatar_url: avatar_url,
+        Updated_at: new Date(),
       };
 
-      let { error } = await supabase.from('profiles').upsert(updates);
+      let { error } = await supabase.from('DOCTOR').upsert(updates);
 
       if (error) {
         throw error;
@@ -66,44 +71,78 @@ const Account = ({ session }) => {
   };
 
   return (
-    <div aria-live="polite">
-      {loading ? (
-        'Saving ...'
-      ) : (
-        <form onSubmit={updateProfile}>
-          <div>Email: {session.user.email}</div>
-          <div>
-            <label htmlFor="username">Name</label>
-            <input
-              id="username"
-              type="text"
-              value={username || ''}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="website">Website</label>
-            <input
-              id="website"
-              type="url"
-              value={website || ''}
-              onChange={(e) => setWebsite(e.target.value)}
-            />
-          </div>
-          <div>
-            <button className="button primary block" disabled={loading}>
-              Update profile
-            </button>
-          </div>
-        </form>
-      )}
-      <button
-        type="button"
-        className="button block"
-        onClick={() => supabase.auth.signOut()}
-      >
-        Sign Out
-      </button>
+    <div className="bg-auto-white px-8 py-16">
+      <div className="shadow-lg ring-2 ring-black flex w-auto flex-col items-start justify-start rounded-lg bg-gray-300 p-8">
+        {loading ? (
+          <InfinitySpin width="100" color="#475569" />
+        ) : (
+          <>
+            {/* <Avatar
+            url={avatar_url}
+            size={150}
+            onUpload={(url) => {
+              setAvatarUrl(url);
+              updateProfile({ username, avatar_url: url });
+            }}
+          /> */}
+            <form
+              className="w-[100%] divide-y-2 divide-gray-400"
+              onSubmit={updateProfile}
+            >
+              <div className="p-4 font-extrabold text-blue-500">
+                Email: {session.user.email}
+              </div>
+              <div className="p-4">
+                <label htmlFor="username">Username</label>
+                <input
+                  className="ml-4 rounded p-2 text-gray-500 hover:ring-2 hover:ring-white hover:ring-offset-2"
+                  id="username"
+                  type="text"
+                  value={username || `Set a username`}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+              <div className="p-4">
+                <label htmlFor="firstName">First name</label>
+                <input
+                  className="ml-4 rounded p-2 text-gray-500 hover:ring-2 hover:ring-white hover:ring-offset-2"
+                  id="firstName"
+                  type="text"
+                  value={firstName || ''}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </div>
+              <div className="p-4">
+                <label htmlFor="lastName">Last name</label>
+                <input
+                  className="ml-4 rounded p-2 text-gray-500 hover:ring-2 hover:ring-white hover:ring-offset-2"
+                  id="lastName"
+                  type="text"
+                  value={lastName || ''}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </div>
+              <div className="p-4">
+                <button
+                  className="ml-4 rounded-lg bg-blue-600 py-2 px-4 text-white hover:ring-2 hover:ring-black"
+                  disabled={loading}
+                >
+                  Update profile
+                </button>
+              </div>
+            </form>
+          </>
+        )}
+        <div className="w-[100%] py-2 relative">
+          <button
+            type="button"
+            className="absolute bottom-[2rem] right-8 rounded-lg bg-red-600 py-2 px-4 text-white hover:ring-2 hover:ring-black"
+            onClick={() => supabase.auth.signOut()}
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

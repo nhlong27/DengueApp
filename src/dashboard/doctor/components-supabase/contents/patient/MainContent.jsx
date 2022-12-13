@@ -78,7 +78,7 @@ const MainContent = (props) => {
           setIsPatient={setIsPatient}
         />
         <div
-          className={` ${style1} absolute top-0 right-0 z-20 min-h-[50%] w-[100%]  rounded-l-lg bg-auto-white shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
+          className={` ${style1} absolute top-0 right-0 min-h-[50%] w-[100%]  rounded-l-lg bg-auto-white shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
         >
           <div className=" flex w-[100%] flex-col items-center justify-start gap-4 p-4">
             <div className="flex w-[100%] flex-row items-center justify-start bg-auto-white text-large font-extrabold text-auto-black shadow-sm">

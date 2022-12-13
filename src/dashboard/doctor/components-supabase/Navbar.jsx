@@ -7,51 +7,43 @@ import { GrSchedulePlay } from 'react-icons/gr';
 import { BiMessageSquareDots } from 'react-icons/bi';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { InfinitySpin } from 'react-loader-spinner';
+import { Link } from 'react-router-dom';
 // import {useLocation} from 'react-router-dom'
 
 const Navbar = (props) => {
   // const { session } = useContext(AppContext);
   const [username, setUsername] = useState('');
-  const { avatar_url, setAvatarUrl } = useState('');
+  const [avatar_url, setAvatarUrl] = useState('');
   const [isOpen, setDropDown] = useState(false);
   const [title, setTitle] = useState('Dashboard');
-  // const location = useLocation();
-  // switch(location.pathname){
-  //   case '/pages/dashboard/doctor/facilities':
-  //     setTitle('Facilities')
-  //     break;
-  //   case '/pages/dashboard/doctor/nurses':
-  //     setTitle('Nurses')
-  //     break;
-  //   case '/pages/dashboard/doctor/devices':
-  //     setTitle('Devices')
-  //     break;
-  //   case '/pages/dashboard/doctor/schedules':
-  //     setTitle('Schedules')
-  //     break;
-  //   case '/pages/dashboard/doctor/notifs':
-  //     setTitle('Notifications')
-  //     break;
-  //   default:
-  //     setTitle('Dashboard')
-  // }
 
+  const getProfile = async () => {
+    try {
+      const { user } = props.session;
 
-  // const { user } = session;
-  // console.log(session);
-  // const getProfile = async () => {
-  //   let { data } = await supabase
-  //     .from('profiles')
-  //     .select(`Email`)
-  //     .eq('id', user.id)
-  //     .single();
-  //   if (data) {
-  //     setUsername(data.Email);
-  //   }
-  // };
-  useEffect(() => {}, []);
+      let { data, error, status } = await supabase
+        .from('DOCTOR')
+        .select(`Username, Avatar_url`)
+        .eq('D_Ssn', user.id)
+        .single();
+
+      if (error && status !== 406) {
+        throw error;
+      }
+
+      if (data) {
+        setUsername(data.Username);
+        setAvatarUrl(data.Avatar_url);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  useEffect(() => {
+    getProfile();
+  }, []);
   return (
-    <nav className="flex h-[10%] w-[100%] items-center justify-between bg-auto-white p-8 shadow-sm">
+    <nav className="flex h-[10%] w-[100%] items-center justify-between bg-auto-white p-8 shadow-md">
       <div className="p-4 text-center text-[28px] font-extrabold tracking-[5px] text-blue-600">
         {props.location}
       </div>
@@ -65,8 +57,8 @@ const Navbar = (props) => {
         <button>
           <IoMdNotificationsOutline />
         </button>
-        <span className="flex items-center justify-center rounded-2xl p-2 text-[18px] ring-2 ring-cyan-100">
-          {/* {user.email} */}
+        <span className="flex items-center justify-center rounded-2xl p-2 text-[18px] font-extrabold tracking-[10px]">
+          {username ? username : 'Default User'}
         </span>
         <button
           onClick={(e) => {
@@ -76,15 +68,15 @@ const Navbar = (props) => {
         >
           {avatar_url ? (
             <img
-              className="ml-2 inline-block h-8 w-8 rounded-full bg-auto-black ring-2 ring-cyan-100 hover:opacity-70"
+              className="inline-block h-8 w-8 rounded-full bg-auto-black ring-2 ring-cyan-100 hover:opacity-70"
               alt=""
               src={avatar_url}
             ></img>
           ) : (
-            <InfinitySpin width="100" color="#475569" />
+            <div className="h-[2rem] w-[2rem] rounded-full bg-gray-400"></div>
           )}
         </button>
-        {isOpen && <DropDownMenu />}
+        {isOpen && <DropDownMenu setLocation={props.setLocation} />}
       </div>
     </nav>
   );
@@ -93,31 +85,34 @@ const Navbar = (props) => {
 export const DropDownMenu = (props) => {
   return (
     <div
-      className={`w-[13rem] p-4 absolute top-[4rem] right-[2rem] z-20 origin-top-right rounded-lg bg-black text-white shadow-lg ring-2 ring-white ring-opacity-100`}
+      className={`absolute top-[4rem] right-[2rem] z-20 w-[13rem] origin-top-right rounded-lg bg-black p-4 text-white shadow-lg ring-2 ring-white ring-opacity-100`}
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="menu-button"
       tabIndex={-1}
     >
       <div className="py-1" role="none">
-        <a
+        <Link
+          onClick={() => {
+            props.setLocation('Profile');
+          }}
+          to="/pages/dashboard/doctor/account"
           className="block w-full px-4 py-2 text-left text-sm  hover:bg-slate-200 hover:text-black"
-          href="/pages/dashboard/doctor/account"
         >
           Profile
-        </a>
+        </Link>
         <a
           className="block w-full px-4 py-2 text-left text-sm hover:bg-slate-200 hover:text-black"
           href="#"
         >
-          Account Settings
+          Settings
         </a>
-        <a
+        {/* <a
           className="block w-full px-4 py-2 text-left text-sm hover:bg-slate-200 hover:text-black"
           href="#"
         >
           Support
-        </a>
+        </a> */}
 
         <button
           type="button"
