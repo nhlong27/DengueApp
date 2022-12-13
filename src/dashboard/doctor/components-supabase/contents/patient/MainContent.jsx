@@ -127,7 +127,7 @@ const MainContent = (props) => {
                 <div className="col-span-3 rounded ring-2 ring-gray-300">
                   <div>
                     {/* <LineChart component={isPatient} /> */} 
-                    <button onClick={()=>props.setIsChart(true)} className='p-4 ring-2 ring-gray-300 text-center'>Open Chart</button>
+                    <button onClick={()=>props.setIsChart([true,'all'])} className='p-4 ring-2 ring-gray-300 text-center'>Open Chart</button>
                     </div>
                 </div>
               </div>

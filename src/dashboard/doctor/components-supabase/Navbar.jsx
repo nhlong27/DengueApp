@@ -8,6 +8,7 @@ import { BiMessageSquareDots } from 'react-icons/bi';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { InfinitySpin } from 'react-loader-spinner';
 import { Link } from 'react-router-dom';
+import { AiOutlineDown } from 'react-icons/ai';
 // import {useLocation} from 'react-router-dom'
 
 const Navbar = (props) => {
@@ -61,6 +62,7 @@ const Navbar = (props) => {
           {username ? username : 'Default User'}
         </span>
         <button
+        className='flex items-center gap-2'
           onClick={(e) => {
             setDropDown((state) => !state);
             e.stopPropagation();
@@ -75,6 +77,7 @@ const Navbar = (props) => {
           ) : (
             <div className="h-[2rem] w-[2rem] rounded-full bg-gray-400"></div>
           )}
+          <AiOutlineDown size={15} />
         </button>
         {isOpen && <DropDownMenu setLocation={props.setLocation} />}
       </div>
@@ -85,13 +88,13 @@ const Navbar = (props) => {
 export const DropDownMenu = (props) => {
   return (
     <div
-      className={`absolute top-[4rem] right-[2rem] z-20 w-[13rem] origin-top-right rounded-lg bg-black p-4 text-white shadow-lg ring-2 ring-white ring-opacity-100`}
+      className={`absolute  top-[4rem] right-[2rem] z-20 w-[13rem] origin-top-right rounded-lg bg-auto-white p-2 text-black shadow-lg ring-2 ring-black`}
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="menu-button"
       tabIndex={-1}
     >
-      <div className="py-1" role="none">
+      <div className=" py-1" role="none">
         <Link
           onClick={() => {
             props.setLocation('Profile');
@@ -116,7 +119,7 @@ export const DropDownMenu = (props) => {
 
         <button
           type="button"
-          className="block w-full border-t-2 border-gray-100 px-4 py-2 text-left text-sm hover:bg-slate-200 hover:text-black"
+          className="block w-full border-t-2 border-gray-300 px-4 py-2 text-left text-sm hover:bg-slate-200 hover:text-black"
           role="menuitem"
           tabIndex={-1}
           id="menu-item-3"

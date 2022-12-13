@@ -52,107 +52,320 @@ export function LineChart(props) {
     subscribe();
   }, []);
   // console.log(telemetries);
-
-  return (
-    <Line
-      // width={800}
-      // height={650}
-      options={{
-        responsive: true,
-        maintainAspectRatio: true,
-        interaction: {
-          mode: 'index',
-          intersect: false,
-        },
-        stacked: 'false',
-        grid: {
-          drawOnChartArea: false, // only want the grid lines for one axis to show up
-        },
-        plugins: {
-          legend: {
-            position: 'top',
+  if (props.isChart[1]==='all'){
+    return (
+      <Line
+        // width={800}
+        // height={650}
+        options={{
+          responsive: true,
+          maintainAspectRatio: true,
+          interaction: {
+            mode: 'index',
+            intersect: false,
           },
-          title: {
-            display: true,
-            text: 'Chart.js Line Chart',
+          stacked: 'false',
+          grid: {
+            drawOnChartArea: false, // only want the grid lines for one axis to show up
           },
-        },
-        scales: {
-          x: {
-            type: 'realtime',
-            realtime: {
-              delay: 100,
-              refresh: 1000,
-              onRefresh: async (chart) => {
-                chart.data.datasets.forEach((dataset) => {
-                  // dataset.data.push({
-                  //   x: Date.now(),
-                  //   y: telemetries.Temperature,
-                  // });
-                  if (dataset.label === 'Temperature') {
-                    dataset.data.push({
-                      x: Date.now(),
-                      y: telemetries.Temperature,
-                    });
-                  } else if (dataset.label === 'SpO2') {
-                    dataset.data.push({
-                      x: Date.now(),
-                      y: telemetries.SpO2,
-                    });
-                  } else {
-                    dataset.data.push({
-                      x: Date.now(),
-                      y: telemetries.Pressure,
-                    });
-                  }
-                }),
-                  chart.update('quiet');
-              },
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Telemetry Data',
+              
             },
           },
-          y1: {
-            beginAtZero: false,
-            min: 30,
-            max: 45,
-            position: 'left',
+          scales: {
+            x: {
+              type: 'realtime',
+              realtime: {
+                delay: 100,
+                refresh: 1000,
+                onRefresh: async (chart) => {
+                  chart.data.datasets.forEach((dataset) => {
+                    // dataset.data.push({
+                    //   x: Date.now(),
+                    //   y: telemetries.Temperature,
+                    // });
+                    if (dataset.label === 'Temperature') {
+                      dataset.data.push({
+                        x: Date.now(),
+                        y: telemetries.Temperature,
+                      });
+                    } else if (dataset.label === 'SpO2') {
+                      dataset.data.push({
+                        x: Date.now(),
+                        y: telemetries.SpO2,
+                      });
+                    } else {
+                      dataset.data.push({
+                        x: Date.now(),
+                        y: telemetries.Pressure,
+                      });
+                    }
+                  }),
+                    chart.update('quiet');
+                },
+              },
+            },
+            y1: {
+              
+              beginAtZero: false,
+              min: 30,
+              max: 45,
+              position: 'left',
+            },
+            y2: {
+              min: 60,
+              max: 110,
+              position: 'right',
+            },
           },
-          y2: {
-            min: 60,
-            max: 110,
-            position: 'right',
+        }}
+        data={{
+          datasets: [
+            {
+              label: 'Temperature (Celcius)',
+              // data: labels.map(() => Math.round(Math.random() * 100)) + 1,
+              borderColor: '#f5ab78',
+              // backgroundColor: 'rgba(255, 99, 132, 0.5)',
+              data: [],
+              yAxisID: 'y1',
+            },
+            {
+              label: 'SpO2 (%)',
+              // data: labels.map(() => Math.round(Math.random() * 100)) + 1,
+              borderColor: '#2f68eb',
+              // backgroundColor: 'rgba(53, 162, 235, 0.5)',
+              data: [],
+              yAxisID: 'y2',
+            },
+            {
+              label: 'Heart Rate (bpm)',
+              // data: labels.map(() => Math.round(Math.random() * 100)) + 1,
+              borderColor: '#9d50eb',
+              // backgroundColor: 'rgba(53, 162, 235, 0.5)',
+              data: [],
+              yAxisID: 'y2',
+            },
+          ],
+        }}
+      />
+    );
+  }
+  if (props.isChart[1]==='Temperature'){
+    return (
+      <Line
+        // width={800}
+        // height={650}
+        options={{
+          responsive: true,
+          maintainAspectRatio: true,
+          // interaction: {
+          //   mode: 'index',
+          //   intersect: false,
+          // },
+          // stacked: 'false',
+          grid: {
+            drawOnChartArea: false, // only want the grid lines for one axis to show up
           },
-        },
-      }}
-      data={{
-        datasets: [
-          {
-            label: 'Temperature',
-            // data: labels.map(() => Math.round(Math.random() * 100)) + 1,
-            borderColor: '#f5ab78',
-            // backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            data: [],
-            yAxisID: 'y1',
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Temperature Data',
+              
+            },
           },
-          {
-            label: 'SpO2',
-            // data: labels.map(() => Math.round(Math.random() * 100)) + 1,
-            borderColor: '#2f68eb',
-            // backgroundColor: 'rgba(53, 162, 235, 0.5)',
-            data: [],
-            yAxisID: 'y2',
+          scales: {
+            x: {
+              type: 'realtime',
+              realtime: {
+                delay: 100,
+                refresh: 1000,
+                onRefresh: async (chart) => {
+                  chart.data.datasets.forEach((dataset) => {
+                    // dataset.data.push({
+                    //   x: Date.now(),
+                    //   y: telemetries.Temperature,
+                    // });
+                      dataset.data.push({
+                        x: Date.now(),
+                        y: telemetries.Temperature,
+                      });
+                  });
+                  chart.update('quiet');
+                },
+              },
+            },
+            y: {
+              
+              beginAtZero: false,
+              min: 30,
+              max: 45,
+              position: 'left',
+            },
+
           },
-          {
-            label: 'Heart Rate',
-            // data: labels.map(() => Math.round(Math.random() * 100)) + 1,
-            borderColor: '#9d50eb',
-            // backgroundColor: 'rgba(53, 162, 235, 0.5)',
-            data: [],
-            yAxisID: 'y2',
+        }}
+        data={{
+          datasets: [
+            {
+              label: 'Temperature (Celcius)',
+              // data: labels.map(() => Math.round(Math.random() * 100)) + 1,
+              borderColor: '#f5ab78',
+              // backgroundColor: 'rgba(255, 99, 132, 0.5)',
+              data: [],
+              yAxisID: 'y',
+            },
+          
+          ],
+        }}
+      />
+    );
+  }
+  else if (props.isChart[1]==='SpO2'){
+    return (
+      <Line
+        // width={800}
+        // height={650}
+        options={{
+          responsive: true,
+          maintainAspectRatio: true,
+          // interaction: {
+          //   mode: 'index',
+          //   intersect: false,
+          // },
+          // stacked: 'false',
+          grid: {
+            drawOnChartArea: false, // only want the grid lines for one axis to show up
           },
-        ],
-      }}
-    />
-  );
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'SpO2 Data',
+              
+            },
+          },
+          scales: {
+            x: {
+              type: 'realtime',
+              realtime: {
+                delay: 100,
+                refresh: 1000,
+                onRefresh: async (chart) => {
+                  chart.data.datasets.forEach((dataset) => {
+                      dataset.data.push({
+                        x: Date.now(),
+                        y: telemetries.SpO2,
+                      });
+                  });
+                  chart.update('quiet');
+                },
+              },
+            },
+
+            y: {
+              min: 90,
+              max: 110,
+              position: 'left',
+            },
+          },
+        }}
+        data={{
+          datasets: [
+            {
+              label: 'SpO2 (%)',
+              // data: labels.map(() => Math.round(Math.random() * 100)) + 1,
+              borderColor: '#2f68eb',
+              // backgroundColor: 'rgba(53, 162, 235, 0.5)',
+              data: [],
+              yAxisID: 'y',
+            },
+
+          ],
+        }}
+      />
+    );
+  }
+  else if (props.isChart[1]==='HeartRate'){
+    return (
+      <Line
+        // width={800}
+        // height={650}
+        options={{
+          responsive: true,
+          maintainAspectRatio: true,
+          // interaction: {
+          //   mode: 'index',
+          //   intersect: false,
+          // },
+          // stacked: 'false',
+          grid: {
+            drawOnChartArea: false, // only want the grid lines for one axis to show up
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Heart Rate Data',
+              
+            },
+          },
+          scales: {
+            x: {
+              type: 'realtime',
+              realtime: {
+                delay: 100,
+                refresh: 1000,
+                onRefresh: async (chart) => {
+                  chart.data.datasets.forEach((dataset) => {
+                    // dataset.data.push({
+                    //   x: Date.now(),
+                    //   y: telemetries.Temperature,
+                    // });
+                      dataset.data.push({
+                        x: Date.now(),
+                        y: telemetries.Pressure,
+                      });
+                  });
+                  chart.update('quiet');
+                },
+              },
+            },
+            y: {
+              min: 60,
+              max: 110,
+              position: 'left',
+            },
+          },
+        }}
+        data={{
+          datasets: [
+          
+            {
+              label: 'Heart Rate (bpm)',
+              // data: labels.map(() => Math.round(Math.random() * 100)) + 1,
+              borderColor: '#9d50eb',
+              // backgroundColor: 'rgba(53, 162, 235, 0.5)',
+              data: [],
+              yAxisID: 'y',
+            },
+          ],
+        }}
+      />
+    );
+  }
 }
 
 // export const options = {

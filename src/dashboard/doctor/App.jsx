@@ -10,11 +10,11 @@ import { LineChart } from './components-supabase/contents/patient/SingleLineChar
 import { AiOutlineDown } from 'react-icons/ai';
 // export const AppContext = createContext();
 function App() {
-  const [isChart, setIsChart] = useState(false);
+  const [isChart, setIsChart] = useState([false,'all']);
   const [location, setLocation] = useState('Dashboard');
   const [session, setSession] = useState(null);
 
-  let chartStyle = isChart ? 'opacity-100 z-1' : 'opacity-0 p-0 -z-10';
+  let chartStyle = isChart[0] ? 'opacity-100 z-1' : 'opacity-0 p-0 -z-10';
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -47,10 +47,10 @@ function App() {
             <div
               className={`${chartStyle} transition-full absolute bottom-0 left-[3rem] h-[35rem] w-[61rem] rounded bg-auto-white p-4 shadow-2xl ring-2 ring-black duration-300`}
             >
-              <div className="w-[100%]">
+              <div className="flex w-[100%] items-center justify-start">
                 <button
                   onClick={() => {
-                    setIsChart(false);
+                    setIsChart([false, 'all']);
                   }}
                   className="rounded p-2 font-bold"
                 >
@@ -60,10 +60,18 @@ function App() {
                     size={30}
                   />
                 </button>
-                <span>Line Chart</span>
+                <span className="text-large font-extrabold tracking-wider text-gray-600">
+                  Line Chart
+                </span>
+                <div className="bg-gray-300 ml-auto rounded-lg flex divide-x-2 divide-gray-500">
+                  <button onClick={()=>setIsChart([true,'all'])} className='flex justify-center items-center px-8 py-2 text-gray-500 tracking-wide hover:bg-gray-400 rounded-l-lg'>All</button>
+                  <button onClick={()=>setIsChart([true,'Temperature'])} className='flex justify-center items-center px-8 py-2 text-gray-500 tracking-wide hover:bg-gray-400'>Temperature</button>
+                  <button onClick={()=>setIsChart([true,'SpO2'])} className='flex justify-center items-center px-8 py-2 text-gray-500 tracking-wide hover:bg-gray-400'>SpO2</button>
+                  <button onClick={()=>setIsChart([true,'HeartRate'])} className='flex justify-center items-center px-8 py-2 text-gray-500 tracking-wide hover:bg-gray-400 rounded-r-lg'>Heart rate</button>
+                </div>
               </div>
               <div className="relative h-[80%] w-[100%]">
-                <LineChart />
+                <LineChart isChart={isChart} />
               </div>
             </div>
           </div>
