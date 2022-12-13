@@ -31,7 +31,10 @@ const MainContent = (props) => {
           .select('*')
           .eq('R_Number', room.R_Number);
         for (let id of NURSEID) {
-          let { data: NURSE } = await supabase.from('NURSE').select('*').eq('N_Ssn', id.N_Ssn);
+          let { data: NURSE } = await supabase
+            .from('NURSE')
+            .select('*')
+            .eq('N_Ssn', id.N_Ssn);
           loadFacility[`${room.R_Number}`].nurses.push(NURSE[0]);
         }
       }
@@ -59,9 +62,9 @@ const MainContent = (props) => {
   }
   if (!loading) {
     return (
-      <div className="absolute h-screen w-[95%]">
+      <>
         <div
-          className={`${style2} flex min-h-[99%] flex-col items-center justify-start gap-16 rounded-lg bg-gray-300 p-8 transition-all duration-700`}
+          className={`flex min-h-[100%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-8 transition-all duration-700`}
         >
           {Object.values(content).map((room, index) => {
             return (
@@ -72,7 +75,10 @@ const MainContent = (props) => {
               //   component={room}
               //   setIsRoom={setIsRoom}
               // />
-              <div className="w-[100%]" key={index}>
+              <div
+                className="w-[100%] overflow-hidden rounded-lg ring-2 ring-black"
+                key={index}
+              >
                 <StatisticsCard
                   component={room}
                   // setInfoOpen={setOpen}
@@ -85,7 +91,7 @@ const MainContent = (props) => {
           })}
         </div>
 
-        <div
+        {/* <div
           className={` ${style1} absolute top-0 right-0 z-20 h-[100%] w-[50%]  rounded-l-lg bg-auto-white shadow-2xl transition-all duration-500 ease-in-out`}
         >
           <div className="sticky top-0 right-0 flex w-[100%] flex-col items-center justify-start gap-4 p-4">
@@ -113,8 +119,8 @@ const MainContent = (props) => {
               </div>
             )}
           </div>
-        </div>
-      </div>
+        </div> */}
+      </>
     );
   } else {
     return (

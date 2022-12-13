@@ -54,7 +54,7 @@ const Sidebar = (props) => {
         <>
           <button
             onClick={() => setOpen((state) => !state)}
-            className="absolute top-[5.3rem] -right-[1rem] flex w-[4rem] items-center justify-center rounded-full bg-blue-600 p-3"
+            className="absolute top-[5.3rem] -right-[1rem] flex w-[4rem] items-center justify-center rounded-full bg-blue-600 p-3 ring-2 ring-black"
           >
             <AiOutlineLeft color="white" size={20} />
           </button>
@@ -118,7 +118,7 @@ const Sidebar = (props) => {
         <>
           <button
             onClick={() => setOpen((state) => !state)}
-            className="absolute top-[5.3rem] -right-[1rem] flex w-[4rem] items-center justify-center rounded-full bg-blue-600 p-3"
+            className="absolute top-[5.3rem] -right-[1rem] flex w-[4rem] items-center justify-center rounded-full bg-blue-600 p-3 ring-2 ring-black"
           >
             <AiOutlineRight color="white" size={20} />
           </button>

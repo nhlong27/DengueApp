@@ -39,13 +39,13 @@ function App() {
             <main className="flex h-[90%] w-[100%] flex-auto">
               <ContentContainer setIsChart={setIsChart} session={session} />
 
-              <div className=" flex w-[25%] flex-col items-center justify-start overflow-y-scroll bg-auto-white shadow-lg">
+              <div className="ml-auto flex w-[25%] flex-col items-center justify-start overflow-y-scroll bg-auto-white shadow-lg">
                 <Chatbox />
               </div>
             </main>
 
             <div
-              className={`${chartStyle} transition-full absolute bottom-0 left-[3rem] h-[35rem] w-[61rem] rounded bg-auto-white p-4 shadow-lg ring-2 ring-black duration-300`}
+              className={`${chartStyle} transition-full absolute bottom-0 left-[3rem] h-[35rem] w-[61rem] rounded bg-auto-white p-4 shadow-2xl ring-2 ring-black duration-300`}
             >
               <div className="w-[100%]">
                 <button

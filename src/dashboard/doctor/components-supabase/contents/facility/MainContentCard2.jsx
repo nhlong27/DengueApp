@@ -53,59 +53,62 @@ import { MdBedroomChild } from 'react-icons/md';
 
 export const StatisticsCard = (props) => {
   const [isRoomContainer, setIsRoomContainer] = useState(false);
+  let containerStyle = isRoomContainer ? 'opacity-100' : 'opacity-0 collapse -mt-[36rem]';
 
   return (
-    <Card sx={{ backgroundColor: '#F7F7FF', fontSize:50 }}>
+    <Card sx={{ backgroundColor: '#F7F7FF', fontSize: 50 }}>
       <CardHeader
         title={`${props.component.R_Number}`}
-        action={
-          <IconButton
-            size="small"
-            aria-label="settings"
-            className="card-more-options"
-            sx={{ color: 'text.secondary' }}
-          >
-            {/* <DotsVertical /> */}
-          </IconButton>
-        }
-        subheader={
-          <Typography variant="body2">
-            <Box component="span" sx={{ fontWeight: 600, color: 'text.primary' }}>
-              Additional Info:
-            </Box>
-          </Typography>
-        }
-        titleTypographyProps={{
-          sx: {
-            mb: 2.5,
-            lineHeight: '2rem !important',
-            letterSpacing: '0.15px !important',
-          },
-        }}
+        // action={
+        //   <IconButton
+        //     size="small"
+        //     aria-label="settings"
+        //     className="card-more-options"
+        //     sx={{ color: 'text.secondary' }}
+        //   >
+        //     {/* <DotsVertical /> */}
+        //   </IconButton>
+        // }
+        // subheader={
+        //   <Typography variant="body2">
+        //     <Box component="span" sx={{ fontWeight: 600, color: 'text.primary' }}>
+        //       Additional Info:
+        //     </Box>
+        //   </Typography>
+        // }
+        // titleTypographyProps={{
+        //   sx: {
+        //     mb: 2.5,
+        //     lineHeight: '2rem !important',
+        //     letterSpacing: '0.15px !important',
+        //   },
+        // }}
       />
-      <button
-        onClick={() => {
-          setIsRoomContainer((state) => !state);
-        }}
-        className="relative z-10 col-span-1 rounded bg-auto-white bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200 focus:rounded-r-lg focus:text-auto-black "
-      >
-        {isRoomContainer ? (
-          <AiOutlineUp className="ml-auto" size={30} color="black" />
-        ) : (
-          <AiOutlineDown className="ml-auto" size={30} color="black" />
-        )}
-      </button>
-
-      <CardContent sx={{ pt: (theme) => `${theme.spacing(3)} !important` }}>
-        <Grid container spacing={[5, 0]}>
+      <div className="flex items-center justify-start">
+        <button
+          onClick={() => {
+            setIsRoomContainer((state) => !state);
+          }}
+          className="relative z-10 col-span-1 mb-auto rounded bg-auto-white bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100  hover:text-gray-600 hover:ring-2 hover:ring-gray-200 focus:rounded-r-lg focus:text-auto-black"
+        >
           {isRoomContainer ? (
-            <DepositWithdraw
-              bedData={props.component.beds}
-              nurseData={props.component.nurses}
-            />
-          ) : null}
-        </Grid>
-      </CardContent>
+            <AiOutlineUp size={30} color="black" />
+          ) : (
+            <AiOutlineDown size={30} color="black" />
+          )}
+        </button>
+
+        <div className={`${containerStyle} transition-all duration-300`}>
+          <CardContent sx={{ pt: (theme) => `${theme.spacing(3)} !important` }}>
+            <Grid container spacing={[5, 0]}>
+              <DepositWithdraw
+                bedData={props.component.beds}
+                nurseData={props.component.nurses}
+              />
+            </Grid>
+          </CardContent>
+        </div>
+      </div>
     </Card>
   );
 };
@@ -129,15 +132,15 @@ export const DepositWithdraw = (props) => {
         justifyContent: 'space-between',
         flexDirection: ['column', 'column', 'row'],
         width: 1000,
-        border: 1,
-        backgroundColor: '#F7F7FF'
+        // border: 1,
+        backgroundColor: '#F7F7FF',
       }}
     >
       <Box sx={{ width: '100%' }}>
         <CardHeader
           title="Beds"
-          sx={{ pt: 5.5, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.6 } }}
-          action={<Typography variant="caption">View All</Typography>}
+          sx={{ pt: 2, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.1 } }}
+          action={<Typography variant="caption">Assigned</Typography>}
           titleTypographyProps={{
             variant: 'h6',
             sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' },
@@ -151,7 +154,7 @@ export const DepositWithdraw = (props) => {
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  mb: index !== props.bedData.length - 1 ? 6 : 0,
+                  mb: index !== props.bedData.length - 1 ? 2 : 0,
                 }}
               >
                 <Box sx={{ minWidth: 38, display: 'flex', justifyContent: 'center' }}>
@@ -199,8 +202,8 @@ export const DepositWithdraw = (props) => {
       <Box sx={{ width: '100%' }}>
         <CardHeader
           title="Nurses"
-          sx={{ pt: 5.5, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.6 } }}
-          action={<Typography variant="caption">View All</Typography>}
+          sx={{ pt: 2, alignItems: 'center', '& .MuiCardHeader-action': { mt: 0.1 } }}
+          action={<Typography variant="caption">Status</Typography>}
           titleTypographyProps={{
             variant: 'h6',
             sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' },
@@ -214,7 +217,7 @@ export const DepositWithdraw = (props) => {
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  mb: index !== props.nurseData.length - 1 ? 6 : 0,
+                  mb: index !== props.nurseData.length - 1 ? 2 : 0,
                 }}
               >
                 <Box sx={{ minWidth: 36, display: 'flex', justifyContent: 'center' }}>

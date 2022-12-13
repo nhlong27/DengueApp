@@ -89,9 +89,9 @@ const NurseSearchCreate = (props) => {
       <div className="ml-8 flex h-[80%] w-[50%] items-center justify-center rounded-[3rem] bg-black p-2 shadow-lg">
         <SearchBar search={props.search} setSearch={props.setSearch} />
       </div>
-      <div className="ml-8 flex h-[80%] w-[15%] items-center justify-center rounded-[3rem] bg-blue-600 py-2 shadow-lg">
+      <div className="ml-8 flex h-[80%] w-[15%] items-center justify-center rounded-[3rem] bg-blue-600 py-2 shadow-lg ring-2 ring-black hover:bg-blue-700">
         <button
-          className="duration-600  rounded bg-blue-600 text-[18px] tracking-widest text-white transition-all hover:text-[20px] hover:tracking-[4px]"
+          className="duration-600  rounded text-[18px] tracking-widest text-white transition-all"
           onClick={() => {
             handleOpen();
             handleRoomLoad();
@@ -121,7 +121,7 @@ const NurseSearchCreate = (props) => {
         )}
       </div>
       <button
-        className="duration-600 ml-6 max-w-[10%] rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400"
+        className="duration-600 ml-6 max-w-[10%] rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400 flex justify-center items-center ring-2 ring-black h-[80%]"
         onClick={() => props.setRefresh((state) => !state)}
       >
         <BiRefresh size={30} color="black" />

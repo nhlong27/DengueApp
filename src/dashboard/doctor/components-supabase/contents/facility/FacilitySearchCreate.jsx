@@ -67,12 +67,12 @@ const FacilitySearchCreate = (props) => {
   };
   return (
     <>
-      <div className="ml-6 flex h-[80%] w-[50%] items-center justify-center rounded-[3rem] bg-black p-2 shadow-lg">
+      <div className="ml-8 flex h-[80%] w-[50%] items-center justify-center rounded-[3rem] bg-black p-2 shadow-lg">
         <SearchBar search={props.search} setSearch={props.setSearch} />
       </div>
-      <div className="ml-6 flex h-[80%] w-[15%]  items-center justify-center rounded-l-[3rem] bg-blue-600 py-2 shadow-lg">
+      <div className="ml-6 flex h-[80%] w-[15%]  items-center justify-center rounded-l-[3rem] bg-blue-600 py-2 shadow-lg ring-2 ring-black hover:bg-blue-700">
         <button
-          className="duration-600 w-[100%] rounded-[3rem] bg-blue-600 text-[18px] tracking-wider text-white transition-all hover:text-[20px] hover:tracking-[1px]"
+          className="duration-600 w-[100%] rounded-[3rem] text-[18px] tracking-wider text-white transition-all "
           onClick={handleOpen1}
         >
           Create Room
@@ -93,9 +93,9 @@ const FacilitySearchCreate = (props) => {
           />
         </TransitionsModal>
       </div>
-      <div className="flex h-[80%] w-[15%]  items-center justify-center rounded-r-[3rem] bg-blue-600 py-2 shadow-lg">
+      <div className="flex h-[80%] w-[15%]  items-center justify-center rounded-r-[3rem] bg-blue-600 py-2 shadow-lg ring-2 ring-black hover:bg-blue-700">
         <button
-          className="duration-600 w-[100%] rounded-[3rem] bg-blue-600 text-[18px] tracking-wider text-white transition-all hover:text-[20px] hover:tracking-[1px]"
+          className="duration-600 w-[100%] rounded-[3rem]  text-[18px] tracking-wider text-white transition-all "
           onClick={() => {
             handleOpen2();
             handleRoomLoad();
@@ -126,7 +126,7 @@ const FacilitySearchCreate = (props) => {
         )}
       </div>
       <button
-        className="duration-600 ml-6 max-w-[10%] rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400"
+        className="duration-600 ml-6 max-w-[10%] rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400 h-[80%] justify-center items-center flex ring-2 ring-black"
         onClick={() => props.setRefresh(state=>!state)}
       >
         <BiRefresh size={30} color="black" />

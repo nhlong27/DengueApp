@@ -104,105 +104,127 @@ const MainContentCard = (
   // }, []);
   // const [isOpenTimeSeries, setOpenTimeSeries] = useState(false);
   return (
-    <div className="z-10 grid w-[100%] grid-cols-3 gap-4 divide-y-2 divide-gray-400 rounded-lg bg-auto-white p-4 shadow-lg transition-all duration-300 ease-in-out hover:bg-white hover:ring-2 hover:ring-gray-300">
+    <div className="grid w-[100%] grid-cols-3 gap-4 divide-y-2 divide-gray-400 rounded-lg bg-auto-white p-4 shadow-lg ring-2 ring-black transition-all duration-300 ease-in-out">
       {loadingDelete ? (
         <div className="w=[100%] flex h-[100%] items-center justify-center text-red-400">
-          <div>Device {component.Label} with access token {component.Token} has been removed</div>
+          <div>
+            Device {component.Label} with access token {component.Token} has been removed
+          </div>
         </div>
       ) : (
         <>
           <div className="col-span-3 flex items-center justify-start">
-            <div className="flex w-[30%] flex-col items-start justify-start">
-              <div className="relative px-4 text-[22px] font-semibold tracking-widest text-black">
-                <GrDevice />
-                {telemetries[`${component.D_Id}`] &&
-                telemetries[`${component.D_Id}`].connected ? (
-                  <div className="absolute top-0 -right-[4rem] text-[14px] text-green-500">
-                    Connected
-                  </div>
-                ) : (
-                  <div className="absolute top-0 -right-[4rem] text-[14px] text-red-500">
-                    Disconnected
-                  </div>
-                )}
-
-                {component.Label}
-              </div>
-              <div className="px-4 text-[16px] font-semibold text-blue-600">
-                {component.Type}
-              </div>
-              {component.Assign === 'No' ? (
-                <div className="px-4 text-[14px] font-bold text-gray-400">
-                  Assigned: {component.Assign}
-                </div>
-              ) : (
-                <div className="px-4 text-[14px] font-bold text-red-400">
-                  Assigned: {component.Assign}
-                </div>
-              )}
-              {/* {isOpenTimeSeries && <TimeSeries client={client} />}
-        <MySocket client={client} /> */}
-            </div>
             {infoOpen ? (
-              <div className="ml-auto flex h-[100%] w-[100%] items-center justify-center gap-[1.8rem]">
-                <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
-                  <div className="">
-                    <TbTemperatureCelsius size={40} color="blue" />{' '}
+              <>
+                <div className="flex w-[30%] flex-col items-start justify-start">
+                  <div className="relative px-4 text-[22px] font-semibold tracking-widest text-black">
+                    <GrDevice />
+                    {/* {telemetries[`${component.D_Id}`] &&
+                    telemetries[`${component.D_Id}`].connected ? (
+                      <div className="absolute top-0 -right-[4rem] text-[14px] text-green-500">
+                        Connected
+                      </div>
+                    ) : (
+                      <div className="absolute top-0 -right-[4rem] text-[14px] text-red-500">
+                        Disconnected
+                      </div>
+                    )} */}
+
+                    {component.Label}
                   </div>
-                  <div className="text-[20px] font-extrabold tracking-[5px] text-purple-600">
-                    {telemetries[`${component.D_Id}`] &&
-                      telemetries[`${component.D_Id}`].temperature}
+                  
+                </div>
+                <div className="ml-auto flex h-[100%] w-[100%] items-center justify-center gap-[1.8rem]">
+                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
+                    <div className="">
+                      <TbTemperatureCelsius size={40} color="blue" />{' '}
+                    </div>
+                    <div className="text-[20px] font-extrabold tracking-[5px] text-purple-600">
+                      {telemetries[`${component.D_Id}`] &&
+                        telemetries[`${component.D_Id}`].temperature}
+                    </div>
+                  </div>
+                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
+                    <div className="">
+                      <GiMedicalDrip size={40} color="blue" />
+                    </div>
+                    <div className="text-[20px] font-extrabold tracking-[5px] text-cyan-600">
+                      {telemetries[`${component.D_Id}`] &&
+                        telemetries[`${component.D_Id}`].SpO2}
+                    </div>
+                  </div>
+                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
+                    <div className="">
+                      <BiHeart size={40} color="blue" />
+                    </div>
+                    <div className="text-[20px] font-extrabold tracking-[5px] text-yellow-600">
+                      {telemetries[`${component.D_Id}`] &&
+                        telemetries[`${component.D_Id}`].HrtPressure}
+                    </div>
                   </div>
                 </div>
-                <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
-                  <div className="">
-                    <GiMedicalDrip size={40} color="blue" />
-                  </div>
-                  <div className="text-[20px] font-extrabold tracking-[5px] text-cyan-600">
-                    {telemetries[`${component.D_Id}`] &&
-                      telemetries[`${component.D_Id}`].SpO2}
-                  </div>
-                </div>
-                <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
-                  <div className="">
-                    <BiHeart size={40} color="blue" />
-                  </div>
-                  <div className="text-[20px] font-extrabold tracking-[5px] text-yellow-600">
-                    {telemetries[`${component.D_Id}`] &&
-                      telemetries[`${component.D_Id}`].HrtPressure}
-                  </div>
-                </div>
-              </div>
+              </>
             ) : (
-              <div className="ml-auto flex h-[100%] w-[100%] items-center justify-center gap-[5rem]">
-                <div className="flex h-[100%] w-[20%] flex-col items-center  justify-between p-2">
-                  <div className="">
-                    <TbTemperatureCelsius size={40} color="blue" />
-                  </div>
-                  <div className="text-[40px] font-extrabold tracking-[5px] text-purple-600">
+              <>
+                <div className="flex w-[30%] flex-col items-start justify-start">
+                  <div className="relative px-4 text-[22px] font-semibold tracking-widest text-black">
+                    <GrDevice />
                     {telemetries[`${component.D_Id}`] &&
-                      telemetries[`${component.D_Id}`].temperature}
+                    telemetries[`${component.D_Id}`].connected ? (
+                      <div className="absolute top-0 -right-[4rem] text-[14px] text-green-500">
+                        Connected
+                      </div>
+                    ) : (
+                      <div className="absolute top-0 -right-[4rem] text-[14px] text-red-500">
+                        Disconnected
+                      </div>
+                    )}
+
+                    {component.Label}
+                  </div>
+                  <div className="px-4 text-[16px] font-semibold text-blue-600">
+                    {component.Type}
+                  </div>
+                  {component.Assign === 'No' ? (
+                    <div className="px-4 text-[14px] font-bold text-gray-400">
+                      Assigned: {component.Assign}
+                    </div>
+                  ) : (
+                    <div className="px-4 text-[14px] font-bold text-red-400">
+                      Assigned: {component.Assign}
+                    </div>
+                  )}
+                </div>
+                <div className="ml-auto flex h-[100%] w-[100%] items-center justify-center gap-[5rem]">
+                  <div className="flex h-[100%] w-[20%] flex-col items-center  justify-between p-2">
+                    <div className="">
+                      <TbTemperatureCelsius size={40} color="blue" />
+                    </div>
+                    <div className="text-[40px] font-extrabold tracking-[5px] text-purple-600">
+                      {telemetries[`${component.D_Id}`] &&
+                        telemetries[`${component.D_Id}`].temperature}
+                    </div>
+                  </div>
+                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-between p-2">
+                    <div className="">
+                      <GiMedicalDrip size={40} color="blue" />
+                    </div>
+                    <div className="text-[40px] font-extrabold tracking-[5px] text-cyan-600">
+                      {telemetries[`${component.D_Id}`] &&
+                        telemetries[`${component.D_Id}`].SpO2}
+                    </div>
+                  </div>
+                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-between p-2">
+                    <div className="">
+                      <BiHeart size={40} color="blue" />
+                    </div>
+                    <div className="text-[40px] font-extrabold tracking-[5px] text-yellow-600">
+                      {telemetries[`${component.D_Id}`] &&
+                        telemetries[`${component.D_Id}`].HrtPressure}
+                    </div>
                   </div>
                 </div>
-                <div className="flex h-[100%] w-[20%] flex-col items-center justify-between p-2">
-                  <div className="">
-                    <GiMedicalDrip size={40} color="blue" />
-                  </div>
-                  <div className="text-[40px] font-extrabold tracking-[5px] text-cyan-600">
-                    {telemetries[`${component.D_Id}`] &&
-                      telemetries[`${component.D_Id}`].SpO2}
-                  </div>
-                </div>
-                <div className="flex h-[100%] w-[20%] flex-col items-center justify-between p-2">
-                  <div className="">
-                    <BiHeart size={40} color="blue" />
-                  </div>
-                  <div className="text-[40px] font-extrabold tracking-[5px] text-yellow-600">
-                    {telemetries[`${component.D_Id}`] &&
-                      telemetries[`${component.D_Id}`].HrtPressure}
-                  </div>
-                </div>
-              </div>
+              </>
             )}
           </div>
           <button

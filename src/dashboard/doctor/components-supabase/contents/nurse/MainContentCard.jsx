@@ -61,13 +61,16 @@ import { RiNurseFill } from 'react-icons/ri';
 
 export const DashboardTable = (props) => {
   return (
-    <Card sx={{ backgroundColor: '#F7F7FF' }}>
+    <Card
+      sx={{ backgroundColor: '#F7F7FF', borderRadius: '25px', border: '2px solid black' }}
+    >
       <TableContainer>
         <Table sx={{ minWidth: 800 }} aria-label="table in dashboard">
           <TableHead>
-            <TableRow>
-              <TableCell>
-                <span className="text-[16px] font-bold">Name</span>
+            <TableRow
+            >
+              <TableCell >
+                <span className="text-[16px] p-4 font-bold">Name</span>
               </TableCell>
               <TableCell>
                 <span className="text-[16px] font-bold">Email</span>
@@ -85,19 +88,31 @@ export const DashboardTable = (props) => {
                 sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}
               >
                 <TableCell sx={{ py: (theme) => `${theme.spacing(0.5)} !important` }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-                      <RiNurseFill />
-                      {row.Fname}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      marginLeft: '15px',
+                      padding: '8px',
+                    }}
+                  >
+                    <Typography sx={{ fontWeight: 500, fontSize: '1.2rem !important' }}>
+                      <RiNurseFill size={24} /> <span>{row.Fname}</span>
                     </Typography>
-                    <Typography variant="caption">{row.Lname}</Typography>
+                    <Typography variant="caption" sx={{ fontSize: '1rem' }}>
+                      {row.Lname}
+                    </Typography>
                   </Box>
                 </TableCell>
-                <TableCell>{row.Email}</TableCell>
+                <TableCell sx={{ fontSize: '1rem' }}>{row.Email}</TableCell>
                 <TableCell sx={{ py: (theme) => `${theme.spacing(0.5)} !important` }}>
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>
-                      {row.R_Number}
+                    <Typography sx={{ fontWeight: 500, fontSize: '1rem !important' }}>
+                      {row.R_Number ? (
+                        row.R_Number
+                      ) : (
+                        <span className="text-red-600">None</span>
+                      )}
                     </Typography>
                     <Typography variant="caption">{'Room number'}</Typography>
                   </Box>
@@ -108,7 +123,7 @@ export const DashboardTable = (props) => {
                       props.setInfoOpen(true);
                       props.setIsNurse(row);
                     }}
-                    className="my-auto rounded-lg p-2 ring-2 ring-gray-200"
+                    className="my-auto rounded-lg p-2 ring-2 ring-gray-200 hover:ring-black"
                   >
                     Details
                   </button>

@@ -82,20 +82,20 @@ export const DashboardTable = (props) => {
     reload();
   }, []);
   return (
-    <Card sx={{ backgroundColor: '#F7F7FF' }}>
+    <Card sx={{ backgroundColor: '#F7F7FF', borderRadius:'25px', border:'2px solid black' }}>
       <TableContainer>
         <Table sx={{ minWidth: 800 }} aria-label="table in dashboard">
           <TableHead>
             <TableRow>
               <TableCell>
-                <span className="text-[16px] font-bold">Status</span>
+                <span className="text-[16px] p-2 font-bold">Status</span>
               </TableCell>
               <TableCell>
                 <span className="text-[16px] font-bold">Name</span>
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <span className="text-[16px] font-bold">Email</span>
-              </TableCell>
+              </TableCell> */}
               <TableCell>
                 <span className="text-[16px] font-bold">Device</span>
               </TableCell>
@@ -152,7 +152,7 @@ export const DashboardTable = (props) => {
                     </Typography>
                   </Box>
                 </TableCell>
-                <TableCell sx={{ fontSize: '1rem' }}>{row.Email}</TableCell>
+                {/* <TableCell sx={{ fontSize: '1rem'}}>{row.Email}</TableCell> */}
                 <TableCell sx={{ fontSize: '1rem' }}>{row.D_Id}</TableCell>
                 <TableCell sx={{ py: (theme) => `${theme.spacing(0.5)} !important` }}>
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>

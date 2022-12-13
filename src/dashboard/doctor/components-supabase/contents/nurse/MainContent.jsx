@@ -37,7 +37,7 @@ const MainContent = (props) => {
   }
   if (!loading) {
     return (
-      <div className="absolute min-h-screen w-[95%] bg-gray-300 p-2 rounded">
+      <div className="absolute min-h-screen w-[95%] bg-gray-300 p-2 rounded-lg">
         
         <DashboardTable
           rows={content}

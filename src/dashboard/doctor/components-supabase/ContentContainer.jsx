@@ -188,7 +188,7 @@ const ContentContainer = (props) => {
     );
   } else {
     return (
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center w-[75%]">
         <InfinitySpin width="300" color="#475569" />;
       </div>
     );

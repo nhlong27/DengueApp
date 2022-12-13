@@ -55,7 +55,7 @@ const MainContent = (props) => {
   }
   if (!loading) {
     return (
-      <div className="absolute h-screen w-[95%] rounded bg-gray-300 p-2">
+      <div className="absolute min-h-[92%] w-[95%] rounded-lg bg-gray-300 p-2 ">
         {/* <div
           className={`${style2} flex min-h-[99%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-8 transition-all duration-700`}
         >
