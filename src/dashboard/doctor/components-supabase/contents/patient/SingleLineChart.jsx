@@ -13,7 +13,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import StreamingPlugin from 'chartjs-plugin-streaming';
 import 'chartjs-adapter-luxon';
-import { ContentContainerContext } from '../../ContentContainer';
+// import { ContentContainerContext } from '../../ContentContainer';
 
 // import faker from '@faker-js/faker';
 
@@ -52,7 +52,7 @@ export function LineChart(props) {
     subscribe();
   }, []);
   // console.log(telemetries);
-  if (props.isChart[1]==='all'){
+  if (props.isChart[1] === 'all') {
     return (
       <Line
         // width={800}
@@ -75,7 +75,6 @@ export function LineChart(props) {
             title: {
               display: true,
               text: 'Telemetry Data',
-              
             },
           },
           scales: {
@@ -90,12 +89,12 @@ export function LineChart(props) {
                     //   x: Date.now(),
                     //   y: telemetries.Temperature,
                     // });
-                    if (dataset.label === 'Temperature') {
+                    if (dataset.label === 'Temperature (Celcius)') {
                       dataset.data.push({
                         x: Date.now(),
                         y: telemetries.Temperature,
                       });
-                    } else if (dataset.label === 'SpO2') {
+                    } else if (dataset.label === 'SpO2 (%)') {
                       dataset.data.push({
                         x: Date.now(),
                         y: telemetries.SpO2,
@@ -112,7 +111,6 @@ export function LineChart(props) {
               },
             },
             y1: {
-              
               beginAtZero: false,
               min: 30,
               max: 45,
@@ -156,7 +154,7 @@ export function LineChart(props) {
       />
     );
   }
-  if (props.isChart[1]==='Temperature'){
+  if (props.isChart[1] === 'Temperature') {
     return (
       <Line
         // width={800}
@@ -179,7 +177,6 @@ export function LineChart(props) {
             title: {
               display: true,
               text: 'Temperature Data',
-              
             },
           },
           scales: {
@@ -194,23 +191,21 @@ export function LineChart(props) {
                     //   x: Date.now(),
                     //   y: telemetries.Temperature,
                     // });
-                      dataset.data.push({
-                        x: Date.now(),
-                        y: telemetries.Temperature,
-                      });
+                    dataset.data.push({
+                      x: Date.now(),
+                      y: telemetries.Temperature,
+                    });
                   });
                   chart.update('quiet');
                 },
               },
             },
             y: {
-              
               beginAtZero: false,
               min: 30,
               max: 45,
               position: 'left',
             },
-
           },
         }}
         data={{
@@ -223,13 +218,11 @@ export function LineChart(props) {
               data: [],
               yAxisID: 'y',
             },
-          
           ],
         }}
       />
     );
-  }
-  else if (props.isChart[1]==='SpO2'){
+  } else if (props.isChart[1] === 'SpO2') {
     return (
       <Line
         // width={800}
@@ -252,7 +245,6 @@ export function LineChart(props) {
             title: {
               display: true,
               text: 'SpO2 Data',
-              
             },
           },
           scales: {
@@ -263,10 +255,10 @@ export function LineChart(props) {
                 refresh: 1000,
                 onRefresh: async (chart) => {
                   chart.data.datasets.forEach((dataset) => {
-                      dataset.data.push({
-                        x: Date.now(),
-                        y: telemetries.SpO2,
-                      });
+                    dataset.data.push({
+                      x: Date.now(),
+                      y: telemetries.SpO2,
+                    });
                   });
                   chart.update('quiet');
                 },
@@ -290,13 +282,11 @@ export function LineChart(props) {
               data: [],
               yAxisID: 'y',
             },
-
           ],
         }}
       />
     );
-  }
-  else if (props.isChart[1]==='HeartRate'){
+  } else if (props.isChart[1] === 'HeartRate') {
     return (
       <Line
         // width={800}
@@ -319,7 +309,6 @@ export function LineChart(props) {
             title: {
               display: true,
               text: 'Heart Rate Data',
-              
             },
           },
           scales: {
@@ -334,10 +323,10 @@ export function LineChart(props) {
                     //   x: Date.now(),
                     //   y: telemetries.Temperature,
                     // });
-                      dataset.data.push({
-                        x: Date.now(),
-                        y: telemetries.Pressure,
-                      });
+                    dataset.data.push({
+                      x: Date.now(),
+                      y: telemetries.Pressure,
+                    });
                   });
                   chart.update('quiet');
                 },
@@ -352,7 +341,6 @@ export function LineChart(props) {
         }}
         data={{
           datasets: [
-          
             {
               label: 'Heart Rate (bpm)',
               // data: labels.map(() => Math.round(Math.random() * 100)) + 1,

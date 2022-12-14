@@ -4,7 +4,9 @@ import { InfinitySpin } from 'react-loader-spinner';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { client } from '@/shared/api/initClient_tenant';
 // import { handleTelemetry } from '../../ContentContainer';
-import { ContentContainerContext } from '../../ContentContainer';
+// import { ContentContainerContext } from '../../ContentContainer';
+import { useAtom } from 'jotai';
+import { deviceList, telemetries } from '@/dashboard/doctor/components-supabase/ContentContainer';
 
 const MainContent = (props) => {
   // const [avai, setAvai] = useState(false);
@@ -12,7 +14,7 @@ const MainContent = (props) => {
   // const [loading, setLoading] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const [isDevice, setIsDevice] = useState({});
-  const { devices } = useContext(ContentContainerContext);
+  const [devices] = useAtom(deviceList);
   // const handleLoad = async () => {
   //   try {
   //     setLoading(true);
@@ -29,6 +31,8 @@ const MainContent = (props) => {
   //     setLoading(false);
   //   }
   // };
+  console.log('devices')
+  console.log(devices)
 
   let style1 = '';
   let style2 = '';
@@ -59,7 +63,7 @@ const MainContent = (props) => {
       </div>
 
       <div
-        className={` ${style1} ring-2 ring-black absolute top-4 right-0 z-20 h-[95%] w-[50%]  rounded-l-lg bg-auto-white shadow-2xl transition-all duration-500 ease-in-out`}
+        className={` ${style1} absolute top-4 right-0 z-20 h-[95%] w-[50%] rounded-l-lg bg-auto-white  shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
       >
         <div className="sticky top-0 right-0 flex w-[100%] flex-col items-center justify-start gap-4 p-4">
           <button

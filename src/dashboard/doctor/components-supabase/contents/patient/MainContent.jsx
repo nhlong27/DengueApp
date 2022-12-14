@@ -16,8 +16,14 @@ import { TbTemperatureCelsius } from 'react-icons/tb';
 import { GiMedicalDrip } from 'react-icons/gi';
 import { BiHeart } from 'react-icons/bi';
 import { GrDevice } from 'react-icons/gr';
-import { ContentContainerContext } from '../../ContentContainer';
+// import { ContentContainerContext } from '../../ContentContainer';
+import { useAtom, Provider } from 'jotai';
 import BasicSelect from '@/shared/utilities/form/BasicSelect';
+import {
+  deviceList,
+  telemetries,
+} from '@/dashboard/doctor/components-supabase/ContentContainer';
+
 // import { LineChart } from './SingleLineChart';
 
 const MainContent = (props) => {
@@ -25,8 +31,8 @@ const MainContent = (props) => {
   const [loading, setLoading] = useState(true);
   const [isOpen, setOpen] = useState(false);
   const [isPatient, setIsPatient] = useState({});
-  const { devices } = useContext(ContentContainerContext);
-
+  // const { devices } = useContext(ContentContainerContext);
+  const [devices] = useAtom(deviceList);
   const handleLoad = async () => {
     try {
       setLoading(true);
@@ -126,9 +132,18 @@ const MainContent = (props) => {
                 </div>
                 <div className="col-span-3 rounded ring-2 ring-gray-300">
                   <div>
-                    {/* <LineChart component={isPatient} /> */} 
-                    <button onClick={()=>props.setIsChart([true,'all'])} className='p-4 ring-2 ring-gray-300 text-center'>Open Chart</button>
-                    </div>
+                    {/* <LineChart component={isPatient} /> */}
+                    <button
+                      onClick={() => {
+                        console.log('props.setIsChart');
+                        console.log(props.setIsChart);
+                        props.setIsChart(() => [true, 'all']);
+                      }}
+                      className="p-4 text-center ring-2 ring-gray-300 hover:ring-black"
+                    >
+                      Open Chart
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -147,7 +162,13 @@ const MainContent = (props) => {
 
 const StatisticsCard = (props) => {
   const [device, setDevice] = useState('');
-  const { telemetries } = useContext(ContentContainerContext);
+  // const { telemetries } = useContext(ContentContainerContext);
+
+  const [tele] = useAtom(telemetries);
+
+  const [currTele] = tele[`${props.component.D_Id}`]
+    ? useAtom(tele[`${props.component.D_Id}`])
+    : useAtom(tele.something);
 
   const handleAssign = async () => {
     try {
@@ -265,10 +286,11 @@ const StatisticsCard = (props) => {
                   Temperature
                 </Typography>
                 <Typography variant="h6" sx={{ color: 'warning.main', fontSize: 50 }}>
-                  {props.component.D_Id
+                  {props.component.D_Id ? currTele && currTele.temperature : 0}
+                  {/* {props.component.D_Id
                     ? telemetries[`${props.component.D_Id}`] &&
                       telemetries[`${props.component.D_Id}`].temperature
-                    : 0}
+                    : 0} */}
                 </Typography>
               </Box>
             </Box>
@@ -294,10 +316,11 @@ const StatisticsCard = (props) => {
                   SpO2
                 </Typography>
                 <Typography variant="h6" sx={{ fontSize: 50, color: 'info.main' }}>
-                  {props.component.D_Id
+                  {props.component.D_Id ? currTele && currTele.SpO2 : 0}
+                  {/* {props.component.D_Id
                     ? telemetries[`${props.component.D_Id}`] &&
                       telemetries[`${props.component.D_Id}`].SpO2
-                    : 0}
+                    : 0} */}
                 </Typography>
               </Box>
             </Box>
@@ -326,10 +349,11 @@ const StatisticsCard = (props) => {
                   Heart Rate
                 </Typography>
                 <Typography variant="h6" sx={{ fontSize: 50, color: '#7C3AED' }}>
-                  {props.component.D_Id
+                  {props.component.D_Id ? currTele && currTele.HrtPressure : 0}
+                  {/* {props.component.D_Id
                     ? telemetries[`${props.component.D_Id}`] &&
                       telemetries[`${props.component.D_Id}`].HrtPressure
-                    : 0}
+                    : 0} */}
                 </Typography>
               </Box>
             </Box>

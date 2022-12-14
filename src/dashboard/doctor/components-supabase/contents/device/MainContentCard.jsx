@@ -7,7 +7,7 @@ import { GiMedicalDrip } from 'react-icons/gi';
 import { BiHeart } from 'react-icons/bi';
 import { GrDevice } from 'react-icons/gr';
 // import { telemetries, handleTelemetry } from '../../ContentContainer';
-import { ContentContainerContext } from '../../ContentContainer';
+// import { ContentContainerContext } from '../../ContentContainer';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { Field, Form, Formik, setNestedObjectValues } from 'formik';
 import { Typography } from '@mui/material';
@@ -16,6 +16,8 @@ import SelectFormField from '@/shared/utilities/form/SelectFormField';
 import TextFormField from '@/shared/utilities/form/TextFormField';
 import { InfinitySpin } from 'react-loader-spinner';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
+import { telemetries } from '../../ContentContainer';
+import { useAtom } from 'jotai';
 
 // const now = Date.now();
 // const mtd = now - 3600000;
@@ -30,7 +32,17 @@ const MainContentCard = (
 ) => {
   // const [close, setClose] = useState(false)
   // const [change, setChange] = useState(false)
-  const { telemetries } = useContext(ContentContainerContext);
+  // const { telemetries } = useContext(ContentContainerContext);
+  const [tele] = useAtom(telemetries);
+  console.log('in device maincontentcard');
+  console.log(tele);
+  console.log(component.D_Id);
+  console.log(tele[`${component.D_Id}`]);
+
+  const [currTele] = tele[`${component.D_Id}`]
+    ? useAtom(tele[`${component.D_Id}`])
+    : useAtom(tele.something);
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
@@ -119,8 +131,8 @@ const MainContentCard = (
                 <div className="flex w-[30%] flex-col items-start justify-start">
                   <div className="relative px-4 text-[22px] font-semibold tracking-widest text-black">
                     <GrDevice />
-                    {/* {telemetries[`${component.D_Id}`] &&
-                    telemetries[`${component.D_Id}`].connected ? (
+                    {/* {currTele &&
+                    currTele.connected ? (
                       <div className="absolute top-0 -right-[4rem] text-[14px] text-green-500">
                         Connected
                       </div>
@@ -132,7 +144,6 @@ const MainContentCard = (
 
                     {component.Label}
                   </div>
-                  
                 </div>
                 <div className="ml-auto flex h-[100%] w-[100%] items-center justify-center gap-[1.8rem]">
                   <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
@@ -140,8 +151,9 @@ const MainContentCard = (
                       <TbTemperatureCelsius size={40} color="blue" />{' '}
                     </div>
                     <div className="text-[20px] font-extrabold tracking-[5px] text-purple-600">
-                      {telemetries[`${component.D_Id}`] &&
-                        telemetries[`${component.D_Id}`].temperature}
+                      {currTele && currTele.temperature}
+                      {/* {currTele &&
+                        currTele.temperature} */}
                     </div>
                   </div>
                   <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
@@ -149,8 +161,7 @@ const MainContentCard = (
                       <GiMedicalDrip size={40} color="blue" />
                     </div>
                     <div className="text-[20px] font-extrabold tracking-[5px] text-cyan-600">
-                      {telemetries[`${component.D_Id}`] &&
-                        telemetries[`${component.D_Id}`].SpO2}
+                      {currTele && currTele.SpO2}
                     </div>
                   </div>
                   <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
@@ -158,8 +169,7 @@ const MainContentCard = (
                       <BiHeart size={40} color="blue" />
                     </div>
                     <div className="text-[20px] font-extrabold tracking-[5px] text-yellow-600">
-                      {telemetries[`${component.D_Id}`] &&
-                        telemetries[`${component.D_Id}`].HrtPressure}
+                      {currTele && currTele.HrtPressure}
                     </div>
                   </div>
                 </div>
@@ -169,8 +179,7 @@ const MainContentCard = (
                 <div className="flex w-[30%] flex-col items-start justify-start">
                   <div className="relative px-4 text-[22px] font-semibold tracking-widest text-black">
                     <GrDevice />
-                    {telemetries[`${component.D_Id}`] &&
-                    telemetries[`${component.D_Id}`].connected ? (
+                    {currTele && currTele.connected ? (
                       <div className="absolute top-0 -right-[4rem] text-[14px] text-green-500">
                         Connected
                       </div>
@@ -200,27 +209,24 @@ const MainContentCard = (
                     <div className="">
                       <TbTemperatureCelsius size={40} color="blue" />
                     </div>
-                    <div className="text-[40px] font-extrabold tracking-[5px] text-purple-600">
-                      {telemetries[`${component.D_Id}`] &&
-                        telemetries[`${component.D_Id}`].temperature}
+                    <div className="text-[40px] font-extrabold tracking-[5px] text-orange-400">
+                      {currTele && currTele.temperature}
                     </div>
                   </div>
                   <div className="flex h-[100%] w-[20%] flex-col items-center justify-between p-2">
                     <div className="">
                       <GiMedicalDrip size={40} color="blue" />
                     </div>
-                    <div className="text-[40px] font-extrabold tracking-[5px] text-cyan-600">
-                      {telemetries[`${component.D_Id}`] &&
-                        telemetries[`${component.D_Id}`].SpO2}
+                    <div className="text-[40px] font-extrabold tracking-[5px] text-blue-400">
+                      {currTele && currTele.SpO2}
                     </div>
                   </div>
                   <div className="flex h-[100%] w-[20%] flex-col items-center justify-between p-2">
                     <div className="">
                       <BiHeart size={40} color="blue" />
                     </div>
-                    <div className="text-[40px] font-extrabold tracking-[5px] text-yellow-600">
-                      {telemetries[`${component.D_Id}`] &&
-                        telemetries[`${component.D_Id}`].HrtPressure}
+                    <div className="text-[40px] font-extrabold tracking-[5px] text-purple-400">
+                      {currTele && currTele.HrtPressure}
                     </div>
                   </div>
                 </div>

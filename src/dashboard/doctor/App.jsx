@@ -8,9 +8,10 @@ import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { client } from '@/shared/api/initClient_tenant';
 import { LineChart } from './components-supabase/contents/patient/SingleLineChart';
 import { AiOutlineDown } from 'react-icons/ai';
+import {Provider} from 'jotai'
 // export const AppContext = createContext();
 function App() {
-  const [isChart, setIsChart] = useState([false,'all']);
+  const [isChart, setIsChart] = useState([false, 'all']);
   const [location, setLocation] = useState('Dashboard');
   const [session, setSession] = useState(null);
 
@@ -25,6 +26,9 @@ function App() {
       setSession(session);
     });
   }, []);
+
+  console.log('app props.setIsChart');
+  console.log(setIsChart);
   return (
     // <AppContext.Provider value={{ session, setSession }}>
     <>
@@ -37,7 +41,9 @@ function App() {
             <Navbar setLocation={setLocation} location={location} session={session} />
 
             <main className="flex h-[90%] w-[100%] flex-auto">
-              <ContentContainer setIsChart={setIsChart} session={session} />
+              <Provider>
+              <ContentContainer  setIsChart={setIsChart} session={session} />
+                    </Provider>
 
               <div className="ml-auto flex w-[25%] flex-col items-center justify-start overflow-y-scroll bg-auto-white shadow-lg">
                 <Chatbox />
@@ -63,11 +69,31 @@ function App() {
                 <span className="text-large font-extrabold tracking-wider text-gray-600">
                   Line Chart
                 </span>
-                <div className="bg-gray-300 ml-auto rounded-lg flex divide-x-2 divide-gray-500">
-                  <button onClick={()=>setIsChart([true,'all'])} className='flex justify-center items-center px-8 py-2 text-gray-500 tracking-wide hover:bg-gray-400 rounded-l-lg'>All</button>
-                  <button onClick={()=>setIsChart([true,'Temperature'])} className='flex justify-center items-center px-8 py-2 text-gray-500 tracking-wide hover:bg-gray-400'>Temperature</button>
-                  <button onClick={()=>setIsChart([true,'SpO2'])} className='flex justify-center items-center px-8 py-2 text-gray-500 tracking-wide hover:bg-gray-400'>SpO2</button>
-                  <button onClick={()=>setIsChart([true,'HeartRate'])} className='flex justify-center items-center px-8 py-2 text-gray-500 tracking-wide hover:bg-gray-400 rounded-r-lg'>Heart rate</button>
+                <div className="ml-auto flex divide-x-2 divide-gray-500 rounded-lg bg-gray-300">
+                  <button
+                    onClick={() => setIsChart([true, 'all'])}
+                    className="flex items-center justify-center rounded-l-lg px-8 py-2 tracking-wide text-gray-500 hover:bg-gray-400"
+                  >
+                    All
+                  </button>
+                  <button
+                    onClick={() => setIsChart([true, 'Temperature'])}
+                    className="flex items-center justify-center px-8 py-2 tracking-wide text-gray-500 hover:bg-gray-400"
+                  >
+                    Temperature
+                  </button>
+                  <button
+                    onClick={() => setIsChart([true, 'SpO2'])}
+                    className="flex items-center justify-center px-8 py-2 tracking-wide text-gray-500 hover:bg-gray-400"
+                  >
+                    SpO2
+                  </button>
+                  <button
+                    onClick={() => setIsChart([true, 'HeartRate'])}
+                    className="flex items-center justify-center rounded-r-lg px-8 py-2 tracking-wide text-gray-500 hover:bg-gray-400"
+                  >
+                    Heart rate
+                  </button>
                 </div>
               </div>
               <div className="relative h-[80%] w-[100%]">

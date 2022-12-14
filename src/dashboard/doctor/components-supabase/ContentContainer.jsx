@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { InfinitySpin } from 'react-loader-spinner';
 import { client } from '@/shared/api/initClient_tenant';
+import { atom, Provider, useAtom } from 'jotai';
 
 // export let telemetryTable = {};
 // export const handleTelemetry = (deviceId, temperature, SpO2, HrtPressure, connection) => {
@@ -20,21 +21,18 @@ import { client } from '@/shared/api/initClient_tenant';
 //     connected: connection,
 //   };
 // };
-export const ContentContainerContext = createContext();
+
+export const deviceList = atom(['kiss ass']);
+export const telemetries = atom({ something: atom(0) });
+// export const ContentContainerContext = createContext();
 const now = Date.now();
 const mtd = now - 3600000;
 
 const ContentContainer = (props) => {
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [devices, setDevices] = useState([{ dummyValue: 0 }, { dummyValue2: 0 }]);
-  const [telemetries, setTelemetries] = useState({
-    randomId: {
-      temperature: 0,
-      SpO2: 0,
-      HrtPressure: 0,
-    },
-  });
+  const [devices, setDevices] = useAtom(deviceList);
+  const [tele, setTelemetries] = useAtom(telemetries);
 
   const handleLoad = async () => {
     try {
@@ -42,11 +40,13 @@ const ContentContainer = (props) => {
       let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
       if (error) throw error;
       console.log('load device success!');
+      console.log('DEVICE');
+      console.log(DEVICE);
+      setDevices(DEVICE);
       let token = await client.connect();
       for (let device of DEVICE) {
         openSocket(device.D_Id);
       }
-      setDevices(DEVICE);
     } catch (error) {
       console.log(error.error_description || error.message);
     } finally {
@@ -55,6 +55,7 @@ const ContentContainer = (props) => {
   };
 
   const openSocket = async (deviceId) => {
+    console.log('socket opened!');
     let params = {
       cmdId: 10,
       entityId: deviceId,
@@ -66,7 +67,6 @@ const ContentContainer = (props) => {
     let timeElapse = 0;
     let status = 'Incubation';
     client.subscribe(params, async function (response) {
-      console.log(response.data);
       if (
         response.data
         // &&
@@ -74,11 +74,14 @@ const ContentContainer = (props) => {
         // response.data.temperature &&
         // response.data.HrtPressure
       ) {
+        console.log('in socket');
+        console.log(deviceId);
+        console.log(response.data);
         if (
           response.data.temperature[0][1] >= 37.5 &&
           response.data.temperature[0][1] <= 38.5
         ) {
-          console.log(timeElapse);
+          // console.log(timeElapse);
           timeElapse = status === 'Incubation' ? timeElapse + 2 : 0;
           status = 'Incubation';
           const { error } = await supabase.from('TELEMETRY').insert([
@@ -145,14 +148,17 @@ const ContentContainer = (props) => {
           ]);
           if (error) throw error;
         }
-        setTelemetries({
-          ...telemetries,
-          [deviceId]: {
-            temperature: response.data.temperature[0][1],
-            SpO2: response.data.SpO2[0][1],
-            HrtPressure: response.data.HrtPressure[0][1],
-          },
+        const telePayload = atom({
+          temperature: response.data.temperature[0][1],
+          SpO2: response.data.SpO2[0][1],
+          HrtPressure: response.data.HrtPressure[0][1],
         });
+
+        setTelemetries((prev) => ({
+          ...prev,
+          hello: 'hi',
+          [deviceId]: telePayload,
+        }));
       }
     });
     // } else {
@@ -160,35 +166,36 @@ const ContentContainer = (props) => {
     // }
   };
 
+  console.log('content props.setIsChart');
+  console.log(props);
   useEffect(() => {
     handleLoad();
   }, [refresh]);
 
   if (!loading) {
     return (
-      <ContentContainerContext.Provider
-        value={{ devices, setDevices, telemetries, setTelemetries }}
-      >
-        <div className="flex w-[75%] flex-auto flex-col">
-          <Routes>
-            <Route
-              path="/index.html"
-              element={<PatientContent setIsChart={props.setIsChart} />}
-            />
-            <Route path="/account" element={<Account session={props.session} />} />
-            <Route path="/facilities" element={<FacilityContent />} />
-            <Route path="/nurses" element={<NurseContent />} />
-            <Route
-              path="/devices"
-              element={<DeviceContent refresh={refresh} setRefresh={setRefresh} />}
-            />
-          </Routes>
-        </div>
-      </ContentContainerContext.Provider>
+      // <ContentContainerContext.Provider value={{ telemetries, setTelemetries }}>
+      <div className="flex w-[75%] flex-auto flex-col">
+        <Routes>
+          <Route
+            path="/index.html"
+            element={<PatientContent setIsChart={props.setIsChart} />}
+          />
+          <Route path="/account" element={<Account session={props.session} />} />
+          <Route path="/facilities" element={<FacilityContent />} />
+          <Route path="/nurses" element={<NurseContent />} />
+          <Route
+            path="/devices"
+            element={<DeviceContent refresh={refresh} setRefresh={setRefresh} />}
+          />
+        </Routes>
+      </div>
+
+      // </ContentContainerContext.Provider>
     );
   } else {
     return (
-      <div className="flex items-center justify-center w-[75%]">
+      <div className="flex w-[75%] items-center justify-center">
         <InfinitySpin width="300" color="#475569" />;
       </div>
     );
