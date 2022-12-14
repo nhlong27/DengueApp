@@ -7,7 +7,7 @@ var mqtt = require('mqtt');
 const thingsboardHost = HOST;
 
 // Reads the access token from arguments
-const accessToken = process.argv[2];
+const accessToken = 'randToken';
 const minTemperature = 36,
   maxTemperature = 41,
   minSpO2 = 95,

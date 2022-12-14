@@ -30,6 +30,8 @@ const DeviceSearchCreate = (props) => {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
+
+    setSession(null);
   }, []);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -48,7 +50,7 @@ const DeviceSearchCreate = (props) => {
             label: values.label,
             deviceProfileId: {
               id: '3e29a7f0-750f-11ed-81cb-3bc720ab387f',
-              entityType: 'DEVICE_PROFILE'
+              entityType: 'DEVICE_PROFILE',
             },
             additionalInfo: {},
           },
@@ -59,17 +61,15 @@ const DeviceSearchCreate = (props) => {
         values.token = credentials.credentialsId;
 
         // Add device to db
-        await supabase
-          .from('DEVICE')
-          .insert([
-            {
-              D_Id: device.id.id,
-              D_Ssn: session.user.id,
-              Label: values.label,
-              Type: values.type,
-              Token: values.token,
-            },
-          ]);
+        await supabase.from('DEVICE').insert([
+          {
+            D_Id: device.id.id,
+            D_Ssn: session.user.id,
+            Label: values.label,
+            Type: values.type,
+            Token: values.token,
+          },
+        ]);
       }
       if (error) throw error;
       console.log('add device success!');

@@ -16,7 +16,7 @@ import SelectFormField from '@/shared/utilities/form/SelectFormField';
 import TextFormField from '@/shared/utilities/form/TextFormField';
 import { InfinitySpin } from 'react-loader-spinner';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
-import { telemetries } from '../../ContentContainer';
+import { telemetries } from '@/dashboard/doctor/App';
 import { useAtom } from 'jotai';
 
 // const now = Date.now();
@@ -34,10 +34,10 @@ const MainContentCard = (
   // const [change, setChange] = useState(false)
   // const { telemetries } = useContext(ContentContainerContext);
   const [tele] = useAtom(telemetries);
-  console.log('in device maincontentcard');
-  console.log(tele);
-  console.log(component.D_Id);
-  console.log(tele[`${component.D_Id}`]);
+  // console.log('in device maincontentcard');
+  // console.log(tele);
+  // console.log(component.D_Id);
+  // console.log(tele[`${component.D_Id}`]);
 
   const [currTele] = tele[`${component.D_Id}`]
     ? useAtom(tele[`${component.D_Id}`])

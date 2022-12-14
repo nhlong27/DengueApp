@@ -19,26 +19,40 @@ import { GrDevice } from 'react-icons/gr';
 // import { ContentContainerContext } from '../../ContentContainer';
 import { useAtom, Provider } from 'jotai';
 import BasicSelect from '@/shared/utilities/form/BasicSelect';
-import {
-  deviceList,
-  telemetries,
-} from '@/dashboard/doctor/components-supabase/ContentContainer';
+import { deviceList, telemetries } from '@/dashboard/doctor/App';
 
 // import { LineChart } from './SingleLineChart';
 
 const MainContent = (props) => {
+  const [isUpdate, setIsUpdate] = useState(false);
   const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isOpen, setOpen] = useState(false);
-  const [isPatient, setIsPatient] = useState({});
-  // const { devices } = useContext(ContentContainerContext);
+  const [isPatient, setIsPatient] = useState(null);
   const [devices] = useAtom(deviceList);
+
+  const listenUpdate = async () => {
+    const PATIENT = supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'PATIENT' },
+        (payload) => {
+          console.log('Change received!', payload);
+          setIsUpdate((state) => !state);
+        },
+      )
+      .subscribe();
+  };
+
   const handleLoad = async () => {
     try {
       setLoading(true);
       let { data: PATIENT, error } = await supabase.from('PATIENT').select('*');
       if (error) throw error;
       console.log('load patients success!');
+      console.log('PATIENT');
+      console.log(PATIENT);
       setContent(PATIENT);
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -47,8 +61,10 @@ const MainContent = (props) => {
     }
   };
   useEffect(async () => {
-    handleLoad();
-  }, [props.refresh]);
+    await handleLoad();
+    listenUpdate();
+    // setContent(null);
+  }, [props.refresh, isUpdate]);
 
   let style1 = '';
   let style2 = '';
@@ -59,6 +75,7 @@ const MainContent = (props) => {
     style1 = '-mr-[64rem] opacity-0';
     style2 = 'w-[100%]';
   }
+
   if (!loading) {
     return (
       <div className="absolute min-h-[92%] w-[95%] rounded-lg bg-gray-300 p-2 ">
@@ -135,9 +152,11 @@ const MainContent = (props) => {
                     {/* <LineChart component={isPatient} /> */}
                     <button
                       onClick={() => {
-                        console.log('props.setIsChart');
-                        console.log(props.setIsChart);
-                        props.setIsChart(() => [true, 'all']);
+                        props.setIsChart(() => ({
+                          open: true,
+                          type: 'all',
+                          device: isPatient.D_Id,
+                        }));
                       }}
                       className="p-4 text-center ring-2 ring-gray-300 hover:ring-black"
                     >
@@ -163,10 +182,12 @@ const MainContent = (props) => {
 const StatisticsCard = (props) => {
   const [device, setDevice] = useState('');
   // const { telemetries } = useContext(ContentContainerContext);
-
   const [tele] = useAtom(telemetries);
-
-  const [currTele] = tele[`${props.component.D_Id}`]
+  // console.log('tele');
+  // console.log(tele);
+  // console.log(props.component.D_Id);
+  // console.log(tele[`${props.component.D_Id}`]);
+  const [currTele] = props.component
     ? useAtom(tele[`${props.component.D_Id}`])
     : useAtom(tele.something);
 

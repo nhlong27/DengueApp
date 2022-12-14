@@ -9,6 +9,22 @@ const MainContent = (props) => {
   const [loading, setLoading] = useState(true);
   const [isOpen, setOpen] = useState(false);
   const [isNurse, setIsNurse] = useState({});
+  const [isUpdate, setIsUpdate] = useState(false);
+
+  const listenUpdate = async ()=>{
+    const NURSE = supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'NURSE' },
+        (payload) => {
+          console.log('Change received!', payload);
+          setIsUpdate(state=>!state)
+        },
+      )
+      .subscribe();
+  }
+
   const handleLoad = async () => {
     try {
       setLoading(true);
@@ -23,8 +39,9 @@ const MainContent = (props) => {
     }
   };
   useEffect(async () => {
-    handleLoad();
-  }, [props.refresh]);
+    await handleLoad();
+    listenUpdate();
+  }, [props.refresh, isUpdate]);
 
   let style1 = '';
   let style2 = '';

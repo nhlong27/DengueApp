@@ -6,6 +6,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint --max-warnings=0 src",
+    "emulator1": "node ./src/shared/emulators/emulator.js ",
     "emulator2": "node ./src/shared/emulators/emulator2.js ",
     "emulator3": "node ./src/shared/emulators/emulator3.js",
     "emulator4": "node ./src/shared/emulators/emulator4.js ",

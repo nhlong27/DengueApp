@@ -6,7 +6,7 @@ const Chatbox = () => {
   const [nurses, setNurses] = useState([]);
   const loadNurse = async () => {
     const { data: NURSE, error } = await supabase.from('NURSE').select('*');
-    console.log(NURSE);
+    // console.log(NURSE);
     setNurses(NURSE);
   };
   useEffect(() => {

@@ -11,6 +11,32 @@ const MainContent = (props) => {
   const [loading, setLoading] = useState(true);
   const [isOpen, setOpen] = useState(false);
   const [isRoom, setIsRoom] = useState({});
+  const [isUpdate, setIsUpdate] = useState(false);
+
+  const listenUpdate = async () => {
+    const BED = supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'BED' },
+        (payload) => {
+          console.log('Change received!', payload);
+          setIsUpdate((state) => !state);
+        },
+      )
+      .subscribe();
+      const ROOM = supabase
+        .channel('custom-all-channel')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'ROOM' },
+          (payload) => {
+            console.log('Change received!', payload);
+            setIsUpdate((state) => !state);
+          },
+        )
+        .subscribe();
+  };
   const handleLoad = async () => {
     try {
       loadFacility = {};
@@ -48,8 +74,9 @@ const MainContent = (props) => {
     }
   };
   useEffect(async () => {
-    handleLoad();
-  }, [props.refresh]);
+    await handleLoad();
+    listenUpdate();
+  }, [props.refresh, isUpdate]);
 
   let style1 = '';
   let style2 = '';

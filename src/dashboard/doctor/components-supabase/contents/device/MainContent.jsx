@@ -6,7 +6,7 @@ import { client } from '@/shared/api/initClient_tenant';
 // import { handleTelemetry } from '../../ContentContainer';
 // import { ContentContainerContext } from '../../ContentContainer';
 import { useAtom } from 'jotai';
-import { deviceList, telemetries } from '@/dashboard/doctor/components-supabase/ContentContainer';
+import { deviceList, telemetries } from '@/dashboard/doctor/App';
 
 const MainContent = (props) => {
   // const [avai, setAvai] = useState(false);
@@ -31,8 +31,6 @@ const MainContent = (props) => {
   //     setLoading(false);
   //   }
   // };
-  console.log('devices')
-  console.log(devices)
 
   let style1 = '';
   let style2 = '';

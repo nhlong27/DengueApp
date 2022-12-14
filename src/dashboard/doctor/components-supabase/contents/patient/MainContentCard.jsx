@@ -16,7 +16,7 @@ import { BsPeopleFill } from 'react-icons/bs';
 import { useEffect } from 'react';
 // import { ContentContainerContext } from '../../ContentContainer';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
-import { telemetries } from '../../ContentContainer';
+import { telemetries } from '@/dashboard/doctor/App';
 import { useAtom } from 'jotai';
 
 const statusObj = {
@@ -33,13 +33,13 @@ export const DashboardTable = (props) => {
 
   const reload = async () => {
     for (let row of props.rows) {
-      console.log(row);
+      // console.log(row);
       if (row.D_Id) {
         const { data: TELEMETRY, error } = await supabase
           .from('TELEMETRY')
           .select('*')
           .eq('D_Id', row.D_Id);
-        console.log(TELEMETRY);
+        // console.log(TELEMETRY);
         row.Status = TELEMETRY[TELEMETRY.length - 1].Status;
       }
     }
@@ -103,8 +103,8 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
   ? useAtom(tele[`${row.D_Id}`])
   : useAtom(tele.something);
   
-  console.log('in Patient');
-  console.log(currTele);
+  // console.log('in Patient');
+  // console.log(currTele);
   
   return (
     <TableRow

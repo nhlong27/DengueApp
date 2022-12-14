@@ -14,7 +14,8 @@ import { Line } from 'react-chartjs-2';
 import StreamingPlugin from 'chartjs-plugin-streaming';
 import 'chartjs-adapter-luxon';
 // import { ContentContainerContext } from '../../ContentContainer';
-
+import { telemetries } from '@/dashboard/doctor/App';
+import { useAtom } from 'jotai';
 // import faker from '@faker-js/faker';
 
 ChartJS.register(
@@ -29,11 +30,15 @@ ChartJS.register(
 );
 
 export function LineChart(props) {
-  const [telemetries, setTelemetries] = useState({
-    Temperature: 36,
-    SpO2: 95,
-    Pressure: 70,
-  });
+  // const [telemetries, setTelemetries] = useState({
+  //   Temperature: 36,
+  //   SpO2: 95,
+  //   Pressure: 70,
+  // });
+  const [tele] = useAtom(telemetries);
+  const [currTele] = useAtom(tele[`${props.isChart.device}`])
+
+
   const subscribe = () => {
     const TELEMETRY = supabase
       .channel('custom-insert-channel')
@@ -41,18 +46,21 @@ export function LineChart(props) {
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'TELEMETRY' },
         (payload) => {
-          telemetries.Temperature = payload.new.Temperature;
-          telemetries.SpO2 = payload.new.SpO2;
-          telemetries.Pressure = payload.new.Pressure;
+          currTele.Temperature = payload.new.Temperature;
+          currTele.SpO2 = payload.new.SpO2;
+          currTele.Pressure = payload.new.Pressure;
         },
       )
       .subscribe();
   };
-  useEffect(() => {
-    subscribe();
-  }, []);
-  // console.log(telemetries);
-  if (props.isChart[1] === 'all') {
+
+
+
+  // const [currTele] = tele[`${props.isChart.device}`]
+  //   ? useAtom(tele[`${props.isChart.device}`])
+  //   : useAtom(tele.something);
+
+  if (props.isChart.type === 'all') {
     return (
       <Line
         // width={800}
@@ -87,22 +95,22 @@ export function LineChart(props) {
                   chart.data.datasets.forEach((dataset) => {
                     // dataset.data.push({
                     //   x: Date.now(),
-                    //   y: telemetries.Temperature,
+                    //   y: currTele.Temperature,
                     // });
                     if (dataset.label === 'Temperature (Celcius)') {
                       dataset.data.push({
                         x: Date.now(),
-                        y: telemetries.Temperature,
+                        y: currTele.temperature,
                       });
                     } else if (dataset.label === 'SpO2 (%)') {
                       dataset.data.push({
                         x: Date.now(),
-                        y: telemetries.SpO2,
+                        y: currTele.SpO2,
                       });
                     } else {
                       dataset.data.push({
                         x: Date.now(),
-                        y: telemetries.Pressure,
+                        y: currTele.HrtPressure,
                       });
                     }
                   }),
@@ -154,7 +162,7 @@ export function LineChart(props) {
       />
     );
   }
-  if (props.isChart[1] === 'Temperature') {
+  if (props.isChart.type === 'temperature') {
     return (
       <Line
         // width={800}
@@ -189,11 +197,11 @@ export function LineChart(props) {
                   chart.data.datasets.forEach((dataset) => {
                     // dataset.data.push({
                     //   x: Date.now(),
-                    //   y: telemetries.Temperature,
+                    //   y: currTele.Temperature,
                     // });
                     dataset.data.push({
                       x: Date.now(),
-                      y: telemetries.Temperature,
+                      y: currTele.Temperature,
                     });
                   });
                   chart.update('quiet');
@@ -222,7 +230,7 @@ export function LineChart(props) {
         }}
       />
     );
-  } else if (props.isChart[1] === 'SpO2') {
+  } else if (props.isChart.type === 'SpO2') {
     return (
       <Line
         // width={800}
@@ -257,7 +265,7 @@ export function LineChart(props) {
                   chart.data.datasets.forEach((dataset) => {
                     dataset.data.push({
                       x: Date.now(),
-                      y: telemetries.SpO2,
+                      y: currTele.SpO2,
                     });
                   });
                   chart.update('quiet');
@@ -286,7 +294,7 @@ export function LineChart(props) {
         }}
       />
     );
-  } else if (props.isChart[1] === 'HeartRate') {
+  } else if (props.isChart.type === 'HrtPressure') {
     return (
       <Line
         // width={800}
@@ -321,11 +329,11 @@ export function LineChart(props) {
                   chart.data.datasets.forEach((dataset) => {
                     // dataset.data.push({
                     //   x: Date.now(),
-                    //   y: telemetries.Temperature,
+                    //   y: currTele.Temperature,
                     // });
                     dataset.data.push({
                       x: Date.now(),
-                      y: telemetries.Pressure,
+                      y: currTele.Pressure,
                     });
                   });
                   chart.update('quiet');

@@ -10,7 +10,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { InfinitySpin } from 'react-loader-spinner';
 import { client } from '@/shared/api/initClient_tenant';
-import { atom, Provider, useAtom } from 'jotai';
+import { useAtom, atom } from 'jotai';
+import { telemetries, deviceList } from '../App';
 
 // export let telemetryTable = {};
 // export const handleTelemetry = (deviceId, temperature, SpO2, HrtPressure, connection) => {
@@ -22,17 +23,31 @@ import { atom, Provider, useAtom } from 'jotai';
 //   };
 // };
 
-export const deviceList = atom(['kiss ass']);
-export const telemetries = atom({ something: atom(0) });
 // export const ContentContainerContext = createContext();
 const now = Date.now();
 const mtd = now - 3600000;
 
 const ContentContainer = (props) => {
+  const [isUpdate, setIsUpdate] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
   const [devices, setDevices] = useAtom(deviceList);
   const [tele, setTelemetries] = useAtom(telemetries);
+  const [isSocket, setIsSocket] = useState(false);
+
+  const listenUpdate = async () => {
+    const DEVICE = supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'DEVICE' },
+        (payload) => {
+          console.log('Device Change received!', payload);
+          setIsUpdate((state) => !state);
+        },
+      )
+      .subscribe();
+  };
 
   const handleLoad = async () => {
     try {
@@ -43,10 +58,34 @@ const ContentContainer = (props) => {
       console.log('DEVICE');
       console.log(DEVICE);
       setDevices(DEVICE);
+      // let token = await client.connect();
+      // for (let device of DEVICE) {
+      //   openSocket(device.D_Id);
+      // }
+    } catch (error) {
+      console.log(error.error_description || error.message);
+    }
+    // finally {
+    //   setLoading(false);
+    // }
+  };
+
+  const handleSocket = async () => {
+    try {
+      console.log('handleSocket');
+      let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
+      if (error) throw error;
+
       let token = await client.connect();
+      const obj = {};
       for (let device of DEVICE) {
+        obj[`${device.D_Id}`] = atom({ temperature: 0, HrtPressure: 0, SpO2: 0 });
         openSocket(device.D_Id);
       }
+
+      console.log('setTelemetries');
+      console.log(obj);
+      setTelemetries(obj);
     } catch (error) {
       console.log(error.error_description || error.message);
     } finally {
@@ -74,9 +113,6 @@ const ContentContainer = (props) => {
         // response.data.temperature &&
         // response.data.HrtPressure
       ) {
-        console.log('in socket');
-        console.log(deviceId);
-        console.log(response.data);
         if (
           response.data.temperature[0][1] >= 37.5 &&
           response.data.temperature[0][1] <= 38.5
@@ -153,12 +189,7 @@ const ContentContainer = (props) => {
           SpO2: response.data.SpO2[0][1],
           HrtPressure: response.data.HrtPressure[0][1],
         });
-
-        setTelemetries((prev) => ({
-          ...prev,
-          hello: 'hi',
-          [deviceId]: telePayload,
-        }));
+        setTelemetries((prev) => ({ ...prev, [deviceId]: telePayload }));
       }
     });
     // } else {
@@ -166,11 +197,11 @@ const ContentContainer = (props) => {
     // }
   };
 
-  console.log('content props.setIsChart');
-  console.log(props);
-  useEffect(() => {
-    handleLoad();
-  }, [refresh]);
+  useEffect(async () => {
+    await handleLoad();
+    await handleSocket();
+    listenUpdate();
+  }, [refresh, isUpdate]);
 
   if (!loading) {
     return (
