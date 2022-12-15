@@ -55,7 +55,10 @@ const PatientSearchCreate = (props) => {
       setDeviceLoading(true);
 
       // I could use devices from useContext
-      let { data: DEVICE, error } = await supabase.from('DEVICE').select('*').eq('Assign', 'No');
+      let { data: DEVICE, error } = await supabase
+        .from('DEVICE')
+        .select('*')
+        .eq('Assign', 'No');
       if (error) throw error;
       let deviceList = DEVICE.map((ele) => ele.Label);
       setDevices(deviceList);
@@ -75,7 +78,7 @@ const PatientSearchCreate = (props) => {
       if (error) throw error;
       let bedList = BED.map((ele) => ele.B_Number);
       setBeds(bedList);
-      console.log(bedList)
+      console.log(bedList);
       console.log('get beds for assigning patient success!');
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -89,14 +92,17 @@ const PatientSearchCreate = (props) => {
       let now = Date.now();
       await supabase.from('PERSON').insert([{ Per_Ssn: now, D_Ssn: session.user.id }]);
       let { data: DEVICE } = await supabase
-      .from('DEVICE')
-      .select('*')
-      .eq('Label', values.label);
-      await supabase.from('DEVICE').update({ Assign: 'Yes' }).eq('D_Id',DEVICE.D_Id);
-      let { data: BED, error } = await supabase
-        .from('BED')
+        .from('DEVICE')
         .select('*')
-        .eq('B_Number', values.B_Number);
+        .eq('Label', values.label)
+        .single();
+      if (DEVICE) {
+        await supabase.from('DEVICE').update({ Assign: 'Yes' }).eq('D_Id', DEVICE.D_Id);
+      }
+      // let { data: BED, error } = await supabase
+      //   .from('BED')
+      //   .select('*')
+      //   .eq('B_Number', values.B_Number);
       await supabase.from('PATIENT').insert([
         {
           Fname: values.fname,
@@ -109,10 +115,11 @@ const PatientSearchCreate = (props) => {
           District: values.district,
           Street: values.street,
           Email: values.email,
-          D_Id: DEVICE[0].D_Id,
-          B_Number: BED[0].B_Number,
+          D_Id: DEVICE.D_Id,
+          B_Number: values.B_Number,
           Per_Ssn: now,
           Age: values.age,
+          Status: 'None',
         },
       ]);
       if (error) throw error;
@@ -167,8 +174,8 @@ const PatientSearchCreate = (props) => {
         )}
       </div>
       <button
-        className="duration-600 ml-6 max-w-[10%] rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400 flex justify-center items-center ring-2 ring-black h-[80%]"
-        onClick={() => props.setRefresh(state=>!state)}
+        className="duration-600 ml-6 flex h-[80%] max-w-[10%] items-center justify-center rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white ring-2 ring-black transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400"
+        onClick={() => props.setRefresh((state) => !state)}
       >
         <BiRefresh size={30} color="black" />
       </button>

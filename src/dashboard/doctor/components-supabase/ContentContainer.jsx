@@ -102,24 +102,21 @@ const ContentContainer = (props) => {
       endTs: now,
       // close: close
     };
-    // if (token) {
     let timeElapse = 0;
-    let status = 'Incubation';
+    let status = 'none';
     client.subscribe(params, async function (response) {
-      if (
-        response.data
-        // &&
-        // response.data.SpO2 &&
-        // response.data.temperature &&
-        // response.data.HrtPressure
-      ) {
-        if (
-          response.data.temperature[0][1] >= 37.5 &&
-          response.data.temperature[0][1] <= 38.5
-        ) {
-          // console.log(timeElapse);
-          timeElapse = status === 'Incubation' ? timeElapse + 2 : 0;
-          status = 'Incubation';
+      if (response.data) {
+        if (response.data.temperature[0][1] < 37) {
+          timeElapse = status !== 'Normal' ? timeElapse + 4 : 0;
+          if (timeElapse >= 10) {
+            status = 'Normal';
+
+            const { error } = await supabase
+              .from('PATIENT')
+              .update({ Status: status })
+              .eq('D_Id', deviceId);
+            if (error) throw error;
+          }
           const { error } = await supabase.from('TELEMETRY').insert([
             {
               D_Id: deviceId,
@@ -127,11 +124,32 @@ const ContentContainer = (props) => {
               Temperature: response.data.temperature[0][1],
               SpO2: response.data.SpO2[0][1],
               Pressure: response.data.HrtPressure[0][1],
-              // Elapse: telemetries[`${deviceId}`].time
-              //   ? telemetries[`${deviceId}`].time(
-              //       Math.round(Date.now() / 60) - telemetries[`${deviceId}`].time,
-              //     )
-              //   : 0,
+              Elapse: timeElapse,
+              Status: status,
+            },
+          ]);
+          if (error) throw error;
+        } else if (
+          response.data.temperature[0][1] >= 37.5 &&
+          response.data.temperature[0][1] <= 38.5
+        ) {
+          timeElapse = status !== 'Incubation' ? timeElapse + 4 : 0;
+          if (timeElapse >= 10) {
+            status = 'Incubation';
+
+            const { error } = await supabase
+              .from('PATIENT')
+              .update({ Status: status })
+              .eq('D_Id', deviceId);
+            if (error) throw error;
+          }
+          const { error } = await supabase.from('TELEMETRY').insert([
+            {
+              D_Id: deviceId,
+              Time: Date.now(),
+              Temperature: response.data.temperature[0][1],
+              SpO2: response.data.SpO2[0][1],
+              Pressure: response.data.HrtPressure[0][1],
               Elapse: timeElapse,
               Status: status,
             },
@@ -141,8 +159,15 @@ const ContentContainer = (props) => {
           response.data.temperature[0][1] >= 39 &&
           response.data.temperature[0][1] <= 40
         ) {
-          timeElapse = status === 'Febrile' ? timeElapse + 2 : 0;
-          status = 'Febrile';
+          timeElapse = status !== 'Febrile' ? timeElapse + 4 : 0;
+          if (timeElapse >= 10) {
+            status = 'Febrile';
+            const { error } = await supabase
+              .from('PATIENT')
+              .update({ Status: status })
+              .eq('D_Id', deviceId);
+            if (error) throw error;
+          }
           const { error } = await supabase.from('TELEMETRY').insert([
             {
               D_Id: deviceId,
@@ -150,11 +175,6 @@ const ContentContainer = (props) => {
               Temperature: response.data.temperature[0][1],
               SpO2: response.data.SpO2[0][1],
               Pressure: response.data.HrtPressure[0][1],
-              // Elapse: telemetries[`${deviceId}`].time
-              //   ? telemetries[`${deviceId}`].time(
-              //       Math.round(Date.now() / 60) - telemetries[`${deviceId}`].time,
-              //     )
-              //   : 0,
               Elapse: timeElapse,
               Status: status,
             },
@@ -164,8 +184,15 @@ const ContentContainer = (props) => {
           response.data.temperature[0][1] >= 37 &&
           response.data.temperature[0][1] <= 37.5
         ) {
-          timeElapse = status === 'Recovery' ? timeElapse + 2 : 0;
-          status = 'Recovery';
+          timeElapse = status !== 'Recovery' ? timeElapse + 4 : 0;
+          if (timeElapse >= 10) {
+            status = 'Recovery';
+            const { error } = await supabase
+              .from('PATIENT')
+              .update({ Status: status })
+              .eq('D_Id', deviceId);
+            if (error) throw error;
+          }
           const { error } = await supabase.from('TELEMETRY').insert([
             {
               D_Id: deviceId,
@@ -173,11 +200,6 @@ const ContentContainer = (props) => {
               Temperature: response.data.temperature[0][1],
               SpO2: response.data.SpO2[0][1],
               Pressure: response.data.HrtPressure[0][1],
-              // Elapse: telemetries[`${deviceId}`].time
-              //   ? telemetries[`${deviceId}`].time(
-              //       Math.round(Date.now() / 60) - telemetries[`${deviceId}`].time,
-              //     )
-              //   : 0,
               Elapse: timeElapse,
               Status: status,
             },
@@ -192,9 +214,6 @@ const ContentContainer = (props) => {
         setTelemetries((prev) => ({ ...prev, [deviceId]: telePayload }));
       }
     });
-    // } else {
-    //   setTimeout(() => openSocket(), 3000);
-    // }
   };
 
   useEffect(async () => {

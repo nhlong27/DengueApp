@@ -18,6 +18,7 @@ import { useEffect } from 'react';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { telemetries } from '@/dashboard/doctor/App';
 import { useAtom } from 'jotai';
+import { InfinitySpin } from 'react-loader-spinner';
 
 const statusObj = {
   // applied: { color: 'info' },
@@ -29,83 +30,110 @@ const statusObj = {
 
 export const DashboardTable = (props) => {
   // const { telemetries } = useContext(ContentContainerContext);
-
-
-  const reload = async () => {
-    for (let row of props.rows) {
-      // console.log(row);
-      if (row.D_Id) {
-        const { data: TELEMETRY, error } = await supabase
-          .from('TELEMETRY')
-          .select('*')
-          .eq('D_Id', row.D_Id);
-        // console.log(TELEMETRY);
-        row.Status = TELEMETRY[TELEMETRY.length - 1].Status;
-      }
-    }
+  // const [isLoading, setLoading] = useState(true);
+  // const getStatus = async () => {
+  //   let { data: DEVICE, error } = await supabase.from('DEVICE').select('Status, D_Id');
+  //   for (let pair of DEVICE) {
+  //     props.setStatusList((prev) => ({ ...prev, [pair.D_Id]: pair.Status }));
+  //   }
+  // };
+  const listenStatusUpdate = () => {
+    // setLoading(true);
+    const PATIENT = supabase
+      .channel('custom-update-channel')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'PATIENT' },
+        (payload) => {
+          console.log('Change received!', payload);
+          props.setIsUpdate((state) => !state);
+          //   props.setStatusList((prev) => ({
+          //     ...prev,
+          //     [payload.new.D_Id]: payload.new.Status,
+          //   }));
+        },
+      )
+      .subscribe();
+    // setLoading(false);
   };
   useEffect(() => {
-    reload();
+    // await getStatus();
+    listenStatusUpdate();
   }, []);
   return (
-    <Card
-      sx={{ backgroundColor: '#F7F7FF', borderRadius: '25px', border: '2px solid black' }}
-    >
-      <TableContainer>
-        <Table sx={{ minWidth: 800 }} aria-label="table in dashboard">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <span className="p-2 text-[16px] font-bold">Status</span>
-              </TableCell>
-              <TableCell>
-                <span className="text-[16px] font-bold">Name</span>
-              </TableCell>
-              {/* <TableCell>
+    <>
+      {/* {isLoading ? (
+        <div className="flex items-center justify-center">
+          <InfinitySpin width="300" color="#475569" />
+        </div>
+      ) : ( */}
+      <Card
+        sx={{
+          backgroundColor: '#F7F7FF',
+          borderRadius: '25px',
+          border: '2px solid black',
+          minWidth: '100%'
+        }}
+      >
+        <TableContainer>
+          <Table sx={{ minWidth: 800 }} aria-label="table in dashboard">
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <span className="p-2 text-[16px] font-bold">Status</span>
+                </TableCell>
+                <TableCell>
+                  <span className="text-[16px] font-bold">Name</span>
+                </TableCell>
+                {/* <TableCell>
                 <span className="text-[16px] font-bold">Email</span>
               </TableCell> */}
-              <TableCell>
-                <span className="text-[16px] font-bold">Device</span>
-              </TableCell>
-              <TableCell>
-                <span className="text-[16px] font-bold">Assigned To</span>{' '}
-              </TableCell>
-              <TableCell>
-                <span className="text-[16px] font-bold">Temperature</span>
-              </TableCell>
-              <TableCell>
-                <span className="text-[16px] font-bold">SpO2</span>
-              </TableCell>
-              <TableCell>
-                <span className="text-[16px] font-bold">Heart Pressure</span>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {props.rows.map((row, index) => (
-              <TableComponent
-                key={index}
-                row={row}
-                setInfoOpen={props.setInfoOpen}
-                setIsPatient={props.setIsPatient}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Card>
+                <TableCell>
+                  <span className="text-[16px] font-bold">Device</span>
+                </TableCell>
+                <TableCell>
+                  <span className="text-[16px] font-bold">Assigned To</span>{' '}
+                </TableCell>
+                <TableCell>
+                  <span className="text-[16px] font-bold">Temperature</span>
+                </TableCell>
+                <TableCell>
+                  <span className="text-[16px] font-bold">SpO2</span>
+                </TableCell>
+                <TableCell>
+                  <span className="text-[16px] font-bold">Heart Pressure</span>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {props.rows.map((row, index) => (
+                <TableComponent
+                  key={index}
+                  row={row}
+                  setInfoOpen={props.setInfoOpen}
+                  setIsPatient={props.setIsPatient}
+                  // statusList={props.statusList}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Card>
+      {/* )} */}
+    </>
   );
 };
+
 const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
   const [tele] = useAtom(telemetries);
-  
+
   const [currTele] = tele[`${row.D_Id}`]
-  ? useAtom(tele[`${row.D_Id}`])
-  : useAtom(tele.something);
-  
+    ? useAtom(tele[`${row.D_Id}`])
+    : useAtom(tele.something);
+
   // console.log('in Patient');
   // console.log(currTele);
-  
+
   return (
     <TableRow
       hover
@@ -113,25 +141,56 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
       sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}
     >
       <TableCell>
-        <Chip
-          label={row.Status}
-          color={statusObj[row.Status].color}
-          sx={{
-            height: 26,
-            fontSize: '1rem',
-            textTransform: 'capitalize',
-            '& .MuiChip-label': { fontWeight: 500 },
-          }}
-        />
-        <button
-          onClick={() => {
-            setInfoOpen(true);
-            setIsPatient(row);
-          }}
-          className="my-auto mt-4 rounded-lg p-2 ring-2 ring-gray-200 hover:ring-black"
-        >
-          Details
-        </button>
+        <div className="flex flex-col items-center justify-around">
+          <div className="flex w-[100%] items-center justify-start gap-2">
+            {/* <Chip
+              // label={`${statusList[`${row.D_Id}`] ? statusList[`${row.D_Id}`] : 'none'}`}
+              color={`${
+                (statusList[`${row.D_Id}`] === 'Incubation' && '#f6e05e') ||
+                (statusList[`${row.D_Id}`] === 'Febrile' && '#f6ad55') ||
+                (statusList[`${row.D_Id}`] === 'Emergency' && '#fc8181') ||
+                (statusList[`${row.D_Id}`] === 'Recovery' && '#68d391')
+              }
+              }} `}
+              sx={{
+                height: 26,
+                fontSize: '1rem',
+                textTransform: 'capitalize',
+                '& .MuiChip-label': { fontWeight: 500 },
+              }}
+            /> */}
+            <span
+              className={`h-[1.5rem] w-[1.5rem] rounded-full ring-2 ring-offset-2 ${
+                (row.Status === 'Incubation' && 'bg-yellow-400 ring-yellow-400') ||
+                (row.Status === 'Febrile' && 'bg-orange-400 ring-orange-400') ||
+                (row.Status === 'Emergency' && 'bg-red-400 ring-red-400') ||
+                (row.Status === 'Recovery' && 'bg-green-400 ring-green-400') ||
+                'bg-blue-400'
+              }`}
+            ></span>
+            <span
+              className={`font-bold capitalize tracking-wider ${
+                (row.Status === 'Incubation' && 'text-yellow-400') ||
+                (row.Status === 'Febrile' && 'text-orange-400') ||
+                (row.Status === 'Emergency' && 'text-red-400') ||
+                (row.Status === 'Recovery' && 'text-green-400') ||
+                'text-blue-400'
+              }
+              `}
+            >
+              {row.Status}
+            </span>
+          </div>
+          <button
+            onClick={() => {
+              setInfoOpen(true);
+              setIsPatient(row);
+            }}
+            className="my-auto mt-4 rounded-lg p-2 ring-2 ring-gray-200 hover:ring-black"
+          >
+            Details
+          </button>
+        </div>
       </TableCell>
       <TableCell sx={{ py: (theme) => `${theme.spacing(0.5)} !important` }}>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -162,7 +221,9 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
         </span>
       </TableCell>
       <TableCell color="green">
-        <span className="text-[30px] font-bold text-blue-400">{currTele && currTele.SpO2}</span>
+        <span className="text-[30px] font-bold text-blue-400">
+          {currTele && currTele.SpO2}
+        </span>
       </TableCell>
       <TableCell color="yellow">
         <span className="text-[30px] font-bold text-purple-400">

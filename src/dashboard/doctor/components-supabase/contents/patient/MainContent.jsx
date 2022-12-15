@@ -30,6 +30,7 @@ const MainContent = (props) => {
   const [isOpen, setOpen] = useState(false);
   const [isPatient, setIsPatient] = useState(null);
   const [devices] = useAtom(deviceList);
+  // const [statusList, setStatusList] = useState({});
 
   const listenUpdate = async () => {
     const PATIENT = supabase
@@ -45,15 +46,32 @@ const MainContent = (props) => {
       .subscribe();
   };
 
-  const handleLoad = async () => {
+  const handleLoad = async (type = 'all') => {
     try {
       setLoading(true);
       let { data: PATIENT, error } = await supabase.from('PATIENT').select('*');
       if (error) throw error;
       console.log('load patients success!');
       console.log('PATIENT');
-      console.log(PATIENT);
-      setContent(PATIENT);
+      let patients = {};
+      patients.emergency = PATIENT.filter((patient) => patient.Status === 'Emergency');
+      patients.all = [...patients.emergency];
+      patients.febrile = PATIENT.filter((patient) => patient.Status === 'Febrile');
+      patients.all = patients.all.concat(patients.febrile);
+      patients.incubation = PATIENT.filter((patient) => patient.Status === 'Incubation');
+      patients.all = patients.all.concat(patients.incubation);
+
+      patients.recovery = PATIENT.filter((patient) => patient.Status === 'Recovery');
+      patients.all = patients.all.concat(patients.recovery);
+
+      patients.normal = PATIENT.filter((patient) => patient.Status === 'Normal');
+      patients.all = patients.all.concat(patients.normal);
+
+      patients.none = PATIENT.filter((patient) => patient.Status === 'none');
+      patients.all = patients.all.concat(patients.none);
+
+      console.log(patients);
+      setContent(patients[`${type}`]);
     } catch (error) {
       console.log(error.error_description || error.message);
     } finally {
@@ -68,17 +86,20 @@ const MainContent = (props) => {
 
   let style1 = '';
   let style2 = '';
+  let styleSort = '';
   if (isOpen) {
     style1 = '';
     style2 = 'w-[40%]';
+    styleSort = '-mt-[32rem] opacity-0';
   } else {
     style1 = '-mr-[64rem] opacity-0';
     style2 = 'w-[100%]';
+    styleSort = '';
   }
 
   if (!loading) {
     return (
-      <div className="absolute min-h-[92%] w-[95%] rounded-lg bg-gray-300 p-2 ">
+      <div className="absolute flex min-h-[92%] min-w-[95%] rounded-lg bg-gray-300 p-2">
         {/* <div
           className={`${style2} flex min-h-[99%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-8 transition-all duration-700`}
         >
@@ -99,12 +120,15 @@ const MainContent = (props) => {
           setInfoOpen={setOpen}
           open={isOpen}
           setIsPatient={setIsPatient}
+          setIsUpdate={setIsUpdate}
+          // statusList={statusList}
+          // setStatusList={setStatusList}
         />
         <div
-          className={` ${style1} absolute top-0 right-0 min-h-[50%] w-[100%]  rounded-l-lg bg-auto-white shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
+          className={` ${style1} absolute top-0 right-0 min-h-[50%] w-[100%]  rounded-l-lg bg-gray-200 shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
         >
           <div className=" flex w-[100%] flex-col items-center justify-start gap-4 p-4">
-            <div className="flex w-[100%] flex-row items-center justify-start bg-auto-white text-large font-extrabold text-auto-black shadow-sm">
+            <div className="flex w-[100%] flex-row items-center justify-start rounded-lg bg-auto-white text-large font-extrabold text-auto-black shadow-sm ring-2 ring-gray-300">
               <button
                 onClick={() => {
                   setOpen(false);
@@ -119,15 +143,35 @@ const MainContent = (props) => {
               <div className="grid w-[100%] grid-cols-4 gap-8">
                 <div className="col-span-1  grid h-[20rem] min-w-[15rem] grid-cols-2 grid-rows-5 gap-4 divide-y-2 divide-gray-400 rounded bg-auto-white p-4 ring-2 ring-gray-300">
                   <div className="col-span-2 row-span-4 flex flex-col items-center justify-between">
-                    <div className="row-span-3 mt-4 h-[70%] w-[80%] rounded-full bg-gray-400">
+                    <div
+                      className={`row-span-3 mt-4 h-[70%] w-[80%] rounded-full bg-gray-400 ring-4 ring-offset-2 ${
+                        (isPatient.Status === 'Incubation' && 'ring-yellow-400') ||
+                        (isPatient.Status === 'Febrile' && 'ring-orange-400') ||
+                        (isPatient.Status === 'Emergency' && 'ring-red-400') ||
+                        (isPatient.Status === 'Recovery' && 'ring-green-400') ||
+                        'ring-blue-400'
+                      }`}
+                    >
                       Avatar
                     </div>
-                    <div className="flex w-[30%] items-center justify-center">
-                      <div className="text-[22px] font-semibold tracking-widest text-black"></div>
+                    <div className="flex w-[60%] items-center justify-between">
+                      <div
+                        className={`h-[1rem] w-[1rem] rounded-full ring-2 ring-offset-2 ${
+                          (isPatient.Status === 'Incubation' &&
+                            'bg-yellow-400 ring-yellow-400') ||
+                          (isPatient.Status === 'Febrile' &&
+                            'bg-orange-400 ring-orange-400') ||
+                          (isPatient.Status === 'Emergency' &&
+                            'bg-red-400 ring-red-400') ||
+                          (isPatient.Status === 'Recovery' &&
+                            'bg-green-400 ring-green-400') ||
+                          'bg-blue-400 ring-blue-400'
+                        }`}
+                      ></div>
                       <div className="text-[22px] font-semibold tracking-widest text-black">
                         {isPatient.Fname}
                       </div>
-                      <div className="text-[22px] font-semibold tracking-widest text-black">
+                      <div className="ml-2 text-[22px] font-semibold tracking-widest text-black">
                         {isPatient.Lname}
                       </div>
                     </div>
@@ -168,12 +212,53 @@ const MainContent = (props) => {
             )}
           </div>
         </div>
+        <div
+          className={`${styleSort} transition-full absolute flex w-[100%] flex-row items-center justify-start left-0 -top-[1rem] duration-700`}
+        >
+          <div className="mr-[1rem] text-black font-extrabold tracking-wider rounded-lg mb-4">Sort by</div>
+          <button
+            onClick={() => handleLoad('all')}
+            className="height-[1rem] mr-[1rem] rounded-lg bg-gray-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-gray-500"
+          >
+            All
+          </button>
+          <button
+            onClick={() => handleLoad('emergency')}
+            className="height-[1rem] mr-[1rem] rounded-lg bg-red-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-red-500"
+          >
+            Emergency
+          </button>
+          <button
+            onClick={() => handleLoad('febrile')}
+            className="height-[1rem] mr-[1rem] rounded-lg bg-orange-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-orange-500"
+          >
+            Febrile
+          </button>
+          <button
+            onClick={() => handleLoad('incubation')}
+            className="height-[1rem] mr-[1rem] rounded-lg bg-yellow-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-yellow-500"
+          >
+            Incubation
+          </button>
+          <button
+            onClick={() => handleLoad('recovery')}
+            className="height-[1rem] mr-[1rem] rounded-lg bg-green-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-green-500"
+          >
+            Recovery
+          </button>
+          <button
+            onClick={() => handleLoad('normal')}
+            className="height-[1rem] mr-[1rem] rounded-lg bg-blue-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-blue-500"
+          >
+            Normal
+          </button>
+        </div>
       </div>
     );
   } else {
     return (
       <div className="flex items-center justify-center">
-        <InfinitySpin width="300" color="#475569" />;
+        <InfinitySpin width="300" color="#475569" />
       </div>
     );
   }
