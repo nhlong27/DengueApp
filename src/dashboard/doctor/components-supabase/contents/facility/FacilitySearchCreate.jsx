@@ -42,19 +42,17 @@ const FacilitySearchCreate = (props) => {
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
-      let now = Date.now()
-      await supabase.from('FACILITY').insert([{ Fac_Number: now}]);
+      let now = Date.now();
+      await supabase.from('FACILITY').insert([{ Fac_Number: now }]);
       if (values.id !== '') {
         await supabase
           .from('BED')
-          .insert([{ B_Number: values.number, R_Number: values.id, Fac_Number: now}]);
+          .insert([{ B_Number: values.number, R_Number: values.id, Fac_Number: now }]);
       } else {
-        
-
         const { data, error } = await supabase
           .from('ROOM')
-          .insert([{ R_Number: values.number, Fac_Number : now }]);
-        }
+          .insert([{ R_Number: values.number, Fac_Number: now }]);
+      }
       console.log('add success!');
       if (error) throw error;
     } catch (error) {
@@ -126,8 +124,8 @@ const FacilitySearchCreate = (props) => {
         )}
       </div>
       <button
-        className="duration-600 ml-6 max-w-[10%] rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400 h-[80%] justify-center items-center flex ring-2 ring-black"
-        onClick={() => props.setRefresh(state=>!state)}
+        className="duration-600 ml-6 flex h-[80%] max-w-[10%] items-center justify-center rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white ring-2 ring-black transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400"
+        onClick={() => props.setRefresh((state) => !state)}
       >
         <BiRefresh size={30} color="black" />
       </button>
@@ -167,6 +165,7 @@ const FacilityFormContent = (props) => {
                 label="Select a room"
                 defaultValue=""
                 variant="standard"
+                required
               />
             ) : null}
             <div className="mt-6">

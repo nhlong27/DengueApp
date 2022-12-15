@@ -11,7 +11,7 @@ const MainContent = (props) => {
   const [isNurse, setIsNurse] = useState({});
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const listenUpdate = async ()=>{
+  const listenUpdate = async () => {
     const NURSE = supabase
       .channel('custom-all-channel')
       .on(
@@ -19,11 +19,11 @@ const MainContent = (props) => {
         { event: '*', schema: 'public', table: 'NURSE' },
         (payload) => {
           console.log('Change received!', payload);
-          setIsUpdate(state=>!state)
+          setIsUpdate((state) => !state);
         },
       )
       .subscribe();
-  }
+  };
 
   const handleLoad = async () => {
     try {
@@ -40,8 +40,11 @@ const MainContent = (props) => {
   };
   useEffect(async () => {
     await handleLoad();
-    listenUpdate();
   }, [props.refresh, isUpdate]);
+
+  useEffect(() => {
+    listenUpdate();
+  }, []);
 
   let style1 = '';
   let style2 = '';
@@ -54,15 +57,14 @@ const MainContent = (props) => {
   }
   if (!loading) {
     return (
-      <div className="absolute min-h-screen w-[95%] bg-gray-300 p-2 rounded-lg">
-        
+      <div className="absolute min-h-screen w-[95%] rounded-lg bg-gray-300 p-2">
         <DashboardTable
           rows={content}
           setInfoOpen={setOpen}
           open={isOpen}
           setIsNurse={setIsNurse}
         />
-      
+
         {/* <div
           className={`${style2} flex min-h-[99%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-8 transition-all duration-700`}
         >
@@ -78,9 +80,9 @@ const MainContent = (props) => {
             );
           })}
         </div> */}
-        
+
         <div
-          className={` ${style1} absolute top-0 right-0 min-h-[100%] w-[100%]  rounded-l-lg bg-white shadow-2xl transition-all duration-500 ease-in-out ring-black ring-2`}
+          className={` ${style1} absolute top-0 right-0 min-h-[100%] w-[100%]  rounded-l-lg bg-white shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
         >
           <div className=" flex w-[100%] flex-col items-center justify-start gap-4 p-4">
             <div className="flex w-[100%] flex-row items-center justify-start bg-white text-large font-extrabold text-auto-black shadow-sm">

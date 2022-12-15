@@ -18,16 +18,16 @@ import BasicSelect from '@/shared/utilities/form/BasicSelect';
 const patient_schema = yup.object({
   fname: yup.string().min(1).max(30),
   lname: yup.string().min(1).max(30),
-  sex: yup.string(),
-  height: yup.number(),
-  weight: yup.number(),
-  bloodtype: yup.string(),
-  city: yup.string(),
-  district: yup.string(),
-  street: yup.string(),
+  sex: yup.string().nullable(),
+  height: yup.number().nullable(),
+  weight: yup.number().nullable(),
+  bloodtype: yup.string().nullable(),
+  city: yup.string().nullable(),
+  district: yup.string().nullable(),
+  street: yup.string().nullable(),
   email: yup.string(),
-  label: yup.string(),
-  B_Number: yup.string(),
+  label: yup.string().nullable(),
+  B_Number: yup.string().nullable(),
 });
 
 const PatientSearchCreate = (props) => {
@@ -62,8 +62,6 @@ const PatientSearchCreate = (props) => {
       if (error) throw error;
       let deviceList = DEVICE.map((ele) => ele.Label);
       setDevices(deviceList);
-      console.log(deviceList);
-
       console.log('get devices for assigning patient success!');
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -74,11 +72,13 @@ const PatientSearchCreate = (props) => {
   const handleBedLoad = async () => {
     try {
       setBedLoading(true);
-      let { data: BED, error } = await supabase.from('BED').select('*');
+      let { data: BED, error } = await supabase
+        .from('BED')
+        .select('*')
+        .eq('Assign', 'No');
       if (error) throw error;
       let bedList = BED.map((ele) => ele.B_Number);
       setBeds(bedList);
-      console.log(bedList);
       console.log('get beds for assigning patient success!');
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -91,18 +91,17 @@ const PatientSearchCreate = (props) => {
       setLoading(true);
       let now = Date.now();
       await supabase.from('PERSON').insert([{ Per_Ssn: now, D_Ssn: session.user.id }]);
-      let { data: DEVICE } = await supabase
+      let { data: DEVICE, error } = await supabase
         .from('DEVICE')
         .select('*')
         .eq('Label', values.label)
         .single();
       if (DEVICE) {
-        await supabase.from('DEVICE').update({ Assign: 'Yes' }).eq('D_Id', DEVICE.D_Id);
+        await supabase.from('DEVICE').update({ Assign: values.fname }).eq('D_Id', DEVICE.D_Id);
       }
-      // let { data: BED, error } = await supabase
-      //   .from('BED')
-      //   .select('*')
-      //   .eq('B_Number', values.B_Number);
+      if (values.B_Number) {
+        await supabase.from('BED').update({Assign: values.fname}).eq('B_Number', values.B_Number)
+      }
       await supabase.from('PATIENT').insert([
         {
           Fname: values.fname,
@@ -115,14 +114,14 @@ const PatientSearchCreate = (props) => {
           District: values.district,
           Street: values.street,
           Email: values.email,
-          D_Id: DEVICE.D_Id,
+          D_Id: DEVICE && DEVICE.D_Id,
           B_Number: values.B_Number,
           Per_Ssn: now,
           Age: values.age,
           Status: 'None',
+          D_Label: DEVICE && DEVICE.Label,
         },
       ]);
-      if (error) throw error;
       console.log('add patient success!');
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -184,31 +183,31 @@ const PatientSearchCreate = (props) => {
 };
 
 const FacilityFormContent = (props) => {
-  const [district, setDistrict] = React.useState('');
-  const [city, setCity] = React.useState('');
-  const [bloodtype, setBloodtype] = React.useState('');
-  const [sex, setSex] = React.useState('');
-  const [age, setAge] = React.useState('');
-  const [device, setDevice] = React.useState('');
-  const [bed, setBed] = React.useState('');
+  const [district, setDistrict] = React.useState(null);
+  const [city, setCity] = React.useState(null);
+  const [bloodtype, setBloodtype] = React.useState(null);
+  const [sex, setSex] = React.useState(null);
+  const [age, setAge] = React.useState(null);
+  const [device, setDevice] = React.useState(null);
+  const [bed, setBed] = React.useState(null);
   return (
     <Formik
       validateOnChange={false}
       validationSchema={props.schema}
       initialValues={{
-        fname: '',
-        lname: '',
-        sex: '',
-        height: '',
-        weight: '',
-        bloodtype: '',
-        city: '',
-        district: '',
-        street: '',
-        label: '',
-        B_Number: '',
-        email: '',
-        age: '',
+        fname: null,
+        lname: null,
+        sex: null,
+        height: null,
+        weight: null,
+        bloodtype: null,
+        city: null,
+        district: null,
+        street: null,
+        label: null,
+        B_Number: null,
+        email: null,
+        age: null,
       }}
       onSubmit={(values) => {
         props.handleSubmit({
@@ -301,7 +300,6 @@ const FacilityFormContent = (props) => {
                 <Field
                   name="weight"
                   component={TextFormField}
-                  required
                   id="weight"
                   label={`Weight (In kg)`}
                   style={{ width: 200, marginRight: 10 }}

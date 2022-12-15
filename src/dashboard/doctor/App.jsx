@@ -13,6 +13,7 @@ import { Provider, atom } from 'jotai';
 
 export const deviceList = atom([]);
 export const telemetries = atom({ something: atom(0) });
+export const facilityList = atom([])
 
 function App() {
   const [isChart, setIsChart] = useState({
@@ -73,14 +74,24 @@ function App() {
                       />
                     </button>
                     <span className="text-large font-extrabold tracking-wider text-gray-600">
-                      Line Chart
+                      Line Chart - 
+                      <span
+                        className={`font-extrabold capitalize tracking-wider ${
+                          (isChart.type === 'all' && 'text-gray-600') ||
+                          (isChart.type === 'temperature' && 'text-orange-400') ||
+                          (isChart.type === 'SpO2' && 'text-blue-400') ||
+                          (isChart.type === 'HrtPressure' && 'text-purple-400')
+                        }`}
+                      >
+                        {isChart.type}
+                      </span>
                     </span>
-                    <div className="ml-auto flex divide-x-2 divide-gray-500 rounded-lg bg-gray-300">
+                    <div className="ml-auto flex gap-2 rounded-lg bg-white">
                       <button
                         onClick={() =>
                           setIsChart((prev) => ({ ...prev, open: true, type: 'all' }))
                         }
-                        className="flex items-center justify-center rounded-l-lg px-8 py-2 tracking-wide text-gray-500 hover:bg-gray-400"
+                        className="flex items-center justify-center rounded-lg  bg-gray-400 px-4 py-2 tracking-wide text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-gray-500"
                       >
                         All
                       </button>
@@ -92,7 +103,7 @@ function App() {
                             type: 'temperature',
                           }))
                         }
-                        className="flex items-center justify-center px-8 py-2 tracking-wide text-gray-500 hover:bg-gray-400"
+                        className="flex items-center justify-center rounded-lg  bg-orange-400 px-4  py-2 tracking-wide text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-orange-500"
                       >
                         Temperature
                       </button>
@@ -100,7 +111,7 @@ function App() {
                         onClick={() =>
                           setIsChart((prev) => ({ ...prev, open: true, type: 'SpO2' }))
                         }
-                        className="flex items-center justify-center px-8 py-2 tracking-wide text-gray-500 hover:bg-gray-400"
+                        className="flex items-center justify-center rounded-lg  bg-blue-400 px-4 py-2 tracking-wide text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-blue-500"
                       >
                         SpO2
                       </button>
@@ -112,7 +123,7 @@ function App() {
                             type: 'HrtPressure',
                           }))
                         }
-                        className="flex items-center justify-center rounded-r-lg px-8 py-2 tracking-wide text-gray-500 hover:bg-gray-400"
+                        className="flex items-center justify-center rounded-lg  bg-purple-400 px-4 py-2 tracking-wide text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-purple-500"
                       >
                         Heart rate
                       </button>

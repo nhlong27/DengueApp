@@ -44,7 +44,9 @@ export default function BasicSelect(props) {
   const handleChange = (event) => {
     props.setInput(event.target.value);
   };
-
+  
+  console.log('props.list')
+  console.log(props.list)
   return (
     <div>
       <div>

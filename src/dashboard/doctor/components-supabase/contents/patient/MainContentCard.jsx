@@ -72,7 +72,7 @@ export const DashboardTable = (props) => {
           backgroundColor: '#F7F7FF',
           borderRadius: '25px',
           border: '2px solid black',
-          minWidth: '100%'
+          minWidth: '100%',
         }}
       >
         <TableContainer>
@@ -165,6 +165,7 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
                 (row.Status === 'Febrile' && 'bg-orange-400 ring-orange-400') ||
                 (row.Status === 'Emergency' && 'bg-red-400 ring-red-400') ||
                 (row.Status === 'Recovery' && 'bg-green-400 ring-green-400') ||
+                (row.Status === 'None' && 'bg-gray-400 ring-gray-400') ||
                 'bg-blue-400'
               }`}
             ></span>
@@ -174,6 +175,7 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
                 (row.Status === 'Febrile' && 'text-orange-400') ||
                 (row.Status === 'Emergency' && 'text-red-400') ||
                 (row.Status === 'Recovery' && 'text-green-400') ||
+                (row.Status === 'None' && 'text-gray-400') ||
                 'text-blue-400'
               }
               `}
@@ -203,8 +205,7 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
           </Typography>
         </Box>
       </TableCell>
-      {/* <TableCell sx={{ fontSize: '1rem'}}>{row.Email}</TableCell> */}
-      <TableCell sx={{ fontSize: '1rem' }}>{row.D_Id}</TableCell>
+      <TableCell sx={{ fontSize: '1rem' }}>{row.D_Label}</TableCell>
       <TableCell sx={{ py: (theme) => `${theme.spacing(0.5)} !important` }}>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <Typography sx={{ fontWeight: 500, fontSize: '1.3rem !important' }}>
@@ -216,17 +217,17 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
         </Box>
       </TableCell>
       <TableCell color="purple">
-        <span className="text-[30px] font-bold text-orange-400">
+        <span className="ring-2 p-2 rounded-2xl ring-orange-400 text-[30px] font-bold text-orange-400">
           {currTele && currTele.temperature}
         </span>
       </TableCell>
       <TableCell color="green">
-        <span className="text-[30px] font-bold text-blue-400">
+        <span className="ring-2 p-2 rounded-2xl ring-blue-400 text-[30px] font-bold text-blue-400">
           {currTele && currTele.SpO2}
         </span>
       </TableCell>
       <TableCell color="yellow">
-        <span className="text-[30px] font-bold text-purple-400">
+        <span className="p-2 rounded-2xl text-[30px] font-bold text-purple-400 ring-2 ring-purple-400">
           {currTele && currTele.HrtPressure}
         </span>
       </TableCell>

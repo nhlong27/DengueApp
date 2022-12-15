@@ -36,8 +36,9 @@ export function LineChart(props) {
   //   Pressure: 70,
   // });
   const [tele] = useAtom(telemetries);
-  const [currTele] = useAtom(tele[`${props.isChart.device}`])
-
+  const [currTele] = tele[`${props.isChart.device}`]
+    ? useAtom(tele[`${props.isChart.device}`])
+    : useAtom(tele.something);
 
   const subscribe = () => {
     const TELEMETRY = supabase
@@ -53,8 +54,6 @@ export function LineChart(props) {
       )
       .subscribe();
   };
-
-
 
   // const [currTele] = tele[`${props.isChart.device}`]
   //   ? useAtom(tele[`${props.isChart.device}`])

@@ -11,7 +11,7 @@ import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { InfinitySpin } from 'react-loader-spinner';
 import { client } from '@/shared/api/initClient_tenant';
 import { useAtom, atom } from 'jotai';
-import { telemetries, deviceList } from '../App';
+import { telemetries, deviceList, facilityList } from '../App';
 
 // export let telemetryTable = {};
 // export const handleTelemetry = (deviceId, temperature, SpO2, HrtPressure, connection) => {
@@ -26,6 +26,7 @@ import { telemetries, deviceList } from '../App';
 // export const ContentContainerContext = createContext();
 const now = Date.now();
 const mtd = now - 3600000;
+let loadFacility = {};
 
 const ContentContainer = (props) => {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -34,40 +35,90 @@ const ContentContainer = (props) => {
   const [devices, setDevices] = useAtom(deviceList);
   const [tele, setTelemetries] = useAtom(telemetries);
   const [isSocket, setIsSocket] = useState(false);
+  const [facilities, setFacilities] = useAtom(facilityList);
 
-  const listenUpdate = async () => {
+  const listenUpdate = () => {
     const DEVICE = supabase
       .channel('custom-all-channel')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'DEVICE' },
         (payload) => {
-          console.log('Device Change received!', payload);
+          console.log('Change received!', payload);
+          setIsUpdate((state) => !state);
+        },
+      )
+      .subscribe();
+
+    const BED = supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'BED' },
+        (payload) => {
+          console.log('Change received!', payload);
+          setIsUpdate((state) => !state);
+        },
+      )
+      .subscribe();
+
+    const ROOM = supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'ROOM' },
+        (payload) => {
+          console.log('Change received!', payload);
           setIsUpdate((state) => !state);
         },
       )
       .subscribe();
   };
 
-  const handleLoad = async () => {
+  const handleLoadDevice = async () => {
     try {
       setLoading(true);
       let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
-      if (error) throw error;
       console.log('load device success!');
       console.log('DEVICE');
       console.log(DEVICE);
-      setDevices(DEVICE);
-      // let token = await client.connect();
-      // for (let device of DEVICE) {
-      //   openSocket(device.D_Id);
-      // }
+      await setDevices(() => DEVICE);
     } catch (error) {
       console.log(error.error_description || error.message);
     }
-    // finally {
-    //   setLoading(false);
-    // }
+  };
+
+  const handleLoadFacility = async () => {
+    try {
+      loadFacility = {};
+      let { data: ROOM, error } = await supabase.from('ROOM').select('*');
+      if (error) throw error;
+      for (let room of ROOM) {
+        loadFacility[`${room.R_Number}`] = { ...room, beds: [], nurses: [] };
+        let { data: BED, error } = await supabase
+          .from('BED')
+          .select('*')
+          .eq('R_Number', room.R_Number);
+        for (let bed of BED) {
+          loadFacility[`${room.R_Number}`].beds.push(bed);
+        }
+        let { data: NURSEID } = await supabase
+          .from('IS_ASSIGNED_TO')
+          .select('*')
+          .eq('R_Number', room.R_Number);
+        for (let id of NURSEID) {
+          let { data: NURSE } = await supabase
+            .from('NURSE')
+            .select('*')
+            .eq('N_Ssn', id.N_Ssn);
+          loadFacility[`${room.R_Number}`].nurses.push(NURSE[0]);
+        }
+      }
+      console.log('load facilty success!');
+      setFacilities(loadFacility);
+    } catch (error) {
+      console.log(error.error_description || error.message);
+    }
   };
 
   const handleSocket = async () => {
@@ -85,7 +136,7 @@ const ContentContainer = (props) => {
 
       console.log('setTelemetries');
       console.log(obj);
-      setTelemetries(obj);
+      setTelemetries((prev) => ({ ...prev, ...obj }));
     } catch (error) {
       console.log(error.error_description || error.message);
     } finally {
@@ -105,7 +156,12 @@ const ContentContainer = (props) => {
     let timeElapse = 0;
     let status = 'none';
     client.subscribe(params, async function (response) {
-      if (response.data) {
+      if (Object.keys(response.data).length !== 0) {
+        await supabase
+          .from('DEVICE')
+          .update({ Status: 'Streaming' })
+          .eq('D_Id', deviceId);
+
         if (response.data.temperature[0][1] < 37) {
           timeElapse = status !== 'Normal' ? timeElapse + 4 : 0;
           if (timeElapse >= 10) {
@@ -213,13 +269,15 @@ const ContentContainer = (props) => {
         });
         setTelemetries((prev) => ({ ...prev, [deviceId]: telePayload }));
       }
+      await supabase.from('DEVICE').update({ Status: 'Paused' }).eq('D_Id', deviceId);
     });
   };
 
   useEffect(async () => {
-    await handleLoad();
-    await handleSocket();
     listenUpdate();
+    await handleLoadDevice();
+    await handleLoadFacility();
+    await handleSocket();
   }, [refresh, isUpdate]);
 
   if (!loading) {
@@ -232,12 +290,12 @@ const ContentContainer = (props) => {
             element={<PatientContent setIsChart={props.setIsChart} />}
           />
           <Route path="/account" element={<Account session={props.session} />} />
-          <Route path="/facilities" element={<FacilityContent />} />
-          <Route path="/nurses" element={<NurseContent />} />
           <Route
-            path="/devices"
-            element={<DeviceContent refresh={refresh} setRefresh={setRefresh} />}
+            path="/facilities"
+            element={<FacilityContent setRefresh={setRefresh} />}
           />
+          <Route path="/nurses" element={<NurseContent />} />
+          <Route path="/devices" element={<DeviceContent setRefresh={setRefresh} />} />
         </Routes>
       </div>
 

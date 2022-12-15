@@ -9,87 +9,28 @@ import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import { useState } from 'react';
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
-
-// ** MUI Imports
-
 import { styled } from '@mui/material/styles';
 import MuiDivider from '@mui/material/Divider';
-
-// ** Icons Imports
-// import TrendingUp from 'mdi-material-ui/TrendingUp';
-// import CurrencyUsd from 'mdi-material-ui/CurrencyUsd';
-// import DotsVertical from 'mdi-material-ui/DotsVertical';
-// import CellphoneLink from 'mdi-material-ui/CellphoneLink';
-// import AccountOutline from 'mdi-material-ui/AccountOutline';
-
 import { RiNurseFill } from 'react-icons/ri';
 import { MdBedroomChild } from 'react-icons/md';
 
-// const renderStats = () => {
-//   return salesData.map((item, index) => (
-//     <Grid item xs={12} sm={3} key={index}>
-//       <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-//         <Avatar
-//           variant="rounded"
-//           sx={{
-//             mr: 3,
-//             width: 44,
-//             height: 44,
-//             boxShadow: 3,
-//             color: 'common.white',
-//             backgroundColor: `${item.color}.main`,
-//           }}
-//         >
-//           {item.icon}
-//         </Avatar>
-//         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-//           <Typography variant="caption">{item.title}</Typography>
-//           <Typography variant="h6">{item.stats}</Typography>
-//         </Box>
-//       </Box>
-//     </Grid>
-//   ));
-// };
-
 export const StatisticsCard = (props) => {
   const [isRoomContainer, setIsRoomContainer] = useState(false);
-  let containerStyle = isRoomContainer ? 'opacity-100' : 'opacity-0 collapse -mt-[36rem]';
+  let containerStyle = isRoomContainer
+    ? 'opacity-100'
+    : 'opacity-0 absolute right-[8rem] invisible';
 
   return (
-    <Card sx={{ backgroundColor: '#F7F7FF', fontSize: 50 }}>
-      <CardHeader
-        title={`${props.component.R_Number}`}
-        // action={
-        //   <IconButton
-        //     size="small"
-        //     aria-label="settings"
-        //     className="card-more-options"
-        //     sx={{ color: 'text.secondary' }}
-        //   >
-        //     {/* <DotsVertical /> */}
-        //   </IconButton>
-        // }
-        // subheader={
-        //   <Typography variant="body2">
-        //     <Box component="span" sx={{ fontWeight: 600, color: 'text.primary' }}>
-        //       Additional Info:
-        //     </Box>
-        //   </Typography>
-        // }
-        // titleTypographyProps={{
-        //   sx: {
-        //     mb: 2.5,
-        //     lineHeight: '2rem !important',
-        //     letterSpacing: '0.15px !important',
-        //   },
-        // }}
-      />
-      <div className="flex items-center justify-start">
+    <Card sx={{ backgroundColor: '#F7F7FF', fontSize: 25 }}>
+      <div className="flex items-start justify-start p-4">
+        <div className="z-20 rounded-lg bg-auto-white px-2 py-4 ring-2 ring-black">
+          <span className="text-blue-600">Room Name:</span> {props.component.R_Number}
+        </div>
         <button
           onClick={() => {
             setIsRoomContainer((state) => !state);
           }}
-          className="relative z-10 col-span-1 mb-auto rounded bg-auto-white bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100  hover:text-gray-600 hover:ring-2 hover:ring-gray-200 focus:rounded-r-lg focus:text-auto-black"
+          className="rounded bg-auto-white bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100  hover:text-gray-600 hover:ring-2 hover:ring-gray-200 focus:rounded-r-lg focus:text-auto-black"
         >
           {isRoomContainer ? (
             <AiOutlineUp size={30} color="black" />
@@ -97,9 +38,20 @@ export const StatisticsCard = (props) => {
             <AiOutlineDown size={30} color="black" />
           )}
         </button>
+        {isRoomContainer ? null : (
+          <div className="ml-16 flex gap-8">
+            <div className=" rounded-t-lg bg-auto-white py-2 pl-4 pr-2 ring-2 ring-black">
+              <span className="text-blue-600">Beds:</span> {props.component.beds.length}
+            </div>
+            <div className=" rounded-b-lg bg-auto-white py-2 pl-4 pr-2 ring-2 ring-black">
+              <span className="text-blue-600">Nurse:</span>{' '}
+              {props.component.nurses.length}
+            </div>
+          </div>
+        )}
 
         <div className={`${containerStyle} transition-all duration-300`}>
-          <CardContent sx={{ pt: (theme) => `${theme.spacing(3)} !important` }}>
+          <CardContent>
             <Grid container spacing={[5, 0]}>
               <DepositWithdraw
                 bedData={props.component.beds}
@@ -131,9 +83,10 @@ export const DepositWithdraw = (props) => {
         display: 'flex',
         justifyContent: 'space-between',
         flexDirection: ['column', 'column', 'row'],
-        width: 1000,
+        width: 600,
         // border: 1,
         backgroundColor: '#F7F7FF',
+        border: '2px solid black',
       }}
     >
       <Box sx={{ width: '100%' }}>
@@ -175,12 +128,12 @@ export const DepositWithdraw = (props) => {
                       {item.B_Number}
                     </Typography>
                   </Box>
-                  {item.Assign ? (
+                  {item.Assign !== 'No' ? (
                     <Typography
                       variant="subtitle2"
                       sx={{ fontWeight: 600, color: 'success.main' }}
                     >
-                      Yes
+                      {item.Assign}
                     </Typography>
                   ) : (
                     <Typography

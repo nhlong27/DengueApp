@@ -116,7 +116,7 @@ const MainContentCard = (
   // }, []);
   // const [isOpenTimeSeries, setOpenTimeSeries] = useState(false);
   return (
-    <div className="grid w-[100%] grid-cols-3 gap-4 divide-y-2 divide-gray-400 rounded-lg bg-auto-white p-4 shadow-lg ring-2 ring-black transition-all duration-300 ease-in-out">
+    <div className="grid w-[100%] grid-cols-3 gap-4  rounded-2xl bg-auto-white p-4 shadow-lg ring-2 ring-black transition-all duration-300 ease-in-out">
       {loadingDelete ? (
         <div className="w=[100%] flex h-[100%] items-center justify-center text-red-400">
           <div>
@@ -146,29 +146,29 @@ const MainContentCard = (
                   </div>
                 </div>
                 <div className="ml-auto flex h-[100%] w-[100%] items-center justify-center gap-[1.8rem]">
-                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
+                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-center rounded-2xl text-orange-400 ring-2 ring-orange-400">
                     <div className="">
-                      <TbTemperatureCelsius size={40} color="blue" />{' '}
+                      <TbTemperatureCelsius size={40} />{' '}
                     </div>
-                    <div className="text-[20px] font-extrabold tracking-[5px] text-purple-600">
+                    <div className="text-[20px] font-extrabold tracking-[5px] text-orange-400">
                       {currTele && currTele.temperature}
                       {/* {currTele &&
                         currTele.temperature} */}
                     </div>
                   </div>
-                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
+                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-center rounded-2xl text-blue-400 ring-2 ring-blue-400">
                     <div className="">
-                      <GiMedicalDrip size={40} color="blue" />
+                      <GiMedicalDrip size={40} />
                     </div>
-                    <div className="text-[20px] font-extrabold tracking-[5px] text-cyan-600">
+                    <div className="text-[20px] font-extrabold tracking-[5px] text-blue-400">
                       {currTele && currTele.SpO2}
                     </div>
                   </div>
-                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-center">
+                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-center rounded-2xl text-purple-400 ring-2 ring-purple-400">
                     <div className="">
-                      <BiHeart size={40} color="blue" />
+                      <BiHeart size={40} />
                     </div>
-                    <div className="text-[20px] font-extrabold tracking-[5px] text-yellow-600">
+                    <div className="text-[20px] font-extrabold tracking-[5px] text-purple-400">
                       {currTele && currTele.HrtPressure}
                     </div>
                   </div>
@@ -179,13 +179,13 @@ const MainContentCard = (
                 <div className="flex w-[30%] flex-col items-start justify-start">
                   <div className="relative px-4 text-[22px] font-semibold tracking-widest text-black">
                     <GrDevice />
-                    {currTele && currTele.connected ? (
+                    {component.Status ? (
                       <div className="absolute top-0 -right-[4rem] text-[14px] text-green-500">
-                        Connected
+                        Receiving Data..
                       </div>
                     ) : (
                       <div className="absolute top-0 -right-[4rem] text-[14px] text-red-500">
-                        Disconnected
+                        Paused
                       </div>
                     )}
 
@@ -195,35 +195,35 @@ const MainContentCard = (
                     {component.Type}
                   </div>
                   {component.Assign === 'No' ? (
-                    <div className="px-4 text-[14px] font-bold text-gray-400">
-                      Assigned: {component.Assign}
+                    <div className="px-4 text-[14px] font-bold text-red-500">
+                      Assigned: None
                     </div>
                   ) : (
-                    <div className="px-4 text-[14px] font-bold text-red-400">
+                    <div className="px-4 text-[14px] font-bold text-green-500">
                       Assigned: {component.Assign}
                     </div>
                   )}
                 </div>
                 <div className="ml-auto flex h-[100%] w-[100%] items-center justify-center gap-[5rem]">
-                  <div className="flex h-[100%] w-[20%] flex-col items-center  justify-between p-2">
+                  <div className="flex h-[100%] w-[20%] flex-col items-center  justify-between rounded-2xl p-2 text-orange-400 ring-2 ring-orange-400">
                     <div className="">
-                      <TbTemperatureCelsius size={40} color="blue" />
+                      <TbTemperatureCelsius size={40} />
                     </div>
                     <div className="text-[40px] font-extrabold tracking-[5px] text-orange-400">
                       {currTele && currTele.temperature}
                     </div>
                   </div>
-                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-between p-2">
+                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-between rounded-2xl p-2 text-blue-400 ring-2 ring-blue-400">
                     <div className="">
-                      <GiMedicalDrip size={40} color="blue" />
+                      <GiMedicalDrip size={40} />
                     </div>
                     <div className="text-[40px] font-extrabold tracking-[5px] text-blue-400">
                       {currTele && currTele.SpO2}
                     </div>
                   </div>
-                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-between p-2">
+                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-between rounded-2xl p-2 text-purple-400 ring-2 ring-purple-400">
                     <div className="">
-                      <BiHeart size={40} color="blue" />
+                      <BiHeart size={40} />
                     </div>
                     <div className="text-[40px] font-extrabold tracking-[5px] text-purple-400">
                       {currTele && currTele.HrtPressure}
@@ -233,46 +233,48 @@ const MainContentCard = (
               </>
             )}
           </div>
-          <button
-            onClick={() => {
-              setInfoOpen(true);
-              setIsDevice(component);
-            }}
-            className="col-span-1 rounded bg-auto-white bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200 focus:bg-cyan-200 focus:text-auto-black "
-          >
-            Details
-          </button>
-          <div
-            onClick={() => setOpen(true)}
-            className="col-span-1 flex items-center justify-center rounded bg-auto-white bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200"
-          >
-            <button>Update</button>
-            <TransitionsModal open={open}>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpen(false);
-                }}
-                className="absolute -top-[1rem] -right-[1rem] rounded-full bg-white"
-              >
-                <AiOutlineCloseCircle size={30} />
-              </button>
-              <FacilityFormContent
-                // schema={device_schema}
-                handleUpdate={handleUpdate}
-                loading={loading}
-                component={component}
-              />
-            </TransitionsModal>
+          <div className="col-span-3 flex items-center justify-start gap-4">
+            <button
+              onClick={() => {
+                setInfoOpen(true);
+                setIsDevice(component);
+              }}
+              className="flex items-center justify-center rounded-lg bg-auto-white px-4 py-2 text-black ring-2 ring-gray-300 hover:ring-black "
+            >
+              Details
+            </button>
+            <div
+              onClick={() => setOpen(true)}
+              className="flex items-center justify-center rounded-lg bg-auto-white px-4 py-2 text-black ring-2 ring-gray-300 hover:ring-black"
+            >
+              <button>Update</button>
+              <TransitionsModal open={open}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen(false);
+                  }}
+                  className="absolute -top-[1rem] -right-[1rem] rounded-full bg-white"
+                >
+                  <AiOutlineCloseCircle size={30} />
+                </button>
+                <FacilityFormContent
+                  // schema={device_schema}
+                  handleUpdate={handleUpdate}
+                  loading={loading}
+                  component={component}
+                />
+              </TransitionsModal>
+            </div>
+            <button
+              onClick={() => {
+                handleDelete();
+              }}
+              className="flex items-center justify-center rounded-lg bg-auto-white px-4 py-2 text-black ring-2 ring-gray-300 hover:ring-black"
+            >
+              Remove
+            </button>
           </div>
-          <button
-            onClick={() => {
-              handleDelete();
-            }}
-            className="col-span-1 rounded bg-auto-white bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200"
-          >
-            Remove
-          </button>
         </>
       )}
     </div>

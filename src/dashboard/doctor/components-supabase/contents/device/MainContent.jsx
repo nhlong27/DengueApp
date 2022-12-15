@@ -9,28 +9,9 @@ import { useAtom } from 'jotai';
 import { deviceList, telemetries } from '@/dashboard/doctor/App';
 
 const MainContent = (props) => {
-  // const [avai, setAvai] = useState(false);
-  // const [content, setContent] = useState([]);
-  // const [loading, setLoading] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const [isDevice, setIsDevice] = useState({});
   const [devices] = useAtom(deviceList);
-  // const handleLoad = async () => {
-  //   try {
-  //     setLoading(true);
-  //     let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
-  //     if (error) throw error;
-  //     console.log('load device success!');
-  //     for (let device of DEVICE){
-  //       handleTelemetry(device.D_Id, 0, 0, 0, false);
-  //     }
-  //     setContent(DEVICE);
-  //   } catch (error) {
-  //     console.log(error.error_description || error.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   let style1 = '';
   let style2 = '';
@@ -41,11 +22,13 @@ const MainContent = (props) => {
     style1 = '-mr-[32rem] opacity-0';
     style2 = 'w-[100%]';
   }
+  console.log('devices');
+  console.log(devices);
   // if (!loading) {
   return (
     <>
       <div
-        className={`${style2} flex min-h-[100%] flex-wrap items-start justify-around gap-4 rounded-lg bg-gray-300 p-8 transition-all duration-700`}
+        className={`${style2} flex min-h-[100%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-2 transition-all duration-700`}
       >
         {devices.map((device, index) => {
           return (
@@ -84,9 +67,9 @@ const MainContent = (props) => {
                 <div className="text-blue-600">{isDevice.Type}</div>
 
                 {isDevice.Assign === 'No' ? (
-                  <div className="text-gray-500">Not assigned</div>
-                ) : (
                   <div className="text-red-500">Not assigned</div>
+                ) : (
+                  <div className="text-green-500">Assigned</div>
                 )}
               </div>
               <div className="text-blue-600">Access Token: {isDevice.Token}</div>
