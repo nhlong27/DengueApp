@@ -8,7 +8,7 @@ const thingsboardHost = HOST;
 
 // Reads the access token from arguments
 // const accessToken = process.argv[2];
-const accessToken = 'randToken2';
+const accessToken = 'incuToken';
 const minTemperature = 37.5,
   maxTemperature = 38.5,
   minSpO2 = 95,

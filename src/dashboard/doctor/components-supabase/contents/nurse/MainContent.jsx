@@ -65,22 +65,6 @@ const MainContent = (props) => {
           setIsNurse={setIsNurse}
         />
 
-        {/* <div
-          className={`${style2} flex min-h-[99%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-8 transition-all duration-700`}
-        >
-          {content.map((patient, index) => {
-            return (
-              <MainContentCard
-                setInfoOpen={setOpen}
-                open={isOpen}
-                key={index}
-                component={patient}
-                setIsPatient={setIsPatient}
-              />
-            );
-          })}
-        </div> */}
-
         <div
           className={` ${style1} absolute top-0 right-0 min-h-[100%] w-[100%]  rounded-l-lg bg-white shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
         >

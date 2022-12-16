@@ -62,6 +62,7 @@ const MainContent = (props) => {
               component={device}
               setIsDevice={setIsDevice}
               status={status}
+              setIsUpdate={props.setIsUpdate}
             />
           );
         })}
@@ -75,7 +76,7 @@ const MainContent = (props) => {
             onClick={() => {
               setOpen(false);
             }}
-            className="absolute top-[14rem] -left-[2.8rem] rounded-lg bg-blue-600 p-4 font-bold text-white shadow-lg hover:bg-blue-800 hover:text-white"
+            className="absolute top-[14rem] -left-[2.8rem] rounded-lg bg-blue-600 p-4 font-bold text-white shadow-lg ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-blue-700 hover:text-white"
           >
             Close
           </button>

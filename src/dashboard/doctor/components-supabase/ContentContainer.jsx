@@ -37,44 +37,45 @@ const ContentContainer = (props) => {
   const [isSocket, setIsSocket] = useState(false);
   const [facilities, setFacilities] = useAtom(facilityList);
 
-  console.log(isUpdate);
-  const listenUpdateMain = async () => {
-    const DEVICE = supabase
-      .channel('custom-all-channel')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'DEVICE' },
-        (payload) => {
-          console.log('Change received!', payload);
-          setIsUpdate((state) => !state);
-        },
-      )
-      .subscribe();
+  // const listenUpdateMain = async () => {
+  //   setLoading(true);
+  //   const DEVICE = supabase
+  //     .channel('custom-all-channel')
+  //     .on(
+  //       'postgres_changes',
+  //       { event: '*', schema: 'public', table: 'DEVICE' },
+  //       (payload) => {
+  //         console.log('Change received!', payload);
+  //         setIsUpdate((state) => !state);
+  //       },
+  //     )
+  //     .subscribe();
 
-    const BED = supabase
-      .channel('custom-all-channel')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'BED' },
-        (payload) => {
-          console.log('Change received!', payload);
-          setIsUpdate((state) => !state);
-        },
-      )
-      .subscribe();
+  //   const BED = supabase
+  //     .channel('custom-all-channel')
+  //     .on(
+  //       'postgres_changes',
+  //       { event: '*', schema: 'public', table: 'BED' },
+  //       (payload) => {
+  //         console.log('Change received!', payload);
+  //         setIsUpdate((state) => !state);
+  //       },
+  //     )
+  //     .subscribe();
 
-    const ROOM = supabase
-      .channel('custom-all-channel')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'ROOM' },
-        (payload) => {
-          console.log('Change received!', payload);
-          setIsUpdate((state) => !state);
-        },
-      )
-      .subscribe();
-  };
+  //   const ROOM = supabase
+  //     .channel('custom-all-channel')
+  //     .on(
+  //       'postgres_changes',
+  //       { event: '*', schema: 'public', table: 'ROOM' },
+  //       (payload) => {
+  //         console.log('Change received!', payload);
+  //         setIsUpdate((state) => !state);
+  //       },
+  //     )
+  //     .subscribe();
+  //   setLoading(false);
+  // };
 
   const handleLoadDevice = async () => {
     try {
@@ -119,11 +120,14 @@ const ContentContainer = (props) => {
       setFacilities(loadFacility);
     } catch (error) {
       console.log(error.error_description || error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSocket = async () => {
     try {
+      setLoading(true);
       console.log('handleSocket');
       let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
       if (error) throw error;
@@ -284,9 +288,9 @@ const ContentContainer = (props) => {
     });
   };
 
-  useEffect(() => {
-    listenUpdateMain();
-  }, []);
+  // useEffect(() => {
+  //   listenUpdateMain();
+  // }, []);
 
   useEffect(async () => {
     await handleLoadDevice();
@@ -309,10 +313,15 @@ const ContentContainer = (props) => {
           <Route path="/account" element={<Account session={props.session} />} />
           <Route
             path="/facilities"
-            element={<FacilityContent setRefresh={setRefresh} />}
+            element={
+              <FacilityContent setRefresh={setRefresh} setIsUpdate={setIsUpdate} />
+            }
           />
           <Route path="/nurses" element={<NurseContent />} />
-          <Route path="/devices" element={<DeviceContent setRefresh={setRefresh} />} />
+          <Route
+            path="/devices"
+            element={<DeviceContent setRefresh={setRefresh} setIsUpdate={setIsUpdate} />}
+          />
         </Routes>
       </div>
 

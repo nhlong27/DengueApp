@@ -1,7 +1,5 @@
 import { client } from '@/shared/api/initClient_tenant';
 import React, { useContext, useEffect, useState } from 'react';
-import { MySocket } from '../../Socket';
-import TimeSeries from '../../TimeSeries';
 import { TbTemperatureCelsius } from 'react-icons/tb';
 import { GiMedicalDrip } from 'react-icons/gi';
 import { BiHeart } from 'react-icons/bi';
@@ -9,7 +7,7 @@ import { GrDevice } from 'react-icons/gr';
 // import { telemetries, handleTelemetry } from '../../ContentContainer';
 // import { ContentContainerContext } from '../../ContentContainer';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
-import { Field, Form, Formik} from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { Typography } from '@mui/material';
 import TransitionsModal from '@/shared/utilities/Modal';
 import SelectFormField from '@/shared/utilities/form/SelectFormField';
@@ -20,12 +18,13 @@ import { telemetries } from '@/dashboard/doctor/App';
 import { useAtom } from 'jotai';
 
 const MainContentCard = (
-  { infoOpen, component, setInfoOpen, setIsDevice, status } = {
+  { infoOpen, component, setInfoOpen, setIsDevice, status, setIsUpdate } = {
     infoOpen: null,
     component: '',
     setInfoopen: null,
     setIsDevice: null,
     status: null,
+    setIsUpdate: null,
   },
 ) => {
   const [tele] = useAtom(telemetries);
@@ -35,8 +34,6 @@ const MainContentCard = (
     : useAtom(tele.something);
 
   const [open, setOpen] = useState(false);
-  const [isUpdate, setIsUpdate] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
 
   // const listenUpdate = () => {
@@ -56,7 +53,6 @@ const MainContentCard = (
   const handleUpdate = async (values) => {
     try {
       //Setting device and access token on thingsboard
-      setLoading(true);
       console.log('component.D_Id');
       console.log(component.D_Id);
       const success = await client.connect();
@@ -92,8 +88,25 @@ const MainContentCard = (
     } catch (error) {
       console.log(error.error_description || error.message);
     } finally {
-      setLoading(false);
       setOpen(false);
+      setIsUpdate((state) => !state);
+    }
+  };
+
+  const handleUnassign = async () => {
+    try {
+      await supabase
+        .from('PATIENT')
+        .update({
+          D_Id: null,
+        })
+        .eq('D_Id', component.D_Id);
+      await supabase.from('DEVICE').update({ Assign: 'No' }).eq('D_Id', component.D_Id);
+      console.log('unassign device success!');
+    } catch (error) {
+      console.log(error.error_description || error.message);
+    } finally {
+      setIsUpdate((state) => !state);
     }
   };
 
@@ -112,13 +125,15 @@ const MainContentCard = (
             D_Id: null,
           })
           .eq('D_Id', component.D_Id);
-
+        await supabase.from('TELEMETRY').delete().eq('D_Id', component.D_Id);
         await supabase.from('DEVICE').delete().eq('D_Id', component.D_Id);
       }
       if (error) throw error;
       console.log('delete device success!');
     } catch (error) {
       console.log(error.error_description || error.message);
+    } finally {
+      setIsUpdate((state) => !state);
     }
   };
 
@@ -275,7 +290,6 @@ const MainContentCard = (
                 <DeviceFormContent
                   // schema={device_schema}
                   handleUpdate={handleUpdate}
-                  loading={loading}
                   component={component}
                 />
               </TransitionsModal>
@@ -286,8 +300,18 @@ const MainContentCard = (
               }}
               className="flex items-center justify-center rounded-lg bg-auto-white px-4 py-2 text-black ring-2 ring-gray-300 hover:ring-black"
             >
-              Remove
+              <AiOutlineCloseCircle /> <span>Remove</span>
             </button>
+            {component.Assign !== 'No' && (
+              <button
+                onClick={() => {
+                  handleUnassign();
+                }}
+                className="ml-auto flex items-center justify-center rounded-lg bg-auto-white px-4 py-2 text-black ring-2 ring-gray-300 hover:ring-black"
+              >
+                <span>Unassign</span>
+              </button>
+            )}
           </div>
         </>
       )}
@@ -337,19 +361,19 @@ const DeviceFormContent = (props) => {
                 helperText={`Please update the type of your device`}
               />
             </div>
-
+            {/* 
             {props.loading ? (
               <div className="absolute bottom-[2rem] right-[3rem]">
                 <InfinitySpin width="300" color="#475569" />
               </div>
-            ) : (
-              <button
-                className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
-                type="submit"
-              >
-                Update
-              </button>
-            )}
+            ) : ( */}
+            <button
+              className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
+              type="submit"
+            >
+              Update
+            </button>
+            {/* )} */}
           </div>
         </Form>
       )}

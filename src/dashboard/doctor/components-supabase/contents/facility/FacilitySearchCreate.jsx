@@ -42,16 +42,16 @@ const FacilitySearchCreate = (props) => {
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
-      let now = Date.now();
-      await supabase.from('FACILITY').insert([{ Fac_Number: now }]);
+      // let now = Date.now();
+      // await supabase.from('FACILITY').insert([{ Fac_Number: now }]);
       if (values.id !== '') {
         await supabase
           .from('BED')
-          .insert([{ B_Number: values.number, R_Number: values.id, Fac_Number: now }]);
+          .insert([{ B_Number: values.number, R_Number: values.id }]);
       } else {
         const { data, error } = await supabase
           .from('ROOM')
-          .insert([{ R_Number: values.number, Fac_Number: now }]);
+          .insert([{ R_Number: values.number }]);
       }
       console.log('add success!');
       if (error) throw error;

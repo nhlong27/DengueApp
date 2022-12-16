@@ -20,6 +20,8 @@ import { useAtom, Provider } from 'jotai';
 import BasicSelect from '@/shared/utilities/form/BasicSelect';
 import { deviceList, telemetries, facilityList } from '@/dashboard/doctor/App';
 import { AiOutlineAreaChart } from 'react-icons/ai';
+import { Field, Form, Formik } from 'formik';
+import TextFormField from '@/shared/utilities/form/TextFormField';
 
 const MainContent = (props) => {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -30,6 +32,7 @@ const MainContent = (props) => {
   const [devices] = useAtom(deviceList);
   const [facilities] = useAtom(facilityList);
   const [beds, setBeds] = useState(null);
+  const [openUpdate, setOpenUpdate] = useState(false);
   // const [statusList, setStatusList] = useState({});
 
   const listenUpdate = async () => {
@@ -79,6 +82,56 @@ const MainContent = (props) => {
     }
   };
 
+  const handleDelete = async (patient) => {
+    try {
+      setLoading(true);
+      await supabase.from('DEVICE').update({ Assign: 'No' }).eq('D_Id', patient.D_Id);
+      await supabase
+        .from('BED')
+        .update({ Assign: 'No' })
+        .eq('B_Number', patient.B_Number);
+
+      const { error } = await supabase
+        .from('PATIENT')
+        .delete()
+        .eq('P_Ssn', patient.P_Ssn);
+
+      console.log('delete patient success!');
+    } catch (error) {
+      console.log(error.error_description || error.message);
+    } finally {
+      setOpen(false);
+      setLoading(false);
+    }
+  };
+
+  const handleUpdate = async (values, patient) => {
+    try {
+      console.log(values);
+      console.log(patient);
+      setLoading(true);
+      const { error } = await supabase
+        .from('PATIENT')
+        .update({
+          Age: values.age,
+          Sex: values.sex,
+          Height: values.height,
+          Weight: values.weight,
+          BloodType: values.bloodtype,
+          City: values.city,
+          District: values.district,
+          Street: values.street,
+        })
+        .eq('P_Ssn', patient.P_Ssn);
+
+      console.log('update patient success!');
+    } catch (error) {
+      console.log(error.error_description || error.message);
+    } finally {
+      setOpen(false);
+      setLoading(false);
+    }
+  };
   useEffect(async () => {
     await handleLoad();
   }, [props.refresh, isUpdate]);
@@ -100,27 +153,9 @@ const MainContent = (props) => {
     styleSort = '';
   }
 
-  console.log('devices');
-  console.log(devices);
-
   if (!loading) {
     return (
       <div className="absolute flex min-h-[92%] min-w-[95%] rounded-lg bg-gray-300 p-2">
-        {/* <div
-          className={`${style2} flex min-h-[99%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-8 transition-all duration-700`}
-        >
-          {content.map((patient, index) => {
-            return (
-              <MainContentCard
-                setInfoOpen={setOpen}
-                open={isOpen}
-              
-                component={patient}
-                setIsPatient={setIsPatient}
-              />
-            );
-          })}
-        </div> */}
         <DashboardTable
           rows={content}
           setInfoOpen={setOpen}
@@ -151,16 +186,11 @@ const MainContent = (props) => {
                   <div className="col-span-2 row-span-4 flex flex-col items-center justify-between gap-2">
                     <div
                       className={`row-span-3 mt-4 h-[10rem] w-[80%] rounded-full bg-gray-400 ring-4 ring-offset-2 ${
-                        (isPatient.Status === 'Incubation' &&
-                          'ring-yellow-400') ||
-                        (isPatient.Status === 'Febrile' &&
-                          'ring-orange-400') ||
-                        (isPatient.Status === 'Emergency' &&
-                          'ring-red-400') ||
-                        (isPatient.Status === 'Recovery' &&
-                          'ring-green-400') ||
-                        (isPatient.Status === 'None' &&
-                          'ring-gray-400') ||
+                        (isPatient.Status === 'Incubation' && 'ring-yellow-400') ||
+                        (isPatient.Status === 'Febrile' && 'ring-orange-400') ||
+                        (isPatient.Status === 'Emergency' && 'ring-red-400') ||
+                        (isPatient.Status === 'Recovery' && 'ring-green-400') ||
+                        (isPatient.Status === 'None' && 'ring-gray-400') ||
                         'ring-blue-400'
                       }`}
                     >
@@ -177,8 +207,7 @@ const MainContent = (props) => {
                             'bg-red-400 ring-red-400') ||
                           (isPatient.Status === 'Recovery' &&
                             'bg-green-400 ring-green-400') ||
-                          (isPatient.Status === 'None' &&
-                            'bg-gray-400 ring-gray-400') ||
+                          (isPatient.Status === 'None' && 'bg-gray-400 ring-gray-400') ||
                           'bg-blue-400 ring-blue-400'
                         }`}
                       ></div>
@@ -194,11 +223,29 @@ const MainContent = (props) => {
                       {isPatient.Email}
                     </div>
                   </div>
-
-                  <button className="col-span-1 rounded bg-auto-white p-4 text-base font-bold text-black ring-2 ring-gray-300 hover:ring-black ">
-                    Update
-                  </button>
-                  <button className="col-span-1 rounded bg-auto-white p-4 text-base font-bold text-black ring-2 ring-gray-300 hover:ring-black">
+                  {openUpdate ? (
+                    <button
+                      onClick={() => setOpenUpdate(false)}
+                      className="col-span-1 rounded bg-black p-4 text-base font-bold text-white opacity-50 ring-2 ring-black ring-offset-1 ring-offset-white hover:opacity-100 "
+                    >
+                      Cancel
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setOpenUpdate(true);
+                      }}
+                      className="col-span-1 rounded bg-auto-white p-4 text-base font-bold text-black ring-2 ring-gray-300 hover:ring-black "
+                    >
+                      Update
+                    </button>
+                  )}
+                  <button
+                    onClick={() => {
+                      handleDelete(isPatient);
+                    }}
+                    className="col-span-1 rounded bg-auto-white p-4 text-base font-bold text-black ring-2 ring-gray-300 hover:ring-black"
+                  >
                     Delete
                   </button>
                 </div>
@@ -211,25 +258,11 @@ const MainContent = (props) => {
                     setIsChart={props.setIsChart}
                     facilities={facilities}
                     setOpen={setOpen}
+                    openUpdate={openUpdate}
+                    setOpenUpdate={setOpenUpdate}
+                    handleUpdate={handleUpdate}
                   />
                 </div>
-                {/* <div className="col-span-3 rounded ring-2 ring-gray-300">
-                  <div>
-                    
-                    <button
-                      onClick={() => {
-                        props.setIsChart(() => ({
-                          open: true,
-                          type: 'all',
-                          device: isPatient.D_Id,
-                        }));
-                      }}
-                      className="p-4 text-center ring-2 ring-gray-300 hover:ring-black"
-                    >
-                      Open Chart
-                    </button>
-                  </div>
-                </div> */}
               </div>
             )}
           </div>
@@ -292,6 +325,11 @@ const StatisticsCard = (props) => {
   const [device, setDevice] = useState('');
   const [room, setRoom] = useState(null);
   const [bed, setBed] = useState(null);
+  const [age, setAge] = useState(props.component.Age);
+  const [sex, setSex] = useState(props.component.Sex);
+  const [bloodtype, setBloodtype] = useState(props.component.BloodType);
+  const [city, setCity] = useState(props.component.City);
+  const [district, setDistrict] = useState(props.component.District);
   const [tele] = useAtom(telemetries);
 
   const [currTele] =
@@ -424,47 +462,179 @@ const StatisticsCard = (props) => {
                     </div>
                   )}
                 </div>
-                <div>
-                  <div className="mb-2 grid grid-cols-4 grid-rows-1 border-b-2 border-gray-300">
-                    <div>
-                      {' '}
-                      <span className="font-bold text-blue-400">Sex</span> :{' '}
-                      {props.component.Sex}
+                {props.openUpdate ? (
+                  <Formik
+                    validateOnChange={false}
+                    initialValues={{
+                      age: age,
+                      sex: sex,
+                      height: props.component.Height,
+                      weight: props.component.weight,
+                      city: city,
+                      district: district,
+                      street: props.component.Street,
+                      bloodtype: bloodtype,
+                    }}
+                    onSubmit={(values) => {
+                      props.handleUpdate(
+                        {
+                          ...values,
+                          age: age,
+                          sex: sex,
+                          city: city,
+                          district: district,
+                          bloodtype: bloodtype,
+                        },
+                        props.component,
+                      );
+                      props.setOpenUpdate(false);
+                    }}
+                  >
+                    {({ values }) => (
+                      <Form>
+                        <div className="flex flex-col items-start justify-start">
+                          <div className="mb-2 grid grid-cols-5 grid-rows-1 border-b-2 border-gray-300">
+                            <BasicSelect
+                              input={age}
+                              setInput={setAge}
+                              name={'Age'}
+                              list={[
+                                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+                                17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+                                31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44,
+                                45, 46, 47, 48, 49, 50,
+                              ]}
+                              style={{ width: 80, height: '2rem' }}
+                            />
+                            <BasicSelect
+                              input={sex}
+                              setInput={setSex}
+                              name={'Sex'}
+                              list={['male', 'female', 'others']}
+                              style={{ width: 100, height: '2rem' }}
+                            />
+                            <Field
+                              name="height"
+                              component={TextFormField}
+                              placeholder={values.height}
+                              value={values.height}
+                              label={`Height (In cm)`}
+                              style={{
+                                display: 'absolute',
+                                width: 80,
+                                height: 10,
+                                top: '-1.5rem',
+                              }}
+                              variant="filled"
+                            />
+                            <Field
+                              name="weight"
+                              component={TextFormField}
+                              placeholder={values.weight}
+                              label={`Weight (In kg)`}
+                              style={{
+                                display: 'absolute',
+                                width: 80,
+                                height: 10,
+                                top: '-1.5rem',
+                              }}
+                              variant="filled"
+                            />
+                            <BasicSelect
+                              input={bloodtype}
+                              setInput={setBloodtype}
+                              name={'Blood Type'}
+                              list={['O+', 'O-', 'A+', 'A-', 'B+', 'B+', 'AB+', 'AB+']}
+                              style={{ width: 80, height: '2rem' }}
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 grid-rows-1 border-b-2 border-gray-300">
+                            <BasicSelect
+                              input={city}
+                              setInput={setCity}
+                              name={'City'}
+                              list={['HCMC', 'Hanoi', 'Danang']}
+                              style={{ width: 130, height: '2rem' }}
+                            />
+                            <BasicSelect
+                              input={district}
+                              setInput={setDistrict}
+                              name={'District'}
+                              list={['District 1', 'Go Vap District', 'District 7']}
+                              style={{ width: 130, height: '2rem' }}
+                            />
+                            <Field
+                              name="street"
+                              component={TextFormField}
+                              label={`Street address`}
+                              placeholder={values.street}
+                              style={{
+                                display: 'absolute',
+                                width: 200,
+                                height: 10,
+                                top: '-1.5rem',
+                              }}
+                              variant="filled"
+                            />
+                            <button
+                              className="ml-12 h-[3rem] w-[100px] rounded bg-blue-600 px-2 py-2 text-center text-white ring-2 ring-gray-300 hover:bg-blue-700 hover:ring-black"
+                              type="submit"
+                            >
+                              Submit
+                            </button>
+                          </div>
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
+                ) : (
+                  <div>
+                    <div className="mb-2 grid grid-cols-5 grid-rows-1 border-b-2 border-gray-300">
+                      <div>
+                        {' '}
+                        <span className="font-bold text-blue-400">Age</span> :{' '}
+                        {props.component.Age}
+                      </div>
+                      <div>
+                        {' '}
+                        <span className="font-bold text-blue-400">Sex</span> :{' '}
+                        {props.component.Sex}
+                      </div>
+                      <div>
+                        {' '}
+                        <span className="font-bold text-blue-400">Height</span> :{' '}
+                        {props.component.Height}
+                      </div>
+                      <div>
+                        {' '}
+                        <span className="font-bold text-blue-400">Weight</span> :{' '}
+                        {props.component.Weight}
+                      </div>
+                      <div>
+                        {' '}
+                        <span className="font-bold text-blue-400">Blood type</span> :{' '}
+                        {props.component.BloodType}
+                      </div>
                     </div>
-                    <div>
-                      {' '}
-                      <span className="font-bold text-blue-400">Height</span> :{' '}
-                      {props.component.Height}
-                    </div>
-                    <div>
-                      {' '}
-                      <span className="font-bold text-blue-400">Weight</span> :{' '}
-                      {props.component.Weight}
-                    </div>
-                    <div>
-                      {' '}
-                      <span className="font-bold text-blue-400">Blood type</span> :{' '}
-                      {props.component.BloodType}
+                    <div className="grid grid-cols-3 grid-rows-1 border-b-2 border-gray-300">
+                      <div>
+                        {' '}
+                        <span className="font-bold text-blue-400">City</span> :{' '}
+                        {props.component.City}
+                      </div>
+                      <div>
+                        {' '}
+                        <span className="font-bold text-blue-400">District</span> :{' '}
+                        {props.component.District}
+                      </div>
+                      <div>
+                        {' '}
+                        <span className="font-bold text-blue-400">Street</span> :{' '}
+                        {props.component.Street}
+                      </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 grid-rows-1 border-b-2 border-gray-300">
-                    <div>
-                      {' '}
-                      <span className="font-bold text-blue-400">City</span> :{' '}
-                      {props.component.City}
-                    </div>
-                    <div>
-                      {' '}
-                      <span className="font-bold text-blue-400">District</span> :{' '}
-                      {props.component.District}
-                    </div>
-                    <div>
-                      {' '}
-                      <span className="font-bold text-blue-400">Street</span> :{' '}
-                      {props.component.Street}
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
             }
             titleTypographyProps={{

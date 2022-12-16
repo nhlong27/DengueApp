@@ -33,7 +33,7 @@ const MainContent = (props) => {
               className="w-[100%] overflow-hidden rounded-2xl ring-2 ring-black"
               key={index}
             >
-              <StatisticsCard component={room} setIsRoom={setIsRoom} />
+              <StatisticsCard component={room} setIsRoom={setIsRoom} setIsUpdate={props.setIsUpdate} />
             </div>
           );
         })}
