@@ -9,7 +9,7 @@ import { GrDevice } from 'react-icons/gr';
 // import { telemetries, handleTelemetry } from '../../ContentContainer';
 // import { ContentContainerContext } from '../../ContentContainer';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
-import { Field, Form, Formik, setNestedObjectValues } from 'formik';
+import { Field, Form, Formik} from 'formik';
 import { Typography } from '@mui/material';
 import TransitionsModal from '@/shared/utilities/Modal';
 import SelectFormField from '@/shared/utilities/form/SelectFormField';
@@ -19,54 +19,65 @@ import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { telemetries } from '@/dashboard/doctor/App';
 import { useAtom } from 'jotai';
 
-// const now = Date.now();
-// const mtd = now - 3600000;
-
 const MainContentCard = (
-  { infoOpen, component, setInfoOpen, setIsDevice } = {
+  { infoOpen, component, setInfoOpen, setIsDevice, status } = {
     infoOpen: null,
     component: '',
     setInfoopen: null,
     setIsDevice: null,
+    status: null,
   },
 ) => {
-  // const [close, setClose] = useState(false)
-  // const [change, setChange] = useState(false)
-  // const { telemetries } = useContext(ContentContainerContext);
   const [tele] = useAtom(telemetries);
-  // console.log('in device maincontentcard');
-  // console.log(tele);
-  // console.log(component.D_Id);
-  // console.log(tele[`${component.D_Id}`]);
 
   const [currTele] = tele[`${component.D_Id}`]
     ? useAtom(tele[`${component.D_Id}`])
     : useAtom(tele.something);
 
   const [open, setOpen] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
+
+  // const listenUpdate = () => {
+  //   const DEVICE = supabase
+  //     .channel('custom-all-channel')
+  //     .on(
+  //       'postgres_changes',
+  //       { event: '*', schema: 'public', table: 'DEVICE' },
+  //       (payload) => {
+  //         console.log('Change received!', payload);
+  //         setIsUpdate((state) => !state);
+  //       },
+  //     )
+  //     .subscribe();
+  // };
 
   const handleUpdate = async (values) => {
     try {
       //Setting device and access token on thingsboard
       setLoading(true);
+      console.log('component.D_Id');
+      console.log(component.D_Id);
       const success = await client.connect();
       if (success) {
-        let device = await client.createUpdateDevice({
-          id: {
-            id: component.D_Id,
-            entityType: 'DEVICE',
+        let device = await client.createUpdateDevice(
+          {
+            id: {
+              id: component.D_Id,
+              entityType: 'DEVICE',
+            },
+            name: values.label,
+            type: values.type,
+            label: values.label,
+            deviceProfileId: {
+              id: '3e29a7f0-750f-11ed-81cb-3bc720ab387f',
+              entityType: 'DEVICE_PROFILE',
+            },
+            additionalInfo: {},
           },
-          name: values.label,
-          type: values.type,
-          label: values.label,
-          // deviceProfileId: {
-          //   id: '3e29a7f0-750f-11ed-81cb-3bc720ab387f',
-          //   entityType: 'DEVICE_PROFILE',
-          // },
-          additionalInfo: {},
-        });
+          `?accessToken=${component.Token}`,
+        );
 
         // Add device to db
         await supabase
@@ -77,7 +88,6 @@ const MainContentCard = (
           })
           .eq('D_Id', component.D_Id);
       }
-      if (error) throw error;
       console.log('update device success!');
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -111,10 +121,14 @@ const MainContentCard = (
       console.log(error.error_description || error.message);
     }
   };
+
   // useEffect(() => {
-  // openSocket();
+  //   listenUpdate();
   // }, []);
-  // const [isOpenTimeSeries, setOpenTimeSeries] = useState(false);
+  // useEffect(() => {
+  //   console.log('rerender!');
+  // }, [isUpdate]);
+
   return (
     <div className="grid w-[100%] grid-cols-3 gap-4  rounded-2xl bg-auto-white p-4 shadow-lg ring-2 ring-black transition-all duration-300 ease-in-out">
       {loadingDelete ? (
@@ -179,7 +193,7 @@ const MainContentCard = (
                 <div className="flex w-[30%] flex-col items-start justify-start">
                   <div className="relative px-4 text-[22px] font-semibold tracking-widest text-black">
                     <GrDevice />
-                    {component.Status ? (
+                    {status && status[`${component.D_Id}`] === 'Streaming' ? (
                       <div className="absolute top-0 -right-[4rem] text-[14px] text-green-500">
                         Receiving Data..
                       </div>
@@ -258,7 +272,7 @@ const MainContentCard = (
                 >
                   <AiOutlineCloseCircle size={30} />
                 </button>
-                <FacilityFormContent
+                <DeviceFormContent
                   // schema={device_schema}
                   handleUpdate={handleUpdate}
                   loading={loading}
@@ -281,7 +295,7 @@ const MainContentCard = (
   );
 };
 
-const FacilityFormContent = (props) => {
+const DeviceFormContent = (props) => {
   return (
     <Formik
       validateOnChange={false}

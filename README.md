@@ -40,6 +40,8 @@ Title: An IoT-based Remote Patient Monitoring System for Tackling the Dengue Fev
 - Local storage
 - Manually Open & Close websocket
 - Breadcrumbs
+- subscriptions: devices & facilities
+- update patient status when device stops connecting
 
 
 # Some additional background facts:

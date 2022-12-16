@@ -12,6 +12,30 @@ const MainContent = (props) => {
   const [isOpen, setOpen] = useState(false);
   const [isDevice, setIsDevice] = useState({});
   const [devices] = useAtom(deviceList);
+  const [status, setStatus] = useState('Paused');
+
+  const listenStatusUdate = () => {
+    const DEVICE = supabase
+      .channel('custom-update-channel')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'DEVICE' },
+
+        async (payload) => {
+          let obj = {};
+          const { data } = await supabase.from('DEVICE').select('D_Id, Status');
+          for (let pair of data) {
+            obj[`${pair.D_Id}`] = pair.Status;
+          }
+          setStatus(() => obj);
+        },
+      )
+      .subscribe();
+  };
+
+  useEffect(() => {
+    listenStatusUdate();
+  }, [status]);
 
   let style1 = '';
   let style2 = '';
@@ -22,8 +46,7 @@ const MainContent = (props) => {
     style1 = '-mr-[32rem] opacity-0';
     style2 = 'w-[100%]';
   }
-  console.log('devices');
-  console.log(devices);
+
   // if (!loading) {
   return (
     <>
@@ -38,6 +61,7 @@ const MainContent = (props) => {
               key={index}
               component={device}
               setIsDevice={setIsDevice}
+              status={status}
             />
           );
         })}

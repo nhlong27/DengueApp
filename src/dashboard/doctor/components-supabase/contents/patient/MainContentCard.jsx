@@ -217,17 +217,17 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
         </Box>
       </TableCell>
       <TableCell color="purple">
-        <span className="ring-2 p-2 rounded-2xl ring-orange-400 text-[30px] font-bold text-orange-400">
+        <span className="rounded-2xl p-2 text-[30px] font-bold text-orange-400 ring-2 ring-orange-400">
           {currTele && currTele.temperature}
         </span>
       </TableCell>
       <TableCell color="green">
-        <span className="ring-2 p-2 rounded-2xl ring-blue-400 text-[30px] font-bold text-blue-400">
+        <span className="rounded-2xl p-2 text-[30px] font-bold text-blue-400 ring-2 ring-blue-400">
           {currTele && currTele.SpO2}
         </span>
       </TableCell>
       <TableCell color="yellow">
-        <span className="p-2 rounded-2xl text-[30px] font-bold text-purple-400 ring-2 ring-purple-400">
+        <span className="rounded-2xl p-2 text-[30px] font-bold text-purple-400 ring-2 ring-purple-400">
           {currTele && currTele.HrtPressure}
         </span>
       </TableCell>

@@ -151,11 +151,16 @@ const MainContent = (props) => {
                   <div className="col-span-2 row-span-4 flex flex-col items-center justify-between gap-2">
                     <div
                       className={`row-span-3 mt-4 h-[10rem] w-[80%] rounded-full bg-gray-400 ring-4 ring-offset-2 ${
-                        (isPatient.Status === 'Incubation' && 'ring-yellow-400') ||
-                        (isPatient.Status === 'Febrile' && 'ring-orange-400') ||
-                        (isPatient.Status === 'Emergency' && 'ring-red-400') ||
-                        (isPatient.Status === 'Recovery' && 'ring-green-400') ||
-                        (isPatient.Status === 'None' && 'ring-gray-400') ||
+                        (isPatient.Status === 'Incubation' &&
+                          'ring-yellow-400') ||
+                        (isPatient.Status === 'Febrile' &&
+                          'ring-orange-400') ||
+                        (isPatient.Status === 'Emergency' &&
+                          'ring-red-400') ||
+                        (isPatient.Status === 'Recovery' &&
+                          'ring-green-400') ||
+                        (isPatient.Status === 'None' &&
+                          'ring-gray-400') ||
                         'ring-blue-400'
                       }`}
                     >
@@ -172,7 +177,8 @@ const MainContent = (props) => {
                             'bg-red-400 ring-red-400') ||
                           (isPatient.Status === 'Recovery' &&
                             'bg-green-400 ring-green-400') ||
-                          (isPatient.Status === 'None' && 'bg-gray-400 ring-gray-400') ||
+                          (isPatient.Status === 'None' &&
+                            'bg-gray-400 ring-gray-400') ||
                           'bg-blue-400 ring-blue-400'
                         }`}
                       ></div>
@@ -304,7 +310,10 @@ const StatisticsCard = (props) => {
         .from('PATIENT')
         .update({ D_Id: DEVICE.D_Id, D_Label: DEVICE.Label })
         .eq('P_Ssn', props.component.P_Ssn);
-      await supabase.from('DEVICE').update({ Assign: props.component.Fname }).eq('D_Id', DEVICE.D_Id);
+      await supabase
+        .from('DEVICE')
+        .update({ Assign: props.component.Fname })
+        .eq('D_Id', DEVICE.D_Id);
       if (error) throw error;
       console.log('assign device success!');
     } catch (error) {
@@ -320,7 +329,10 @@ const StatisticsCard = (props) => {
         .from('PATIENT')
         .update({ B_Number: bed })
         .eq('P_Ssn', props.component.P_Ssn);
-      await supabase.from('BED').update({ Assign: props.component.Fname }).eq('B_Number', bed);
+      await supabase
+        .from('BED')
+        .update({ Assign: props.component.Fname })
+        .eq('B_Number', bed);
       // await supabase.from('TELEMETRY').insert([{ D_Id: DEVICE[0].D_Id, Time: now }]);
       if (error) throw error;
       console.log('assign bed success!');

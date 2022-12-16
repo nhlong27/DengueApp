@@ -37,7 +37,8 @@ const ContentContainer = (props) => {
   const [isSocket, setIsSocket] = useState(false);
   const [facilities, setFacilities] = useAtom(facilityList);
 
-  const listenUpdate = () => {
+  console.log(isUpdate);
+  const listenUpdateMain = async () => {
     const DEVICE = supabase
       .channel('custom-all-channel')
       .on(
@@ -157,10 +158,16 @@ const ContentContainer = (props) => {
     let status = 'none';
     client.subscribe(params, async function (response) {
       if (Object.keys(response.data).length !== 0) {
+        console.log('response - streaming');
         await supabase
           .from('DEVICE')
           .update({ Status: 'Streaming' })
           .eq('D_Id', deviceId);
+
+        // await supabase
+        //   .from('PATIENT')
+        //   .update({ D_Status: 'Streaming' })
+        //   .eq('D_Id', deviceId);
 
         if (response.data.temperature[0][1] < 37) {
           timeElapse = status !== 'Normal' ? timeElapse + 4 : 0;
@@ -267,18 +274,28 @@ const ContentContainer = (props) => {
           SpO2: response.data.SpO2[0][1],
           HrtPressure: response.data.HrtPressure[0][1],
         });
+        setTimeout(async () => {
+          await supabase.from('DEVICE').update({ Status: 'Paused' }).eq('D_Id', deviceId);
+          // await supabase.from('PATIENT').update({ D_Status: 'Paused' }).eq('D_Id', deviceId);
+        }, 20000);
+
         setTelemetries((prev) => ({ ...prev, [deviceId]: telePayload }));
       }
-      await supabase.from('DEVICE').update({ Status: 'Paused' }).eq('D_Id', deviceId);
     });
   };
 
+  useEffect(() => {
+    listenUpdateMain();
+  }, []);
+
   useEffect(async () => {
-    listenUpdate();
     await handleLoadDevice();
     await handleLoadFacility();
+  }, [isUpdate, refresh]);
+
+  useEffect(async () => {
     await handleSocket();
-  }, [refresh, isUpdate]);
+  }, [refresh]);
 
   if (!loading) {
     return (

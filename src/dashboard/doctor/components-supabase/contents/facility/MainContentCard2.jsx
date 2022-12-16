@@ -13,12 +13,71 @@ import { styled } from '@mui/material/styles';
 import MuiDivider from '@mui/material/Divider';
 import { RiNurseFill } from 'react-icons/ri';
 import { MdBedroomChild } from 'react-icons/md';
+import TransitionsModal from '@/shared/utilities/Modal';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { Field, Form, Formik } from 'formik';
+import TextFormField from '@/shared/utilities/form/TextFormField';
+import { InfinitySpin } from 'react-loader-spinner';
+import { supabase } from '@/shared/api/supabase/supabaseClient';
 
 export const StatisticsCard = (props) => {
   const [isRoomContainer, setIsRoomContainer] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
   let containerStyle = isRoomContainer
     ? 'opacity-100'
     : 'opacity-0 absolute right-[8rem] invisible';
+
+  const handleUpdate = async (values) => {
+    alert('this fuctionality does not yet exist');
+    //   try {
+    //     //Setting device and access token on thingsboard
+    //     setLoading(true);
+
+    //     // Add device to db
+    //     await supabase
+    //       .from('BED')
+    //       .update({
+    //         R_Number: values.R_Number
+    //       })
+    //       .eq('R_Number', props.component.R_Number);
+    //     await supabase
+    //       .from('ROOM')
+    //       .update({
+    //         R_Number: values.R_Number
+    //       })
+    //       .eq('R_Number', props.component.R_Number);
+    //     console.log('update room success!');
+    //   } catch (error) {
+    //     console.log(error.error_description || error.message);
+    //   } finally {
+    //     setLoading(false);
+    //     setOpen(false);
+    //   }
+  };
+
+  const handleDelete = async (values) => {
+    alert('this functionality doesn not yet exist');
+    //   try {
+    //     //Setting device and access token on thingsboard
+    //     setLoadingDelete(true);
+    //       // delete device from db
+    //       await supabase
+    //         .from('ROOM')
+    //         .delete({
+    //           : null,
+    //         })
+    //         .eq('D_Id', component.D_Id);
+
+    //       await supabase.from('DEVICE').delete().eq('D_Id', component.D_Id);
+
+    //     if (error) throw error;
+    //     console.log('delete room success!');
+    //   } catch (error) {
+    //     console.log(error.error_description || error.message);
+    //   }
+  };
 
   return (
     <Card sx={{ backgroundColor: '#F7F7FF', fontSize: 25 }}>
@@ -39,15 +98,50 @@ export const StatisticsCard = (props) => {
           )}
         </button>
         {isRoomContainer ? null : (
-          <div className="ml-16 flex gap-8">
-            <div className=" rounded-t-lg bg-auto-white py-2 pl-4 pr-2 ring-2 ring-black">
-              <span className="text-blue-600">Beds:</span> {props.component.beds.length}
+          <>
+            <div className="ml-16 flex gap-8">
+              <div className=" rounded-t-lg bg-auto-white py-2 pl-4 pr-2 ring-2 ring-black">
+                <span className="text-blue-600">Beds:</span> {props.component.beds.length}
+              </div>
+              <div className=" rounded-b-lg bg-auto-white py-2 pl-4 pr-2 ring-2 ring-black">
+                <span className="text-blue-600">Nurse:</span>{' '}
+                {props.component.nurses.length}
+              </div>
             </div>
-            <div className=" rounded-b-lg bg-auto-white py-2 pl-4 pr-2 ring-2 ring-black">
-              <span className="text-blue-600">Nurse:</span>{' '}
-              {props.component.nurses.length}
+            <div className="ml-auto flex gap-8 text-base">
+              <div
+                onClick={() => setOpen(true)}
+                className="flex items-center justify-center rounded-lg bg-auto-white px-4 py-2 text-black ring-2 ring-gray-300 hover:ring-black"
+              >
+                <button>Update</button>
+                <TransitionsModal open={open}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpen(false);
+                    }}
+                    className="absolute -top-[1rem] -right-[1rem] rounded-full bg-white"
+                  >
+                    <AiOutlineCloseCircle size={30} />
+                  </button>
+                  <FacilityFormContent
+                    // schema={device_schema}
+                    handleUpdate={handleUpdate}
+                    loading={loading}
+                    component={props.component}
+                  />
+                </TransitionsModal>
+              </div>
+              <button
+                onClick={() => {
+                  handleDelete();
+                }}
+                className="flex items-center justify-center rounded-lg bg-auto-white px-4 py-2 text-black ring-2 ring-gray-300 hover:ring-black"
+              >
+                Remove
+              </button>
             </div>
-          </div>
+          </>
         )}
 
         <div className={`${containerStyle} transition-all duration-300`}>
@@ -205,5 +299,52 @@ export const DepositWithdraw = (props) => {
         </CardContent>
       </Box>
     </Card>
+  );
+};
+
+const FacilityFormContent = (props) => {
+  return (
+    <Formik
+      validateOnChange={false}
+      // validationSchema={props.schema}
+      initialValues={{
+        R_Number: props.component.R_Number,
+      }}
+      onSubmit={(values) => {
+        props.handleUpdate({ ...values });
+      }}
+    >
+      {({ values }) => (
+        <Form>
+          <div className="flex flex-col items-start justify-start">
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              {`Update this room ${props.component.R_Number}`}
+            </Typography>
+            <div className={`mt-6`}>
+              <Field
+                name="R_Number"
+                component={TextFormField}
+                required
+                id="number-required"
+                label={`Room Number`}
+                placeholder={`${props.component.R_Number}`}
+              />
+            </div>
+            {props.loading ? (
+              <div className="absolute bottom-[2rem] right-[3rem]">
+                <InfinitySpin width="300" color="#475569" />
+              </div>
+            ) : (
+              <button
+                className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
+                type="submit"
+              >
+                Update
+              </button>
+            )}
+          </div>
+        </Form>
+      )}
+    </Formik>
   );
 };
