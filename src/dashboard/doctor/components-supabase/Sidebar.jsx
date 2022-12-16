@@ -15,6 +15,10 @@ import TransitionsModal from '@/shared/utilities/Modal';
 import SelectFormField from '@/shared/utilities/form/SelectFormField';
 import TextFormField from '@/shared/utilities/form/TextFormField';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
+import {BsChatLeftDots} from 'react-icons/bs'
+import { BsCalendar2Date } from 'react-icons/bs';
+
+import { FiSettings } from 'react-icons/fi';
 
 const Sidebar = (props) => {
   const [isOpen, setOpen] = useState(false);
@@ -95,22 +99,22 @@ const Sidebar = (props) => {
           </div>
           <div className="ml-8 mr-12 border-t-2 border-auto-white p-4"></div>
           <div className="mr-2 flex flex-col gap-2 pb-8">
-            <div className="duration-400 my-2  flex items-center p-4  py-2 px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white">
-              <MdOutlineSchedule size={20} />
+            <Link  onClick={()=>props.setLocation('Schedules')} className="duration-400 my-2  flex items-center p-4  py-2 px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white">
+              <BsCalendar2Date size={20} />
               <span className="mx-auto">Schedule</span>
-            </div>
-            <div className="duration-400 my-2 flex items-center p-4 py-2 px-8  text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white">
-              <IoMdNotificationsOutline size={24} />
-              <span className="mx-auto">Notifs</span>
-            </div>
+            </Link>
+            <Link onClick={()=>props.setLocation('Messages')} className="duration-400 my-2 flex items-center p-4 py-2 px-8  text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white">
+              <BsChatLeftDots size={18} />
+              <span className="mx-auto">Messages</span>
+            </Link>
             <div
               onClick={() => {
                 setEmuOpen(true);
               }}
               className="duration-400 my-2 mt-12 flex items-center p-4 py-2 px-8  text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white"
             >
-              <MdScreenSearchDesktop size={24} />
-              <span className="mx-auto">Emulator</span>
+              <FiSettings size={20} />
+              <span className="mx-auto">Settings</span>
             </div>
           </div>
         </>
@@ -159,21 +163,29 @@ const Sidebar = (props) => {
           </div>
           <div className="ml-[1.4rem] mr-12 border-t-2 border-auto-white p-4"></div>
           <div className="mr-0 flex flex-col gap-2 pb-8">
-            <div className="duration-400 justify p-center  my-2 flex items-center justify-center py-2  text-[20px]  tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white">
-              <MdOutlineSchedule size={25} />
+            <Link
+              onClick={() => props.setLocation('Schedules')}
+              to="/pages/dashboard/doctor/schedules"
+              className="duration-400 justify p-center  my-2 flex items-center justify-center py-2  text-[20px]  tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
+            >
+              <BsCalendar2Date size={22} />
               {/* <span className="hidden">Schedule</span> */}
-            </div>
-            <div className="duration-400 p-center my-2 flex items-center justify-center py-2  text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white">
-              <IoMdNotificationsOutline size={25} />
+            </Link>
+            <Link
+              onClick={() => props.setLocation('Messages')}
+              to="/pages/dashboard/doctor/messages"
+              className="duration-400 p-center my-2 flex items-center justify-center py-2  text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
+            >
+              <BsChatLeftDots size={20} />
               {/* <span className="hidden">Notifs</span> */}
-            </div>
+            </Link>
             <div
               onClick={() => {
                 setEmuOpen(true);
               }}
               className="duration-400 p-center my-2 mt-8 flex items-center justify-center py-2  text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
             >
-              <MdScreenSearchDesktop size={25} />
+              <FiSettings size={20} />
             </div>
           </div>
         </>

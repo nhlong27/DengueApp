@@ -12,6 +12,8 @@ import { InfinitySpin } from 'react-loader-spinner';
 import { client } from '@/shared/api/initClient_tenant';
 import { useAtom, atom } from 'jotai';
 import { telemetries, deviceList, facilityList } from '../App';
+import Schedules from './Schedules'
+import Messages from './contents/message/Messages'
 
 // export let telemetryTable = {};
 // export const handleTelemetry = (deviceId, temperature, SpO2, HrtPressure, connection) => {
@@ -322,6 +324,8 @@ const ContentContainer = (props) => {
             path="/devices"
             element={<DeviceContent setRefresh={setRefresh} setIsUpdate={setIsUpdate} />}
           />
+          <Route path="/schedules" element={<Schedules />} />
+          <Route path="/messages" element={<Messages />} />
         </Routes>
       </div>
 

@@ -4,27 +4,34 @@ Title: An IoT-based Remote Patient Monitoring System for Tackling the Dengue Fev
 # App Components & Features
 
 ## Navigate
-- Sign up/ Login 
-- Profile (add Avatar) 
-- Logout 
++ Sign up/ Login 
++ Profile (add Avatar) 
+<!-- - Logout  -->
 - User Guide
 
 ## Core functionalities
 
 ### CRUD
-+ Facilities
-<!-- Devices -> access tokens + HOST to configure devices -->
-+ Nurses -> Invite, Assign available (room assigned?) 
-+ Patients -> Invite, Assign available (bed, device assigned?)
+<!-- + Facilities -->
+<!-- + Devices -> access tokens + HOST to configure devices -->
++ Nurses 
+->  Invite, 
+<!-- ->  Assign available (room assigned?)  -->
+
++ Patients 
+ -> Invite,
+  <!-- -> Assign available (bed, device assigned?) -->
 
 ### Data Streaming
-++ Device sending data -> Device status, Patient Telemetry in Line charts
+<!-- ++ Device sending data -> Device status, Patient Telemetry in Line charts -->
 ++ Query timeseries
 + Dashboard Patient Info -> navigate to Facilities (Bed assigned - patient info) (Nurse assigned), Nurse assigned and Device assigned section
 
 ### Status & Alarm
-++ Alarm threshold & status
-- Sort by phases
+<!-- ++ Alarm threshold & status -->
++ Sort by phases
+<!-- -> Simple -->
+-> Graphs
 
 ## Others
 - Dashboard Search, Chatbox, Schedule, Notifications

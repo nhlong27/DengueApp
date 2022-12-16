@@ -56,11 +56,15 @@ const NurseSearchCreate = (props) => {
       setLoading(true);
       let now = Date.now();
       await supabase.from('PERSON').insert([{ Per_Ssn: now, D_Ssn: session.user.id }]);
-      await supabase
-        .from('NURSE')
-        .insert([
-          { Fname: values.fname, Lname: values.lname, Per_Ssn: now, Email: values.email },
-        ]);
+      await supabase.from('NURSE').insert([
+        {
+          Fname: values.fname,
+          Lname: values.lname,
+          Per_Ssn: now,
+          Email: values.email,
+          Assign: values.rooms ? values.rooms.join() : 'No',
+        },
+      ]);
       let { data: NURSE, error } = await supabase
         .from('NURSE')
         .select('*')
@@ -121,7 +125,7 @@ const NurseSearchCreate = (props) => {
         )}
       </div>
       <button
-        className="duration-600 ml-6 max-w-[10%] rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400 flex justify-center items-center ring-2 ring-black h-[80%]"
+        className="duration-600 ml-6 flex h-[80%] max-w-[10%] items-center justify-center rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white ring-2 ring-black transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400"
         onClick={() => props.setRefresh((state) => !state)}
       >
         <BiRefresh size={30} color="black" />
@@ -156,7 +160,7 @@ const FacilityFormContent = (props) => {
             </Typography>
             <div className={`mt-6`}>
               <Field
-                style={{ width: 150, marginRight:20 }}
+                style={{ width: 150, marginRight: 20 }}
                 name="fname"
                 component={TextFormField}
                 required

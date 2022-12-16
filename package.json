@@ -15,6 +15,9 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@mantine/core": "^5.9.4",
+    "@mantine/dates": "^5.9.4",
+    "@mantine/hooks": "^5.9.4",
     "@mui/material": "^5.10.15",
     "@supabase/supabase-js": "^2.1.1",
     "axios": "^1.2.0",

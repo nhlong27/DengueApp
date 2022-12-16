@@ -49,20 +49,20 @@ const Navbar = (props) => {
         {props.location}
       </div>
       <div className="relative flex items-center justify-center gap-4 p-4 text-[22px]">
-        <button>
+        <Link to="/pages/dashboard/doctor/schedules">
           <GrSchedulePlay />
-        </button>
-        <button>
+        </Link>
+        <Link to="/pages/dashboard/doctor/messages">
           <BiMessageSquareDots />
-        </button>
-        <button>
+        </Link>
+        <button onClick={() => alert('The functionality for this does not yet exist')}>
           <IoMdNotificationsOutline />
         </button>
         <span className="flex items-center justify-center rounded-2xl p-2 text-[18px] font-extrabold tracking-[10px]">
           {username ? username : 'Default User'}
         </span>
         <button
-        className='flex items-center gap-2'
+          className="flex items-center gap-2"
           onClick={(e) => {
             setDropDown((state) => !state);
             e.stopPropagation();
