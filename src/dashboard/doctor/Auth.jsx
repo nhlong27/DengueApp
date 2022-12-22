@@ -7,6 +7,7 @@ import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { useNavigate } from 'react-router';
 import Account from './components-supabase/Account';
 import { InfinitySpin } from 'react-loader-spinner';
+import loginImage from '../../../assets/img/login.jpg';
 
 const loginSchema = yup.object({
   username: yup.string().required().max(15).min(5),
@@ -40,7 +41,7 @@ const Auth = () => {
         >
           <img
             className="h-[100%] w-[100%] bg-gradient-to-tr from-black to-gray-600"
-            src="../../../assets/img/login.jpg"
+            src={loginImage}
             alt=""
           />
         </div>
@@ -109,7 +110,7 @@ const Login = (props) => {
                   </div>
                   <div className="absolute right-0 mt-4 flex flex-col items-end justify-start gap-2">
                     <button
-                      className=" rounded bg-blue-600 px-6 py-2 text-auto-white hover:bg-blue-700 hover:font-bold ring-2 ring-black "
+                      className=" rounded bg-blue-600 px-6 py-2 text-auto-white ring-2 ring-black hover:bg-blue-700 hover:font-bold "
                       type="submit"
                       onClick={() => {
                         handleLogIn({ ...values });
@@ -280,7 +281,7 @@ const Signup = (props) => {
                   </div>
                   <div className="absolute right-[10rem] mt-4 flex flex-col items-end justify-start gap-2">
                     <button
-                      className=" rounded bg-blue-600 px-6 py-2 text-auto-white hover:bg-blue-700 hover:font-bold ring-2 ring-black"
+                      className=" rounded bg-blue-600 px-6 py-2 text-auto-white ring-2 ring-black hover:bg-blue-700 hover:font-bold"
                       type="submit"
                       onClick={() => {
                         console.log({ ...values });
