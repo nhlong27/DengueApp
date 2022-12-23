@@ -10,13 +10,13 @@ import { InfinitySpin } from 'react-loader-spinner';
 import loginImage from '../../../assets/img/login.jpg';
 
 const loginSchema = yup.object({
-  username: yup.string().required().max(15).min(5),
-  password: yup.string().required().min(5).max(30),
+  username: yup.string().max(15).min(5),
+  password: yup.string().required().min(6).max(30),
   email: yup.string().email(),
 });
 const signupSchema = yup.object({
-  username: yup.string().required().max(15).min(5),
-  password: yup.string().required().min(5).max(30),
+  username: yup.string().max(15).min(5),
+  password: yup.string().required().min(6).max(30),
   email: yup.string().email(),
 });
 

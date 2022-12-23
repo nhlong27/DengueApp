@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Field, Form, Formik} from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { Typography } from '@mui/material';
 import TransitionsModal from '@/shared/utilities/Modal';
 import SelectFormField from '@/shared/utilities/form/SelectFormField';
@@ -97,13 +97,24 @@ const PatientSearchCreate = (props) => {
         .eq('Label', values.label)
         .single();
       if (DEVICE) {
-        await supabase.from('DEVICE').update({ Assign: values.fname }).eq('D_Id', DEVICE.D_Id);
+        await supabase
+          .from('DEVICE')
+          .update({ Assign: values.fname })
+          .eq('D_Id', DEVICE.D_Id);
       }
       if (values.B_Number) {
-        await supabase.from('BED').update({Assign: values.fname}).eq('B_Number', values.B_Number)
+        await supabase
+          .from('BED')
+          .update({ Assign: values.fname })
+          .eq('B_Number', values.B_Number);
       }
+      const { data: USER } = await supabase.auth.signUp({
+        email: values.email,
+        password: 'password',
+      });
       await supabase.from('PATIENT').insert([
         {
+          P_Ssn: USER.user.id,
           Fname: values.fname,
           Lname: values.lname,
           Sex: values.sex,
@@ -120,8 +131,10 @@ const PatientSearchCreate = (props) => {
           Age: values.age,
           Status: 'None',
           D_Label: DEVICE && DEVICE.Label,
+          D_Ssn: session.user.id,
         },
       ]);
+
       console.log('add patient success!');
     } catch (error) {
       console.log(error.error_description || error.message);

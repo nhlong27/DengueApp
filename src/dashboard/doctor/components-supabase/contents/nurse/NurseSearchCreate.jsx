@@ -56,15 +56,24 @@ const NurseSearchCreate = (props) => {
       setLoading(true);
       let now = Date.now();
       await supabase.from('PERSON').insert([{ Per_Ssn: now, D_Ssn: session.user.id }]);
+
+      const { data: USER } = await supabase.auth.signUp({
+        email: values.email,
+        password: 'password',
+      });
+
       await supabase.from('NURSE').insert([
         {
+          N_ssn: USER.user.id,
           Fname: values.fname,
           Lname: values.lname,
           Per_Ssn: now,
           Email: values.email,
           Assign: values.rooms ? values.rooms.join() : 'No',
+          D_Ssn: session.user.id
         },
       ]);
+      
       let { data: NURSE, error } = await supabase
         .from('NURSE')
         .select('*')

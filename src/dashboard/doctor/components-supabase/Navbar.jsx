@@ -14,7 +14,7 @@ import { AiOutlineDown } from 'react-icons/ai';
 const Navbar = (props) => {
   // const { session } = useContext(AppContext);
   const [username, setUsername] = useState('');
-  const [avatar_url, setAvatarUrl] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
   const [isOpen, setDropDown] = useState(false);
   const [title, setTitle] = useState('Dashboard');
 
@@ -34,14 +34,18 @@ const Navbar = (props) => {
 
       if (data) {
         setUsername(data.Username);
-        setAvatarUrl(data.Avatar_url);
+        const { data: IMAGE, error } = await supabase.storage
+          .from(`doctors/${user.id}/avatars/self`)
+          .download(data.Avatar_url);
+        const url = URL.createObjectURL(IMAGE);
+        setAvatarUrl(url);
       }
     } catch (error) {
       alert(error.message);
     }
   };
-  useEffect(() => {
-    getProfile();
+  useEffect(async () => {
+    await getProfile();
   }, []);
   return (
     <nav className="flex h-[10%] w-[100%] items-center justify-between bg-auto-white p-8 shadow-md">
@@ -58,7 +62,7 @@ const Navbar = (props) => {
         <button onClick={() => alert('The functionality for this does not yet exist')}>
           <IoMdNotificationsOutline />
         </button>
-        <span className="flex items-center justify-center rounded-2xl p-2 text-[18px] font-extrabold tracking-[10px]">
+        <span className="flex items-center justify-center rounded-2xl p-2 text-[18px] font-extrabold tracking-[5px]">
           {username ? username : 'Default User'}
         </span>
         <button
@@ -68,11 +72,11 @@ const Navbar = (props) => {
             e.stopPropagation();
           }}
         >
-          {avatar_url ? (
+          {avatarUrl ? (
             <img
-              className="inline-block h-8 w-8 rounded-full bg-auto-black ring-2 ring-cyan-100 hover:opacity-70"
-              alt=""
-              src={avatar_url}
+              className="inline-block h-8 w-8 rounded-full bg-auto-black ring-2 ring-black hover:opacity-70"
+              src={avatarUrl ? avatarUrl : `https://place-hold.it/150x150`}
+              alt={avatarUrl ? 'Avatar' : 'No image'}
             ></img>
           ) : (
             <div className="h-[2rem] w-[2rem] rounded-full bg-gray-400"></div>

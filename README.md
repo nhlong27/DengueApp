@@ -5,7 +5,8 @@ Title: An IoT-based Remote Patient Monitoring System for Tackling the Dengue Fev
 
 ## Navigate
 + Sign up/ Login 
-+ Profile (add Avatar) 
++ Profile (add Avatar) Update
+* Delete Auth user not possible (manually through web editor)
 <!-- - Logout  -->
 - User Guide
 

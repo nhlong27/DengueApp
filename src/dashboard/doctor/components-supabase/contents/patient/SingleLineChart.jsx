@@ -30,15 +30,18 @@ ChartJS.register(
 );
 
 export function LineChart(props) {
-  // const [telemetries, setTelemetries] = useState({
-  //   Temperature: 36,
-  //   SpO2: 95,
-  //   Pressure: 70,
-  // });
-  const [tele] = useAtom(telemetries);
-  const [currTele] = tele[`${props.isChart.device}`]
-    ? useAtom(tele[`${props.isChart.device}`])
-    : useAtom(tele.something);
+  const [currTele, setTelemetries] = useState({
+    temperature: 36,
+    SpO2: 95,
+    HrtPressure: 70,
+  });
+
+
+
+  // const [tele] = useAtom(telemetries);
+  // const [currTele] = tele[`${props.isChart.device}`]
+  //   ? useAtom(tele[`${props.isChart.device}`])
+  //   : useAtom(tele.something);
 
   const subscribe = () => {
     const TELEMETRY = supabase
@@ -47,13 +50,19 @@ export function LineChart(props) {
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'TELEMETRY' },
         (payload) => {
-          currTele.Temperature = payload.new.Temperature;
-          currTele.SpO2 = payload.new.SpO2;
-          currTele.Pressure = payload.new.Pressure;
+          console.log(payload.new)
+          if (payload.new.D_Id === props.isChart.device){
+            currTele.temperature = payload.new.Temperature;
+            currTele.SpO2 = payload.new.SpO2;
+            currTele.HrtPressure = payload.new.Pressure;
+          }
         },
       )
       .subscribe();
   };
+  useEffect(()=>{
+    subscribe();
+  },[])
 
   // const [currTele] = tele[`${props.isChart.device}`]
   //   ? useAtom(tele[`${props.isChart.device}`])
