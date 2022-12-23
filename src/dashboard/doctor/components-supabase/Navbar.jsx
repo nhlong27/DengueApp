@@ -24,7 +24,7 @@ const Navbar = (props) => {
 
       let { data, error, status } = await supabase
         .from('DOCTOR')
-        .select(`Username, Avatar_url`)
+        .select(`Username`)
         .eq('D_Ssn', user.id)
         .single();
 
@@ -35,8 +35,8 @@ const Navbar = (props) => {
       if (data) {
         setUsername(data.Username);
         const { data: IMAGE, error } = await supabase.storage
-          .from(`doctors/${user.id}/avatars/self`)
-          .download(data.Avatar_url);
+          .from(`doctors/${user.id}`)
+          .download('avatar.png');
         const url = URL.createObjectURL(IMAGE);
         setAvatarUrl(url);
       }

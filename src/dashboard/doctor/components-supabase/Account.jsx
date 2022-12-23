@@ -10,7 +10,7 @@ const Account = ({ session }) => {
   const [username, setUsername] = useState(null);
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
-  const [avatar_url, setAvatarUrl] = useState(null);
+  // const [avatar_url, setAvatarUrl] = useState('avatar.png');
 
   useEffect(() => {
     getProfile();
@@ -23,7 +23,7 @@ const Account = ({ session }) => {
 
       let { data, error, status } = await supabase
         .from('DOCTOR')
-        .select(`Username, Avatar_url, Fname, Lname`)
+        .select(`Username, Fname, Lname`)
         .eq('D_Ssn', user.id)
         .single();
 
@@ -35,7 +35,7 @@ const Account = ({ session }) => {
         setUsername(data.Username);
         setLastName(data.Lname);
         setFirstName(data.Fname);
-        setAvatarUrl(data.Avatar_url);
+        // setAvatarUrl(data.Avatar_url);
       }
     } catch (error) {
       alert(error.message);
@@ -43,21 +43,21 @@ const Account = ({ session }) => {
       setLoading(false);
     }
   };
-  const updateAvatar = async (url) => {
-     try {
-       setLoading(true);
+  // const updateAvatar = async (url) => {
+  //    try {
+  //      setLoading(true);
 
-       let { error } = await supabase.from('DOCTOR').update({Avatar_url: url}).eq('D_Ssn', session.user.id);
+  //      let { error } = await supabase.from('DOCTOR').update({Avatar_url: url}).eq('D_Ssn', session.user.id);
 
-       if (error) {
-         throw error;
-       }
-     } catch (error) {
-       alert(error.message);
-     } finally {
-       setLoading(false);
-     }
-  }
+  //      if (error) {
+  //        throw error;
+  //      }
+  //    } catch (error) {
+  //      alert(error.message);
+  //    } finally {
+  //      setLoading(false);
+  //    }
+  // }
   const updateProfile = async () => {
 
     try {
@@ -69,7 +69,7 @@ const Account = ({ session }) => {
         Username: username,
         Fname: firstName,
         Lname: lastName,
-        Avatar_url: avatar_url,
+        // Avatar_url: avatar_url,
         Updated_at: new Date(),
       };
 
@@ -93,13 +93,13 @@ const Account = ({ session }) => {
         ) : (
           <>
             <Avatar
-              url={avatar_url}
+              // url={avatar_url}
               size={150}
-              onUpload={async (url) => {
-                await setAvatarUrl(() => url);
-                await updateAvatar(url);
+              // onUpload={async (url) => {
+              //   await setAvatarUrl(() => url);
+                // await updateAvatar(url);
                 
-              }}
+              // }}
               session={session}
             />
             <form

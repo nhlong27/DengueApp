@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { InfinitySpin } from 'react-loader-spinner';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 
-export default function Avatar({ url, size, onUpload, session }) {
+export default function Avatar({ size, session }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
-    if (url) downloadImage(url);
-  }, [url]);
+    downloadImage('avatar.png');
+  }, [update]);
 
   const downloadImage = async (path) => {
     try {
       const { data, error } = await supabase.storage
-        .from(`doctors/${session.user.id}/avatars/self`)
+        .from(`doctors/${session.user.id}`)
         .download(path);
       if (error) {
         throw error;
@@ -36,19 +37,28 @@ export default function Avatar({ url, size, onUpload, session }) {
       }
 
       const file = event.target.files[0];
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      let { error: uploadError } = await supabase.storage
-        .from(`doctors/${session.user.id}/avatars/self`)
-        .upload(filePath, file);
-
-      if (uploadError) {
-        throw uploadError;
+      // const fileExt = file.name.split('.').pop();
+      // const fileName = `avatar.${fileExt}`;
+      // const filePath = `${fileName}`;
+      if (avatarUrl) {
+        const { data, error: updateError } = await supabase.storage
+          .from(`doctors/${session.user.id}`)
+          .update('avatar.png', file, {
+            cacheControl: '3600',
+            upsert: false,
+          });
+        if (updateError) {
+          throw updateError;
+        }
+      } else {
+        let { error: uploadError } = await supabase.storage
+          .from(`doctors/${session.user.id}`)
+          .upload('avatar.png', file);
+        if (uploadError) {
+          throw uploadError;
+        }
       }
-
-      onUpload(filePath);
+      setUpdate((state) => !state);
     } catch (error) {
       alert(error.message);
     } finally {
