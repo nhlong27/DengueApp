@@ -29,16 +29,7 @@ const statusObj = {
 };
 
 export const DashboardTable = (props) => {
-  // const { telemetries } = useContext(ContentContainerContext);
-  // const [isLoading, setLoading] = useState(true);
-  // const getStatus = async () => {
-  //   let { data: DEVICE, error } = await supabase.from('DEVICE').select('Status, D_Id');
-  //   for (let pair of DEVICE) {
-  //     props.setStatusList((prev) => ({ ...prev, [pair.D_Id]: pair.Status }));
-  //   }
-  // };
   const listenStatusUpdate = () => {
-    // setLoading(true);
     const PATIENT = supabase
       .channel('custom-update-channel')
       .on(
@@ -47,26 +38,15 @@ export const DashboardTable = (props) => {
         (payload) => {
           console.log('Change received!', payload);
           props.setIsUpdate((state) => !state);
-          //   props.setStatusList((prev) => ({
-          //     ...prev,
-          //     [payload.new.D_Id]: payload.new.Status,
-          //   }));
         },
       )
       .subscribe();
-    // setLoading(false);
   };
   useEffect(() => {
-    // await getStatus();
     listenStatusUpdate();
   }, []);
   return (
     <>
-      {/* {isLoading ? (
-        <div className="flex items-center justify-center">
-          <InfinitySpin width="300" color="#475569" />
-        </div>
-      ) : ( */}
       <Card
         sx={{
           backgroundColor: '#F7F7FF',
@@ -85,9 +65,6 @@ export const DashboardTable = (props) => {
                 <TableCell>
                   <span className="text-[16px] font-bold">Name</span>
                 </TableCell>
-                {/* <TableCell>
-                <span className="text-[16px] font-bold">Email</span>
-              </TableCell> */}
                 <TableCell>
                   <span className="text-[16px] font-bold">Device</span>
                 </TableCell>
@@ -112,14 +89,12 @@ export const DashboardTable = (props) => {
                   row={row}
                   setInfoOpen={props.setInfoOpen}
                   setIsPatient={props.setIsPatient}
-                  // statusList={props.statusList}
                 />
               ))}
             </TableBody>
           </Table>
         </TableContainer>
       </Card>
-      {/* )} */}
     </>
   );
 };
@@ -131,9 +106,6 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
     ? useAtom(tele[`${row.D_Id}`])
     : useAtom(tele.something);
 
-  // console.log('in Patient');
-  // console.log(currTele);
-
   return (
     <TableRow
       hover
@@ -143,22 +115,6 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
       <TableCell>
         <div className="flex flex-col items-center justify-around">
           <div className="flex w-[100%] items-center justify-start gap-2">
-            {/* <Chip
-              // label={`${statusList[`${row.D_Id}`] ? statusList[`${row.D_Id}`] : 'none'}`}
-              color={`${
-                (statusList[`${row.D_Id}`] === 'Incubation' && '#f6e05e') ||
-                (statusList[`${row.D_Id}`] === 'Febrile' && '#f6ad55') ||
-                (statusList[`${row.D_Id}`] === 'Emergency' && '#fc8181') ||
-                (statusList[`${row.D_Id}`] === 'Recovery' && '#68d391')
-              }
-              }} `}
-              sx={{
-                height: 26,
-                fontSize: '1rem',
-                textTransform: 'capitalize',
-                '& .MuiChip-label': { fontWeight: 500 },
-              }}
-            /> */}
             <span
               className={`h-[1.5rem] w-[1.5rem] rounded-full ring-2 ring-offset-2 ${
                 (row.Status === 'Incubation' && 'bg-yellow-400 ring-yellow-400') ||
@@ -231,7 +187,6 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
           {currTele && currTele.HrtPressure}
         </span>
       </TableCell>
-      {/* <TableCell></TableCell> */}
     </TableRow>
   );
 };

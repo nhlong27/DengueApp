@@ -14,19 +14,8 @@ import { useAtom, atom } from 'jotai';
 import { telemetries, deviceList, facilityList } from './App';
 import Schedules from './components-supabase/contents/schedule/Schedules';
 import Messages from './components-supabase/contents/message/Messages';
-// import { useLocation, useNavigate } from 'react-router-dom';
+import { userSession } from '../Auth';
 
-// export let telemetryTable = {};
-// export const handleTelemetry = (deviceId, temperature, SpO2, HrtPressure, connection) => {
-//   telemetryTable[`${deviceId}`] = {
-//     temperature: temperature,
-//     SpO2: SpO2,
-//     HrtPressure: HrtPressure,
-//     connected: connection,
-//   };
-// };
-
-// export const ContentContainerContext = createContext();
 const now = Date.now();
 const mtd = now - 3600000;
 let loadFacility = {};
@@ -39,11 +28,13 @@ const ContentContainer = (props) => {
   const [tele, setTelemetries] = useAtom(telemetries);
   const [isSocket, setIsSocket] = useState(false);
   const [facilities, setFacilities] = useAtom(facilityList);
+  
+  const [session] = useAtom(userSession)
 
   const handleLoadDevice = async () => {
     try {
       setLoading(true);
-      let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
+      let { data: DEVICE, error } = await supabase.from('DEVICE').select('*').eq('D_Ssn', session.user.id);
 
       console.log('load devices success!');
       await setDevices(() => DEVICE);
@@ -55,7 +46,7 @@ const ContentContainer = (props) => {
   const handleLoadFacility = async () => {
     try {
       loadFacility = {};
-      let { data: ROOM, error } = await supabase.from('ROOM').select('*');
+      let { data: ROOM, error } = await supabase.from('ROOM').select('*').eq('D_Ssn', session.user.id);
       if (error) throw error;
       for (let room of ROOM) {
         loadFacility[`${room.R_Number}`] = { ...room, beds: [], nurses: [] };
@@ -259,7 +250,7 @@ const ContentContainer = (props) => {
       <div className="flex w-[75%] flex-auto flex-col">
         <Routes>
           <Route path="/" element={<PatientContent setIsChart={props.setIsChart} />} />
-          <Route path="/account" element={<Account session={props.session} />} />
+          <Route path="/account" element={<Account />} />
           <Route
             path="/facilities"
             element={

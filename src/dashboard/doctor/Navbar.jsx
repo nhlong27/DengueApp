@@ -10,6 +10,8 @@ import { InfinitySpin } from 'react-loader-spinner';
 import { Link } from 'react-router-dom';
 import { AiOutlineDown } from 'react-icons/ai';
 import Prompt from './components-supabase/components/Prompt';
+import { useAtom } from 'jotai';
+import { userSession } from '../Auth';
 // import {useLocation} from 'react-router-dom'
 
 const Navbar = (props) => {
@@ -19,9 +21,11 @@ const Navbar = (props) => {
   const [isOpen, setDropDown] = useState(false);
   const [title, setTitle] = useState('Dashboard');
 
+  const [session] = useAtom(userSession)
+
   const getProfile = async () => {
     try {
-      const { user } = props.session;
+      const { user } = session;
 
       let { data, error, status } = await supabase
         .from('DOCTOR')

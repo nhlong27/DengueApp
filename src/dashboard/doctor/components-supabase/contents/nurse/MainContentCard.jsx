@@ -115,9 +115,6 @@ export const DashboardTable = (props) => {
                     <span className="p-4 text-[16px] font-bold">Name</span>
                   </TableCell>
                   <TableCell>
-                    <span className="text-[16px] font-bold">Email</span>
-                  </TableCell>
-                  <TableCell>
                     <span className="text-[16px] font-bold">Assigned To</span>
                   </TableCell>
                 </TableRow>
@@ -157,7 +154,6 @@ export const DashboardTable = (props) => {
                         </button>
                       </Box>
                     </TableCell>
-                    <TableCell sx={{ fontSize: '1rem' }}>{row.Email}</TableCell>
                     <TableCell sx={{ py: (theme) => `${theme.spacing(0.5)} !important` }}>
                       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography sx={{ fontWeight: 500, fontSize: '1rem !important' }}>
@@ -253,12 +249,16 @@ const NurseFormContent = (props) => {
       {({ values }) => (
         <Form>
           <div className="flex flex-col items-start justify-start">
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              {`Update this Nurse with id ${props.component.N_Ssn}`}
-            </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              {`Being assigned: ${props.component.Assign} `}
-            </Typography>
+            <div className="mb-4 text-large font-bold tracking-wider text-blue-500">
+              Update nurse
+            </div>
+            <div className="text-[16px] text-blue-500">
+              {`Nurse Id: ${props.component.N_Ssn}`} <br />
+              {`Assigned: ${props.component.Assign}`} <br />
+              <span className="text-red-500">
+                Please note that nurse Id cannot be updated.
+              </span>
+            </div>
             <div className={`mt-6`}>
               <Field
                 name="fname"

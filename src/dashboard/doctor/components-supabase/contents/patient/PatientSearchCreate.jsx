@@ -205,6 +205,13 @@ const FacilityFormContent = (props) => {
               </div>
               <div className="text-[18px] text-blue-500">
                 Please fill in all the necessary information.
+                <br />
+                The patient will use the given{' '}
+                <span className="italic text-red-500">email</span> and{' '}
+                <span className="italic text-red-500">password</span> to log in.
+                <br />
+                First name and last name are also required. All the other information can
+                be filled in by the patient later.
               </div>
               <div className={`mt-6`}>
                 <div className="flex items-center justify-start">
@@ -336,6 +343,7 @@ const FacilityFormContent = (props) => {
                     list={props.optionList.beds}
                     style={{ width: 200, marginRight: 10 }}
                   />
+                  Or assign later.
                 </div>
               </div>
 
@@ -344,12 +352,17 @@ const FacilityFormContent = (props) => {
                   <InfinitySpin width="300" color="#475569" />
                 </div>
               ) : (
-                <button
-                  className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
-                  type="submit"
-                >
-                  Submit
-                </button>
+                <>
+                  <button
+                    className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
+                    type="submit"
+                  >
+                    Submit
+                  </button>
+                  <div className="mt-4 rounded-lg p-2 text-[16px] text-pink-500 ring-2 ring-pink-500">
+                    Activation link will be sent to the email
+                  </div>
+                </>
               )}
             </div>
           </Form>

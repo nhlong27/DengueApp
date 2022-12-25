@@ -283,7 +283,7 @@ const MainContentCard = (
                     e.stopPropagation();
                     setOpen(false);
                   }}
-                  className="absolute -top-[1rem] -right-[1rem] rounded-full bg-white"
+                  className="absolute -top-[1rem] -right-[1rem] rounded-full bg-auto-white"
                 >
                   <AiOutlineCloseCircle size={30} />
                 </button>
@@ -321,63 +321,67 @@ const MainContentCard = (
 
 const DeviceFormContent = (props) => {
   return (
-    <Formik
-      validateOnChange={false}
-      // validationSchema={props.schema}
-      initialValues={{
-        label: props.component.Label,
-        type: props.component.Type,
-      }}
-      onSubmit={(values) => {
-        props.handleUpdate({ ...values });
-      }}
-    >
-      {({ values }) => (
-        <Form>
-          <div className="flex flex-col items-start justify-start">
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              {`Update this device with access token ${props.component.Token}`}
-            </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              {`Please note that access token cannot be updated. Being assigned:${props.component.Assign} `}
-            </Typography>
-            <div className={`mt-6`}>
-              <Field
-                name="label"
-                component={TextFormField}
-                required
-                id="label-required"
-                label={`Device Name`}
-                placeholder={`${props.component.Label}`}
-                helperText={`Please update the name of your device`}
-              />
-              <Field
-                name="type"
-                component={TextFormField}
-                required
-                id="type-required"
-                label={`Device Type`}
-                placeholder={`${props.component.Type}`}
-                helperText={`Please update the type of your device`}
-              />
-            </div>
-            {/* 
+    <div className="h-[100%] w-[100%] bg-auto-white">
+      <Formik
+        validateOnChange={false}
+        // validationSchema={props.schema}
+        initialValues={{
+          label: props.component.Label,
+          type: props.component.Type,
+        }}
+        onSubmit={(values) => {
+          props.handleUpdate({ ...values });
+        }}
+      >
+        {({ values }) => (
+          <Form>
+            <div className="flex flex-col items-start justify-start">
+              <div className="mb-4 text-large font-bold tracking-wider text-blue-500">
+                Update this device.
+              </div>
+              <div className="text-[16px] text-blue-500">
+                {`Assigned to: ${props.component.Assign}`} <br />
+                {`Access token: ${props.component.Token}`} <br />
+                <span className='text-red-500'>Please note that access token cannot be updated.</span>
+              </div>
+              <div className={`mt-6`}>
+                <Field
+                  name="label"
+                  component={TextFormField}
+                  required
+                  id="label-required"
+                  label={`Device Name`}
+                  placeholder={`${props.component.Label}`}
+                  helperText={`Please update the name of your device`}
+                />
+                <Field
+                  name="type"
+                  component={TextFormField}
+                  required
+                  id="type-required"
+                  label={`Device Type`}
+                  placeholder={`${props.component.Type}`}
+                  helperText={`Please update the type of your device`}
+                />
+              </div>
+              {/* 
             {props.loading ? (
               <div className="absolute bottom-[2rem] right-[3rem]">
                 <InfinitySpin width="300" color="#475569" />
               </div>
             ) : ( */}
-            <button
-              className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
-              type="submit"
-            >
-              Update
-            </button>
-            {/* )} */}
-          </div>
-        </Form>
-      )}
-    </Formik>
+              <button
+                className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
+                type="submit"
+              >
+                Update
+              </button>
+              {/* )} */}
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
 };
 

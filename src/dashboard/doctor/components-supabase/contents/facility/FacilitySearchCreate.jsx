@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { Field, Form, Formik, setNestedObjectValues } from 'formik';
 import { Typography } from '@mui/material';
 import TransitionsModal from '@/shared/utilities/Modal';
-import SelectFormField from '@/shared/utilities/form/SelectFormField';
+import BasicSelect from '@/shared/utilities/form/BasicSelect';
 import TextFormField from '@/shared/utilities/form/TextFormField';
 import SearchBar from '../../components/SearchBar';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
@@ -11,49 +11,41 @@ import { InfinitySpin } from 'react-loader-spinner';
 // import { AppContext } from '@/dashboard/doctor/App';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { BiRefresh } from 'react-icons/bi';
+import { useAtom } from 'jotai';
+import { userSession } from '@/dashboard/Auth';
+import { facilityList } from '@/dashboard/doctor/App';
 
 var tabSelectedInput = {};
 const facility_schema = yup.object({
-  id: yup.string().min(1).max(30),
   number: yup.string().min(1).max(30),
 });
 
 const FacilitySearchCreate = (props) => {
   const [loading, setLoading] = useState(false);
-  const [roomLoading, setRoomLoading] = useState(false);
-  const [rooms, setRooms] = useState([]);
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
+
+  const [facilities] = useAtom(facilityList)
+  const [session] = useAtom(userSession)
+
   const handleOpen1 = () => setOpen1(true);
   const handleOpen2 = () => setOpen2(true);
-  const handleRoomLoad = async () => {
-    try {
-      setRoomLoading(true);
-      let { data: ROOM, error } = await supabase.from('ROOM').select('*');
-      if (error) throw error;
-      setRooms(ROOM);
-      console.log('get rooms for create bed success!');
-    } catch (error) {
-      console.log(error.error_description || error.message);
-    } finally {
-      setRoomLoading(false);
-    }
-  };
+
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
-      // let now = Date.now();
-      // await supabase.from('FACILITY').insert([{ Fac_Number: now }]);
-      if (values.id !== '') {
+
+      if (values.room !== '') {
         await supabase
           .from('BED')
-          .insert([{ B_Number: values.number, R_Number: values.id }]);
+          .insert([{ B_Number: values.number, R_Number: values.room, D_Ssn: session.user.id }]);
       } else {
         const { data, error } = await supabase
           .from('ROOM')
-          .insert([{ R_Number: values.number }]);
+          .insert([{ R_Number: values.number, D_Ssn: session.user.id }]);
       }
-      console.log('add success!');
+
+      console.log('add room/bed success!');
       if (error) throw error;
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -96,17 +88,12 @@ const FacilitySearchCreate = (props) => {
           className="duration-600 w-[100%] rounded-[3rem]  text-[18px] tracking-wider text-white transition-all "
           onClick={() => {
             handleOpen2();
-            handleRoomLoad();
           }}
         >
           Create Bed
         </button>
 
-        {roomLoading ? (
-          <div className="fixed flex h-screen w-screen items-center justify-center">
-            <InfinitySpin width="500" color="#475569" />
-          </div>
-        ) : (
+
           <TransitionsModal open={open2}>
             <button
               onClick={() => setOpen2(false)}
@@ -115,13 +102,12 @@ const FacilitySearchCreate = (props) => {
               <AiOutlineCloseCircle size={30} />
             </button>
             <FacilityFormContent
-              optionList={rooms}
+              optionList={Object.keys(facilities)}
               schema={facility_schema}
               handleSubmit={handleSubmit}
               loading={loading}
             />
           </TransitionsModal>
-        )}
       </div>
       <button
         className="duration-600 ml-6 flex h-[80%] max-w-[10%] items-center justify-center rounded-[3rem] bg-gray-300 p-3 text-[18px] tracking-wider text-white ring-2 ring-black transition-all hover:bg-gray-400 hover:text-[20px] hover:tracking-[1px] focus:bg-gray-400"
@@ -134,47 +120,51 @@ const FacilitySearchCreate = (props) => {
 };
 
 const FacilityFormContent = (props) => {
+  const [room, setRoom] = useState('')
   return (
     <Formik
       validateOnChange={false}
       validationSchema={props.schema}
       initialValues={{
         number: '',
-        id: '',
       }}
       onSubmit={(values) => {
-        props.handleSubmit({ ...values });
+        props.handleSubmit({ ...values, room: room });
       }}
     >
       {({ values }) => (
         <Form>
           <div>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              {props.optionList ? 'Add a bed' : 'Add a room'}
-            </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              Please add the number of the
-              {props.optionList ? ' bed' : ' room'}
-            </Typography>
+            <div className="mb-4 text-large font-bold tracking-wider text-blue-500">
+              Add a new {props.optionList ? 'bed' : 'room'}
+            </div>
+            <div className="text-[18px] text-blue-500">
+              Please fill in all the necessary information. <br />
+              <div className="mt-4 text-[16px]">
+                Noted: Health facility's (<span className="italic text-red-500">bed</span>{' '}
+                or <span className="italic text-red-500">room</span>) label should follow
+                the HS code of Medical Equipment in Vietnam, stipulated under Circular
+                14/2018/TT-BYT dated on 15 May 2018 by Vietnam Ministry of health.
+              </div>
+            </div>
+
             {props.optionList ? (
-              <Field
-                options={props.optionList}
-                name="id"
-                component={SelectFormField}
-                id="standard-select"
-                label="Select a room"
-                defaultValue=""
-                variant="standard"
-                required
+              <BasicSelect
+                input={room}
+                setInput={setRoom}
+                name={'Room'}
+                list={props.optionList}
+                style={{ width: 200 }}
               />
             ) : null}
-            <div className="mt-6">
+            <div className="mt-2">
               <Field
                 name="number"
                 component={TextFormField}
                 required
                 id="number-required"
-                label={`${props.optionList ? 'Bed number' : 'Room number'}`}
+                label={`${props.optionList ? 'Bed Code' : 'Room Code'}`}
+                variant='filled'
               />
             </div>
             {props.loading ? (
@@ -182,12 +172,20 @@ const FacilityFormContent = (props) => {
                 <InfinitySpin width="300" color="#475569" />
               </div>
             ) : (
-              <button
-                className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
-                type="submit"
-              >
-                Submit
-              </button>
+              <>
+                <div className="mt-4 rounded-lg p-2 text-[16px] text-gray-500 ring-2 ring-gray-500">
+                  Bed must be assigned to one and only one patient
+                </div>
+                <div className="mt-4 rounded-lg p-2 text-[16px] text-gray-500 ring-2 ring-gray-500">
+                  Room must be assigned to one or many nurse
+                </div>
+                <button
+                  className="absolute bottom-[3rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
+                  type="submit"
+                >
+                  Submit
+                </button>
+              </>
             )}
           </div>
         </Form>

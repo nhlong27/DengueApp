@@ -3,6 +3,9 @@ import { DashboardTable } from './MainContentCard';
 import { InfinitySpin } from 'react-loader-spinner';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { AiOutlineLeft } from 'react-icons/ai';
+import { useAtom } from 'jotai';
+import { userSession } from '@/dashboard/Auth';
+import NurseAvatar from './NurseAvatar';
 
 const MainContent = (props) => {
   const [content, setContent] = useState([]);
@@ -10,6 +13,8 @@ const MainContent = (props) => {
   const [isOpen, setOpen] = useState(false);
   const [isNurse, setIsNurse] = useState({});
   const [isUpdate, setIsUpdate] = useState(false);
+
+  const [session] = useAtom(userSession)
 
   const listenUpdate = async () => {
     const NURSE = supabase
@@ -28,7 +33,7 @@ const MainContent = (props) => {
   const handleLoad = async () => {
     try {
       setLoading(true);
-      let { data: NURSE, error } = await supabase.from('NURSE').select('*');
+      let { data: NURSE, error } = await supabase.from('NURSE').select('*').eq('D_Ssn', session.user.id);
       if (error) throw error;
       console.log('load nurses success!');
       setContent(NURSE);
@@ -66,10 +71,10 @@ const MainContent = (props) => {
         />
 
         <div
-          className={` ${style1} absolute top-0 right-0 min-h-[100%] w-[100%]  rounded-l-lg bg-white shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
+          className={` ${style1} absolute top-0 right-0 min-h-[100%] w-[100%]  rounded-l-lg bg-gray-200 shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
         >
           <div className=" flex w-[100%] flex-col items-center justify-start gap-4 p-4">
-            <div className="flex w-[100%] flex-row items-center justify-start bg-white text-large font-extrabold text-auto-black shadow-sm">
+            <div className="flex w-[100%] flex-row items-center justify-start bg-auto-white text-large font-extrabold text-auto-black shadow-sm">
               <button
                 onClick={() => {
                   setOpen(false);
@@ -82,27 +87,26 @@ const MainContent = (props) => {
             </div>
             {isNurse && (
               <div className="grid w-[100%] grid-cols-4 gap-8">
-                <div className="col-span-1  grid h-[20rem] min-w-[15rem] grid-cols-2 grid-rows-5 gap-4 divide-y-2 divide-gray-400 rounded bg-white p-4 ring-2 ring-gray-300">
-                  <div className="col-span-2 row-span-4 flex flex-col items-center justify-between">
-                    <div className="row-span-3 mt-4 h-[70%] w-[80%] rounded-full bg-gray-400">
-                      Avatar
-                    </div>
-                    <div className="flex w-[30%] items-center justify-center">
-                      <div className="text-[22px] font-semibold tracking-widest text-black"></div>
+                <div className="col-span-1  grid h-[20rem] min-w-[15rem] grid-cols-2 grid-rows-5 gap-4 divide-y-2 divide-gray-400 rounded bg-auto-white p-4 ring-2 ring-gray-300">
+                  <div className="relative col-span-2 row-span-4 flex flex-col items-center justify-between gap-2">
+                    <NurseAvatar isNurse={isNurse} />
+                    <div className="flex w-[100%] items-center justify-between">
+                      <div
+                        className={`h-[1rem] w-[1rem] rounded-full ring-2 ring-offset-2`}
+                      ></div>
                       <div className="text-[22px] font-semibold tracking-widest text-black">
                         {isNurse.Fname}
                       </div>
-                      <div className="text-[22px] font-semibold tracking-widest text-black">
+                      <div className="ml-2 text-[22px] font-semibold tracking-widest text-black">
                         {isNurse.Lname}
                       </div>
                     </div>
+                    <div className="w-[100%]">
+                      <span className="font-bold text-blue-500">Email</span>:{' '}
+                      {isNurse.Email}
+                    </div>
                   </div>
-                  <button className="col-span-1 rounded bg-cyan-100 bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200 focus:bg-cyan-200 focus:text-auto-black ">
-                    Update
-                  </button>
-                  <button className="col-span-1 rounded bg-cyan-100 bg-opacity-5 p-4 text-base font-bold text-gray-400 transition-all duration-500 hover:bg-opacity-100 hover:text-gray-600  hover:ring-2 hover:ring-gray-200">
-                    Delete
-                  </button>
+                  
                 </div>
                 <div className="col-span-3 rounded ring-2 ring-gray-300"></div>
               </div>

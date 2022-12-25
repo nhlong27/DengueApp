@@ -44,7 +44,7 @@ const NurseSearchCreate = (props) => {
       });
 
       console.log('activation mail sent!');
-      const {error} = await supabase.from('NURSE').insert([
+      const { error } = await supabase.from('NURSE').insert([
         {
           N_Ssn: USER.user.id,
           Fname: values.fname,
@@ -86,7 +86,7 @@ const NurseSearchCreate = (props) => {
         >
           Create
         </button>
-        <TransitionsModal open={open}>
+        <TransitionsModal open={open} style={{ width: 700, height: 700 }}>
           <button
             onClick={() => setOpen(false)}
             className="absolute -top-[1rem] -right-[1rem] rounded-full bg-auto-white"
@@ -135,11 +135,17 @@ const FacilityFormContent = (props) => {
             </div>
             <div className="text-[18px] text-blue-500">
               Please fill in all the necessary information.
+              <br />
+              The nurse will use the given{' '}
+              <span className="italic text-red-500">email</span> and{' '}
+              <span className="italic text-red-500">password</span> to log in.
+              <br />
+              First name and last name are also required.
             </div>
             <div className={`mt-6`}>
               <div className="flex items-center justify-start">
                 <Field
-                  style={{ width: 200, marginRight: 20 }}
+                  style={{ width: 300, marginRight: 20 }}
                   name="fname"
                   component={TextFormField}
                   required
@@ -151,7 +157,7 @@ const FacilityFormContent = (props) => {
                 />
                 <Field
                   variant="filled"
-                  style={{ width: 200 }}
+                  style={{ width: 300 }}
                   name="lname"
                   component={TextFormField}
                   required
@@ -170,7 +176,7 @@ const FacilityFormContent = (props) => {
                   label={`Email`}
                   placeholder={`nurse@mail.com`}
                   helperText={`Please type the email`}
-                  style={{ width: 200, marginRight: 20 }}
+                  style={{ width: 300, marginRight: 20 }}
                 />
                 <Field
                   name="password"
@@ -178,7 +184,7 @@ const FacilityFormContent = (props) => {
                   id="password"
                   label={`Password`}
                   helperText={`The default password is "password" if not specified.`}
-                  style={{ width: 200 }}
+                  style={{ width: 300 }}
                 />
               </div>
               <div className="text-[18px] text-blue-500">Assign a room/rooms</div>
@@ -187,6 +193,7 @@ const FacilityFormContent = (props) => {
                 setPersonName={setRooms}
                 names={props.optionList}
               />
+              Or assign later.
             </div>
 
             {props.loading ? (
@@ -194,12 +201,17 @@ const FacilityFormContent = (props) => {
                 <InfinitySpin width="300" color="#475569" />
               </div>
             ) : (
-              <button
-                className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
-                type="submit"
-              >
-                Submit
-              </button>
+              <>
+                <button
+                  className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
+                  type="submit"
+                >
+                  Submit
+                </button>
+                <div className="text-[16px] text-ping-500 ring-2 ring-pink-500 rounded-lg p-2 mt-12">
+                  Activation link will be sent to the email
+                </div>
+              </>
             )}
           </div>
         </Form>

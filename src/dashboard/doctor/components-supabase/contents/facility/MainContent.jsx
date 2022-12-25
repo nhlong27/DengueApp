@@ -9,7 +9,7 @@ import { useAtom } from 'jotai';
 const MainContent = (props) => {
   const [isOpen, setOpen] = useState(false);
   const [isRoom, setIsRoom] = useState({});
-  const [content] = useAtom(facilityList);
+  const [facilities] = useAtom(facilityList);
 
   let style1 = '';
   let style2 = '';
@@ -20,26 +20,32 @@ const MainContent = (props) => {
     style1 = '-mr-[32rem] opacity-0';
     style2 = 'w-[100%]';
   }
-  // if (!loading) {
   return (
     <>
       <div
-        className={`flex min-h-[100%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-2 transition-all duration-700`}
+        className={`flex min-h-[100%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-4 transition-all duration-700`}
       >
-        {Object.values(content).map((room, index) => {
-          return (
-            <div
-              className="w-[100%] overflow-hidden rounded-2xl ring-2 ring-black"
-              key={index}
-            >
-              <StatisticsCard
-                component={room}
-                setIsRoom={setIsRoom}
-                setIsUpdate={props.setIsUpdate}
-              />
+        <div className="w-[100%] rounded-2xl bg-auto-white p-4">
+          {Object.keys(facilities).length === 0 && (
+            <div className="flex w-[100%] items-center justify-center font-bold tracking-[5px] text-gray-500">
+              NO FACILITY AVAILABLE
             </div>
-          );
-        })}
+          )}
+          {Object.values(facilities).map((room, index) => {
+            return (
+              <div
+                className="w-[100%] overflow-hidden rounded-2xl ring-2 ring-black"
+                key={index}
+              >
+                <StatisticsCard
+                  component={room}
+                  setIsRoom={setIsRoom}
+                  setIsUpdate={props.setIsUpdate}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </>
   );

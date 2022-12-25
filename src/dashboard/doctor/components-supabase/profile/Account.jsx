@@ -2,14 +2,19 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { InfinitySpin } from 'react-loader-spinner';
 import Avatar from './Avatar';
+import { useAtom } from 'jotai';
+import { userSession } from '@/dashboard/Auth';
 
-const Account = ({ session }) => {
+const Account = (props) => {
+  const [session] = useAtom(userSession);
+
   const [loading, setLoading] = useState(true);
   const [password, setPassword] = useState('Reset password');
   const [email, setEmail] = useState(session.user.email);
   const [username, setUsername] = useState(null);
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
+
   // const [avatar_url, setAvatarUrl] = useState('avatar.png');
 
   useEffect(() => {
@@ -91,16 +96,7 @@ const Account = ({ session }) => {
           <InfinitySpin width="100" color="#475569" />
         ) : (
           <>
-            <Avatar
-              // url={avatar_url}
-              size={150}
-              // onUpload={async (url) => {
-              //   await setAvatarUrl(() => url);
-              // await updateAvatar(url);
-
-              // }}
-              session={session}
-            />
+            <Avatar />
             <form
               className="w-[100%] divide-y-2 divide-gray-400"
               onSubmit={updateProfile}

@@ -22,6 +22,8 @@ import { deviceList, telemetries, facilityList } from '@/dashboard/doctor/App';
 import { AiOutlineAreaChart } from 'react-icons/ai';
 import { Field, Form, Formik } from 'formik';
 import TextFormField from '@/shared/utilities/form/TextFormField';
+import { userSession } from '@/dashboard/Auth';
+import PatientAvatar from './PatientAvatar';
 
 const MainContent = (props) => {
   const [isUpdate, setIsUpdate] = useState(false);
@@ -31,9 +33,10 @@ const MainContent = (props) => {
   const [isPatient, setIsPatient] = useState(null);
   const [devices] = useAtom(deviceList);
   const [facilities] = useAtom(facilityList);
-  const [beds, setBeds] = useState(null);
   const [openUpdate, setOpenUpdate] = useState(false);
   // const [statusList, setStatusList] = useState({});
+
+  const [session] = useAtom(userSession)
 
   const listenUpdate = async () => {
     const PATIENT = supabase
@@ -52,7 +55,7 @@ const MainContent = (props) => {
   const handleLoad = async (type = 'all') => {
     try {
       setLoading(true);
-      let { data: PATIENT, error } = await supabase.from('PATIENT').select('*');
+      let { data: PATIENT, error } = await supabase.from('PATIENT').select('*').eq('D_Ssn', session.user.id);
       if (error) throw error;
       let patients = {};
       patients.emergency = PATIENT.filter((patient) => patient.Status === 'Emergency');
@@ -105,8 +108,6 @@ const MainContent = (props) => {
 
   const handleUpdate = async (values, patient) => {
     try {
-      console.log(values);
-      console.log(patient);
       setLoading(true);
       const { error } = await supabase
         .from('PATIENT')
@@ -121,7 +122,7 @@ const MainContent = (props) => {
           Street: values.street,
         })
         .eq('P_Ssn', patient.P_Ssn);
-
+      if (error) throw error;
       console.log('update patient success!');
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -164,8 +165,6 @@ const MainContent = (props) => {
           open={isOpen}
           setIsPatient={setIsPatient}
           setIsUpdate={setIsUpdate}
-          // statusList={statusList}
-          // setStatusList={setStatusList}
         />
         <div
           className={` ${style1} absolute top-0 right-0 min-h-[100%] w-[100%]  rounded-l-lg bg-gray-200 shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
@@ -185,19 +184,8 @@ const MainContent = (props) => {
             {isPatient && (
               <div className="grid w-[100%] grid-cols-4 gap-8">
                 <div className="col-span-1  grid min-h-[20rem] min-w-[15rem] grid-cols-2 grid-rows-5 gap-4 rounded bg-auto-white p-4 ring-2 ring-gray-300">
-                  <div className="col-span-2 row-span-4 flex flex-col items-center justify-between gap-2">
-                    <div
-                      className={`row-span-3 mt-4 h-[10rem] w-[80%] rounded-full bg-gray-400 ring-4 ring-offset-2 ${
-                        (isPatient.Status === 'Incubation' && 'ring-yellow-400') ||
-                        (isPatient.Status === 'Febrile' && 'ring-orange-400') ||
-                        (isPatient.Status === 'Emergency' && 'ring-red-400') ||
-                        (isPatient.Status === 'Recovery' && 'ring-green-400') ||
-                        (isPatient.Status === 'None' && 'ring-gray-400') ||
-                        'ring-blue-400'
-                      }`}
-                    >
-                      Avatar
-                    </div>
+                  <div className="relative col-span-2 row-span-4 flex flex-col items-center justify-between gap-2">
+                    <PatientAvatar isPatient={isPatient}/>
                     <div className="flex w-[100%] items-center justify-between">
                       <div
                         className={`h-[1rem] w-[1rem] rounded-full ring-2 ring-offset-2 ${
@@ -220,7 +208,7 @@ const MainContent = (props) => {
                         {isPatient.Lname}
                       </div>
                     </div>
-                    <div className="w-[100%]">
+                    <div className="w-[100%] overflow-hidden">
                       <span className="font-bold text-blue-500">Email</span>:{' '}
                       {isPatient.Email}
                     </div>

@@ -71,17 +71,17 @@ https://hptoancau.com/en/hs-code-medical-equipment-vietnam/
 
 ## Basic (Auth, Doctor View, CRUD)
 
-- Home page (whole, smoothscroll)
-- Login page (sign up new user, mail validate, log in) _ DrLong, long.nguyen****@hcmut.edu.vn 
-- Account page (upload avatar, update username, guide through each section: dashboard, nurses, facilities, devices)
+<!-- - Home page (whole, smoothscroll) -->
+<!-- - Login page (sign up new user, mail validate, log in) _ DrLong, nhlong2706@hcmut.edu.vn  -->
+<!-- - Account page (upload avatar, update username, guide through each section: dashboard, nurses, facilities, devices) -->
 
-- CRUD (add new patient, add device, add room & bed, assign device and bed to patient) Dat Do, iamfal****@gmail.com, D_demo, accessToken:___ , R_demo, B_demo
+<!-- - CRUD (add new patient, add device, add room & bed, assign device and bed to patient) Dat Do, iamfal****@gmail.com, D_demo, accessToken:___ , R_demo, B_demo -->
 
 ## Core (Virtual Device, Real Device Stream, Patient View, Catergories, Chart, Calendar View - Queries)
 
 - Real Device stream (Charts, Settings -> Alarm Configuration) 10s
 
-- Categories (<existing account>, Virtual Device, script) nhlong****@gmail.com, 5 (none/normal, incubation, febrile, emergency, recovery)
+- Categories (<existing account>, Virtual Device, script, search) nhlong****@gmail.com, 5 (none/normal, incubation, febrile, emergency, recovery)
 
 - Queries (Calendar View)
  

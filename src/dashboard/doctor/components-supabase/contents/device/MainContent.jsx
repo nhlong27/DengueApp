@@ -47,25 +47,31 @@ const MainContent = (props) => {
     style2 = 'w-[100%]';
   }
 
-  // if (!loading) {
   return (
     <>
       <div
-        className={`${style2} flex min-h-[100%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-2 transition-all duration-700`}
+        className={`${style2} flex min-h-[100%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-4 transition-all duration-700`}
       >
-        {devices.map((device, index) => {
-          return (
-            <MainContentCard
-              setInfoOpen={setOpen}
-              infoOpen={isOpen}
-              key={index}
-              component={device}
-              setIsDevice={setIsDevice}
-              status={status}
-              setIsUpdate={props.setIsUpdate}
-            />
-          );
-        })}
+        <div className="w-[100%] rounded-2xl bg-auto-white p-4">
+          {devices.length === 0 && (
+            <div className="flex w-[100%] items-center justify-center font-bold tracking-[5px] text-gray-500">
+              NO DEVICE AVAILABLE
+            </div>
+          )}
+          {devices.map((device, index) => {
+            return (
+              <MainContentCard
+                setInfoOpen={setOpen}
+                infoOpen={isOpen}
+                key={index}
+                component={device}
+                setIsDevice={setIsDevice}
+                status={status}
+                setIsUpdate={props.setIsUpdate}
+              />
+            );
+          })}
+        </div>
       </div>
 
       <div
@@ -80,12 +86,17 @@ const MainContent = (props) => {
           >
             Close
           </button>
-          <div className="flex w-[100%] flex-row items-center justify-between bg-auto-white text-large font-extrabold text-auto-black shadow-sm">
+          <div className="flex h-[100%] w-[100%] flex-row items-center justify-between bg-auto-white text-large font-extrabold text-auto-black shadow-sm">
             Device Details
           </div>
           {isDevice && (
-            <>
-              <div className="flex w-[100%] flex-row items-center justify-between rounded bg-auto-white p-2 shadow-lg shadow-gray-200 ring-2 ring-gray-200 hover:bg-white hover:ring-2 hover:ring-gray-300">
+            <div className="flex w-[100%] flex-col items-center justify-start">
+              <div className="flex w-[100%] flex-row items-center justify-between rounded bg-auto-white p-2 shadow-lg shadow-gray-200 border-x-2 border-t-2 border-gray-200">
+                <div className="text-[14px] tracking-[2px] font-bold text-gray-500">LABEL</div>
+                <div className="text-[14px] tracking-[2px] font-bold text-gray-500">TYPE</div>
+                <div className="text-[14px] tracking-[2px] font-bold text-gray-500">ASSIGN</div>
+              </div>
+              <div className="flex w-[100%] flex-row items-center justify-between rounded bg-auto-white p-2 shadow-lg shadow-gray-200 border-x-2 border-b-2 border-gray-200">
                 <div className="text-[18px] font-bold tracking-wider">
                   {isDevice.Label}
                 </div>
@@ -97,8 +108,8 @@ const MainContent = (props) => {
                   <div className="text-green-500">Assigned</div>
                 )}
               </div>
-              <div className="text-blue-600">Access Token: {isDevice.Token}</div>
-            </>
+              <div className="text-gray-500 ring-2 ring-gray-500 p-4 rounded-lg mt-8">Access Token: {isDevice.Token}</div>
+            </div>
           )}
         </div>
       </div>

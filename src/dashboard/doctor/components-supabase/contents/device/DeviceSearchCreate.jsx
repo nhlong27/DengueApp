@@ -64,14 +64,14 @@ const DeviceSearchCreate = (props) => {
         await supabase.from('DEVICE').insert([
           {
             D_Id: device.id.id,
-            D_Ssn: session.user.id,
             Label: values.label,
             Type: values.type,
             Token: values.token,
+            D_Ssn: session.user.id,
           },
         ]);
       }
-      if (error) throw error;
+
       console.log('add device success!');
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -134,12 +134,14 @@ const FacilityFormContent = (props) => {
       {({ values }) => (
         <Form>
           <div className="flex flex-col items-start justify-start">
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              Add a device
-            </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              Please add a label and the type of the device.
-            </Typography>
+            <div className="mb-4 text-large font-bold tracking-wider text-blue-500">
+              Add a new device
+            </div>
+            <div className="text-[18px] text-blue-500">
+              Please fill in all the necessary information. <br />
+              The <span className="italic text-red-500">access token</span> must be the
+              same with a real device's
+            </div>
             <div className={`mt-6`}>
               <Field
                 name="label"
@@ -173,12 +175,17 @@ const FacilityFormContent = (props) => {
                 <InfinitySpin width="300" color="#475569" />
               </div>
             ) : (
-              <button
-                className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
-                type="submit"
-              >
-                Submit
-              </button>
+              <>
+                <button
+                  className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
+                  type="submit"
+                >
+                  Submit
+                </button>
+                <div className="mt-4 rounded-lg p-2 text-[16px] text-gray-500 ring-2 ring-gray-500">
+                  You can also create virtual devices
+                </div>
+              </>
             )}
           </div>
         </Form>

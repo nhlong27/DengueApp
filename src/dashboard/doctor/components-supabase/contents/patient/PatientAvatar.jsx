@@ -4,7 +4,7 @@ import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { useAtom } from 'jotai';
 import { userSession } from '@/dashboard/Auth';
 
-export default function Avatar(props) {
+const PatientAvatar = ({ isPatient }) => {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [update, setUpdate] = useState(false);
@@ -18,7 +18,7 @@ export default function Avatar(props) {
   const downloadImage = async (path) => {
     try {
       const { data, error } = await supabase.storage
-        .from(`doctors/${session.user.id}`)
+        .from(`doctors/${session.user.id}/patients/${isPatient.P_Ssn}`)
         .download(path);
       if (error) {
         throw error;
@@ -46,8 +46,8 @@ export default function Avatar(props) {
       // const filePath = `${fileName}`;
       if (avatarUrl) {
         const { data, error: updateError } = await supabase.storage
-          .from(`doctors/${session.user.id}`)
-          .update('avatar.png', file, {
+          .from(`doctors/${session.user.id}/patients/${isPatient.P_Ssn}`)
+          .update(`avatar.png`, file, {
             cacheControl: '3600',
             upsert: false,
           });
@@ -56,8 +56,8 @@ export default function Avatar(props) {
         }
       } else {
         let { error: uploadError } = await supabase.storage
-          .from(`doctors/${session.user.id}`)
-          .upload('avatar.png', file);
+          .from(`doctors/${session.user.id}/patients/${isPatient.P_Ssn}`)
+          .upload(`avatar.png`, file);
         if (uploadError) {
           throw uploadError;
         }
@@ -70,31 +70,38 @@ export default function Avatar(props) {
     }
   };
   return (
-    <div className="mb-4 flex items-end justify-start">
+    <>
+      {uploading ? (
+        <InfinitySpin width="100" color="#475569" />
+      ) : (
+        <div className="flex flex-col items-center justify-start text-[14px] absolute top-0 w-[45%] left-0">
+          {/* <label className="text-blue-600" htmlFor="single">
+            Upload an avatar
+          </label> */}
+          <input
+            className="bg-auto-white ring-2 ring-gray-300 hover:ring-black overflow-hidden w-[100%] rounded-xl h-[1.5rem]"
+            type="file"
+            accept="image/*"
+            onChange={uploadAvatar}
+            disabled={uploading}
+          />
+        </div>
+      )}
       <img
-        className="ring-2 ring-black"
+        className={`row-span-3 mt-4 h-[10rem] w-[80%] rounded-full bg-gray-400 ring-4 ring-offset-2 ${
+          (isPatient.Status === 'Incubation' && 'ring-yellow-400') ||
+          (isPatient.Status === 'Febrile' && 'ring-orange-400') ||
+          (isPatient.Status === 'Emergency' && 'ring-red-400') ||
+          (isPatient.Status === 'Recovery' && 'ring-green-400') ||
+          (isPatient.Status === 'None' && 'ring-gray-400') ||
+          'ring-blue-400'
+        }`}
         src={avatarUrl ? avatarUrl : `https://place-hold.it/150x150`}
         alt={avatarUrl ? 'Avatar' : 'No image'}
         style={{ height: 150, width: 150 }}
       />
-      {uploading ? (
-        <InfinitySpin width="100" color="#475569" />
-      ) : (
-        <div className="ml-8">
-          <label className="text-blue-600" htmlFor="single">
-            Upload an avatar
-          </label>
-          <div>
-            <input
-              type="file"
-              id="single"
-              accept="image/*"
-              onChange={uploadAvatar}
-              disabled={uploading}
-            />
-          </div>
-        </div>
-      )}
-    </div>
+    </>
   );
-}
+};
+
+export default PatientAvatar;

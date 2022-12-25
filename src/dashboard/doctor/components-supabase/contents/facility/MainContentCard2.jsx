@@ -89,8 +89,8 @@ export const StatisticsCard = (props) => {
     <>
       <Card sx={{ backgroundColor: '#F7F7FF', fontSize: 25 }}>
         <div className="flex items-start justify-start p-4">
-          <div className="z-20 rounded-lg bg-auto-white px-2 py-4 ring-2 ring-black">
-            <span className="text-blue-600">Room Name:</span> {props.component.R_Number}
+          <div className="z-20 rounded-lg bg-auto-white px-2 py-4 ring-2 ring-gray-400">
+            <span className="text-blue-600">Room Code:</span> {props.component.R_Number}
           </div>
           <button
             onClick={() => {
@@ -107,11 +107,11 @@ export const StatisticsCard = (props) => {
           {isRoomContainer ? null : (
             <>
               <div className="ml-16 flex gap-8">
-                <div className=" rounded-t-lg bg-auto-white py-2 pl-4 pr-2 ring-2 ring-black">
+                <div className=" rounded-t-lg bg-auto-white py-2 pl-4 pr-2 ring-2 ring-gray-400">
                   <span className="text-blue-600">Beds:</span>{' '}
                   {props.component.beds.length}
                 </div>
-                <div className=" rounded-b-lg bg-auto-white py-2 pl-4 pr-2 ring-2 ring-black">
+                <div className=" rounded-b-lg bg-auto-white py-2 pl-4 pr-2 ring-2 ring-gray-400">
                   <span className="text-blue-600">Nurse:</span>{' '}
                   {props.component.nurses.length}
                 </div>
@@ -168,7 +168,7 @@ export const DepositWithdraw = (props) => {
         width: 1000,
         // border: 1,
         backgroundColor: '#F7F7FF',
-        border: '2px solid black',
+        border: '2px solid gray',
       }}
     >
       <Box sx={{ width: '100%' }}>
