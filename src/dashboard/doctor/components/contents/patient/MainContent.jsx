@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react';
 import MainContentCard from './MainContentCard';
 import { db_doctor } from '@/dashboard/doctor/App';
-
 
 const MainContent = () => {
   const [avai, setAvai] = useState(false);
@@ -78,5 +77,4 @@ const MainContent = () => {
   }
 };
 
-
-export default MainContent
+export default MainContent;

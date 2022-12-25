@@ -26,7 +26,7 @@ export const addOrUpdatePatient = async (client, params) => {
   //   const customer = await client.createUpdateCustomer(params);
   //   return customer;
   // }
-  db_doctor.patientList = {}
+  db_doctor.patientList = {};
   let randomObj = {
     title: params.title + '_ptnt',
     country: params.country,

@@ -6,7 +6,7 @@ import SelectFormField from '@/shared/utilities/form/SelectFormField';
 import TextFormField from '@/shared/utilities/form/TextFormField';
 import { client } from '@/shared/api/initClient_tenant';
 import * as yup from 'yup';
-import SearchBar from '../../SearchBar';
+import SearchBar from '../../components/SearchBar';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 // import { AppContext } from '@/dashboard/doctor/App';

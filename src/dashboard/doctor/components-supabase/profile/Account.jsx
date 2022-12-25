@@ -59,7 +59,6 @@ const Account = ({ session }) => {
   //    }
   // }
   const updateProfile = async () => {
-
     try {
       setLoading(true);
       const { user } = session;
@@ -87,7 +86,7 @@ const Account = ({ session }) => {
 
   return (
     <div className="m-8 min-h-[92%] rounded-lg bg-gray-300 px-4 py-4">
-      <div className="flex w-auto flex-col items-start justify-start rounded-lg bg-auto-white pt-8 px-8 shadow-lg ring-2 ring-black">
+      <div className="flex w-auto flex-col items-start justify-start rounded-lg bg-auto-white px-8 pt-8 shadow-lg ring-2 ring-black">
         {loading ? (
           <InfinitySpin width="100" color="#475569" />
         ) : (
@@ -97,8 +96,8 @@ const Account = ({ session }) => {
               size={150}
               // onUpload={async (url) => {
               //   await setAvatarUrl(() => url);
-                // await updateAvatar(url);
-                
+              // await updateAvatar(url);
+
               // }}
               session={session}
             />

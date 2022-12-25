@@ -36,8 +36,6 @@ export function LineChart(props) {
     HrtPressure: 70,
   });
 
-
-
   // const [tele] = useAtom(telemetries);
   // const [currTele] = tele[`${props.isChart.device}`]
   //   ? useAtom(tele[`${props.isChart.device}`])
@@ -50,8 +48,8 @@ export function LineChart(props) {
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'TELEMETRY' },
         (payload) => {
-          console.log(payload.new)
-          if (payload.new.D_Id === props.isChart.device){
+          console.log(payload.new);
+          if (payload.new.D_Id === props.isChart.device) {
             currTele.temperature = payload.new.Temperature;
             currTele.SpO2 = payload.new.SpO2;
             currTele.HrtPressure = payload.new.Pressure;
@@ -60,9 +58,9 @@ export function LineChart(props) {
       )
       .subscribe();
   };
-  useEffect(()=>{
+  useEffect(() => {
     subscribe();
-  },[])
+  }, []);
 
   // const [currTele] = tele[`${props.isChart.device}`]
   //   ? useAtom(tele[`${props.isChart.device}`])

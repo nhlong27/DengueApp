@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 import TransitionsModal from '@/shared/utilities/Modal';
 import SelectFormField from '@/shared/utilities/form/SelectFormField';
 import TextFormField from '@/shared/utilities/form/TextFormField';
-import SearchBar from '../../SearchBar';
+import SearchBar from '../../components/SearchBar';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { InfinitySpin } from 'react-loader-spinner';
 // import { AppContext } from '@/dashboard/doctor/App';

@@ -21,4 +21,4 @@ export const deleteDevice = async (client, deviceId) => {
 
 export const openWebsocket = async (client, callback, params) => {
   await client.subscribe(params, callback);
-}
+};

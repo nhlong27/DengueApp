@@ -16,8 +16,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        doctor: resolve(__dirname, 'pages/dashboard/doctor/index.html'),
-        patient: resolve(__dirname, 'pages/dashboard/patient/index.html'),
+        doctor: resolve(__dirname, 'dashboard/index.html'),
       },
     },
   },

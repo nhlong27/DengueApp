@@ -9,6 +9,7 @@ import { IoMdNotificationsOutline } from 'react-icons/io';
 import { InfinitySpin } from 'react-loader-spinner';
 import { Link } from 'react-router-dom';
 import { AiOutlineDown } from 'react-icons/ai';
+import Prompt from './components-supabase/components/Prompt';
 // import {useLocation} from 'react-router-dom'
 
 const Navbar = (props) => {
@@ -37,11 +38,14 @@ const Navbar = (props) => {
         const { data: IMAGE, error } = await supabase.storage
           .from(`doctors/${user.id}`)
           .download('avatar.png');
-        const url = URL.createObjectURL(IMAGE);
-        setAvatarUrl(url);
+        if (error) throw error;
+        if (IMAGE) {
+          const url = URL.createObjectURL(IMAGE);
+          setAvatarUrl(url);
+        }
       }
     } catch (error) {
-      alert(error.message);
+      console.log(error.message);
     }
   };
   useEffect(async () => {
@@ -49,14 +53,17 @@ const Navbar = (props) => {
   }, []);
   return (
     <nav className="flex h-[10%] w-[100%] items-center justify-between bg-auto-white p-8 shadow-md">
-      <div className="p-4 text-center text-[28px] font-extrabold tracking-[5px] text-blue-600">
-        {props.location}
+      <div className="flex items-center justify-start">
+        <div className="p-4 text-center text-[28px] font-extrabold tracking-[5px] text-blue-600">
+          {props.location}
+        </div>
+        <Prompt heading={props.location} />
       </div>
       <div className="relative flex items-center justify-center gap-4 p-4 text-[22px]">
-        <Link to="/pages/dashboard/doctor/schedules">
+        <Link to="/dashboard/schedules">
           <GrSchedulePlay />
         </Link>
-        <Link to="/pages/dashboard/doctor/messages">
+        <Link to="/dashboard/messages">
           <BiMessageSquareDots />
         </Link>
         <button onClick={() => alert('The functionality for this does not yet exist')}>
@@ -103,7 +110,7 @@ export const DropDownMenu = (props) => {
           onClick={() => {
             props.setLocation('Profile');
           }}
-          to="/pages/dashboard/doctor/account"
+          to="/dashboard/account"
           className="block w-full px-4 py-2 text-left text-sm  hover:bg-slate-200 hover:text-black"
         >
           Profile

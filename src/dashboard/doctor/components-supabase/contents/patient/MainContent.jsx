@@ -42,7 +42,7 @@ const MainContent = (props) => {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'PATIENT' },
         (payload) => {
-          console.log('Change received!', payload);
+          console.log('Patient received!', payload);
           setIsUpdate((state) => !state);
         },
       )
@@ -54,8 +54,6 @@ const MainContent = (props) => {
       setLoading(true);
       let { data: PATIENT, error } = await supabase.from('PATIENT').select('*');
       if (error) throw error;
-      console.log('load patients success!');
-      console.log('PATIENT');
       let patients = {};
       patients.emergency = PATIENT.filter((patient) => patient.Status === 'Emergency');
       patients.all = [...patients.emergency];
@@ -73,7 +71,7 @@ const MainContent = (props) => {
       patients.none = PATIENT.filter((patient) => patient.Status === 'None');
       patients.all = patients.all.concat(patients.none);
 
-      console.log(patients);
+      console.log('load patients success!')
       setContent(patients[`${type}`]);
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -134,10 +132,14 @@ const MainContent = (props) => {
   };
   useEffect(async () => {
     await handleLoad();
+    
   }, [props.refresh, isUpdate]);
 
   useEffect(() => {
     listenUpdate();
+    return () => {
+      setIsUpdate(null);
+    }
   }, []);
 
   let style1 = '';

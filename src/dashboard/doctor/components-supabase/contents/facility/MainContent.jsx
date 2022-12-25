@@ -11,7 +11,6 @@ const MainContent = (props) => {
   const [isRoom, setIsRoom] = useState({});
   const [content] = useAtom(facilityList);
 
-
   let style1 = '';
   let style2 = '';
   if (isOpen) {
@@ -33,7 +32,11 @@ const MainContent = (props) => {
               className="w-[100%] overflow-hidden rounded-2xl ring-2 ring-black"
               key={index}
             >
-              <StatisticsCard component={room} setIsRoom={setIsRoom} setIsUpdate={props.setIsUpdate} />
+              <StatisticsCard
+                component={room}
+                setIsRoom={setIsRoom}
+                setIsUpdate={props.setIsUpdate}
+              />
             </div>
           );
         })}

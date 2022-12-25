@@ -30,7 +30,7 @@ const Sidebar = (props) => {
       className={`${open} relative flex min-w-[5rem] shrink-0 flex-col bg-black transition-all duration-500`}
     >
       <Link
-        to="/pages/dashboard/doctor/index.html"
+        to="/dashboard/"
         className="mb-8 flex h-[10%] items-center justify-start p-4 text-large font-bold text-auto-white"
       >
         {isOpen ? (
@@ -66,7 +66,7 @@ const Sidebar = (props) => {
           <div className="mr-2 flex flex-col gap-2 pb-8 ">
             <Link
               onClick={() => props.setLocation('Dashboard')}
-              to="/pages/dashboard/doctor/index.html"
+              to="/dashboard/"
               className="duration-400 my-2 flex items-center justify-start py-2  px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white "
             >
               <RxDashboard size={20} />
@@ -74,7 +74,7 @@ const Sidebar = (props) => {
             </Link>
             <Link
               onClick={() => props.setLocation('Facilities')}
-              to="/pages/dashboard/doctor/facilities"
+              to="/dashboard/facilities"
               className="duration-400 my-2 flex items-center justify-start py-2  px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white"
             >
               <TbBuildingHospital size={20} />
@@ -82,7 +82,7 @@ const Sidebar = (props) => {
             </Link>
             <Link
               onClick={() => props.setLocation('Nurses')}
-              to="/pages/dashboard/doctor/nurses"
+              to="/dashboard/nurses"
               className="duration-400 my-2 flex items-center justify-start py-2  px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white"
             >
               <RiNurseLine size={22} />
@@ -90,7 +90,7 @@ const Sidebar = (props) => {
             </Link>
             <Link
               onClick={() => props.setLocation('Devices')}
-              to="/pages/dashboard/doctor/devices"
+              to="/dashboard/devices"
               className="duration-400 my-2 flex items-center justify-start py-2  px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white"
             >
               <TbDeviceWatch size={24} />
@@ -99,11 +99,19 @@ const Sidebar = (props) => {
           </div>
           <div className="ml-8 mr-12 border-t-2 border-auto-white p-4"></div>
           <div className="mr-2 flex flex-col gap-2 pb-8">
-            <Link  onClick={()=>props.setLocation('Schedules')} className="duration-400 my-2  flex items-center p-4  py-2 px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white">
+            <Link
+              onClick={() => props.setLocation('Schedules')}
+              to="/dashboard/schedules"
+              className="duration-400 my-2  flex items-center p-4  py-2 px-8 text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white"
+            >
               <BsCalendar2Date size={20} />
               <span className="mx-auto">Schedule</span>
             </Link>
-            <Link onClick={()=>props.setLocation('Messages')} className="duration-400 my-2 flex items-center p-4 py-2 px-8  text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white">
+            <Link
+              onClick={() => props.setLocation('Messages')}
+              to="/dashboard/messages"
+              className="duration-400 my-2 flex items-center p-4 py-2 px-8  text-[17px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white hover:pl-12 hover:text-[19px] focus:border-r-4 focus:border-auto-white  focus:pl-12 focus:text-[17px] focus:text-auto-white"
+            >
               <BsChatLeftDots size={18} />
               <span className="mx-auto">Messages</span>
             </Link>
@@ -130,7 +138,7 @@ const Sidebar = (props) => {
           <div className="mr-0 flex flex-col gap-2 pb-8">
             <Link
               onClick={() => props.setLocation('Dashboard')}
-              to="/pages/dashboard/doctor/index.html"
+              to="/dashboard/"
               className="duration-400 my-2 flex items-center justify-center py-2 text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white "
             >
               <RxDashboard size={23} />
@@ -138,7 +146,7 @@ const Sidebar = (props) => {
             </Link>
             <Link
               onClick={() => props.setLocation('Facilities')}
-              to="/pages/dashboard/doctor/facilities"
+              to="/dashboard/facilities"
               className="duration-400 my-2 flex items-center justify-center py-2   text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
             >
               <TbBuildingHospital size={24} />
@@ -146,7 +154,7 @@ const Sidebar = (props) => {
             </Link>
             <Link
               onClick={() => props.setLocation('Nurses')}
-              to="/pages/dashboard/doctor/nurses"
+              to="/dashboard/nurses"
               className="duration-400 my-2 flex items-center justify-center py-2   text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
             >
               <RiNurseLine size={23} />
@@ -154,7 +162,7 @@ const Sidebar = (props) => {
             </Link>
             <Link
               onClick={() => props.setLocation('Devices')}
-              to="/pages/dashboard/doctor/devices"
+              to="/dashboard/devices"
               className="duration-400 my-2 flex items-center justify-center py-2   text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
             >
               <TbDeviceWatch size={25} />
@@ -165,7 +173,7 @@ const Sidebar = (props) => {
           <div className="mr-0 flex flex-col gap-2 pb-8">
             <Link
               onClick={() => props.setLocation('Schedules')}
-              to="/pages/dashboard/doctor/schedules"
+              to="/dashboard/schedules"
               className="duration-400 justify p-center  my-2 flex items-center justify-center py-2  text-[20px]  tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
             >
               <BsCalendar2Date size={22} />
@@ -173,7 +181,7 @@ const Sidebar = (props) => {
             </Link>
             <Link
               onClick={() => props.setLocation('Messages')}
-              to="/pages/dashboard/doctor/messages"
+              to="/dashboard/messages"
               className="duration-400 p-center my-2 flex items-center justify-center py-2  text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
             >
               <BsChatLeftDots size={20} />

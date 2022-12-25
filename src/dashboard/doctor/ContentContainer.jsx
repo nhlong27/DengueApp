@@ -1,19 +1,20 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import PatientContent from './contents/patient/PatientContent';
-import FacilityContent from './contents/facility/FacilityContent';
-import NurseContent from './contents/nurse/NurseContent';
-import DeviceContent from './contents/device/DeviceContent';
-import Account from './Account';
+import PatientContent from './components-supabase/contents/patient/PatientContent';
+import FacilityContent from './components-supabase/contents/facility/FacilityContent';
+import NurseContent from './components-supabase/contents/nurse/NurseContent';
+import DeviceContent from './components-supabase/contents/device/DeviceContent';
+import Account from './components-supabase/profile/Account';
 import { createContext } from 'react';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { InfinitySpin } from 'react-loader-spinner';
 import { client } from '@/shared/api/initClient_tenant';
 import { useAtom, atom } from 'jotai';
-import { telemetries, deviceList, facilityList } from '../App';
-import Schedules from './Schedules'
-import Messages from './contents/message/Messages'
+import { telemetries, deviceList, facilityList } from './App';
+import Schedules from './components-supabase/contents/schedule/Schedules';
+import Messages from './components-supabase/contents/message/Messages';
+// import { useLocation, useNavigate } from 'react-router-dom';
 
 // export let telemetryTable = {};
 // export const handleTelemetry = (deviceId, temperature, SpO2, HrtPressure, connection) => {
@@ -39,53 +40,12 @@ const ContentContainer = (props) => {
   const [isSocket, setIsSocket] = useState(false);
   const [facilities, setFacilities] = useAtom(facilityList);
 
-  // const listenUpdateMain = async () => {
-  //   setLoading(true);
-  //   const DEVICE = supabase
-  //     .channel('custom-all-channel')
-  //     .on(
-  //       'postgres_changes',
-  //       { event: '*', schema: 'public', table: 'DEVICE' },
-  //       (payload) => {
-  //         console.log('Change received!', payload);
-  //         setIsUpdate((state) => !state);
-  //       },
-  //     )
-  //     .subscribe();
-
-  //   const BED = supabase
-  //     .channel('custom-all-channel')
-  //     .on(
-  //       'postgres_changes',
-  //       { event: '*', schema: 'public', table: 'BED' },
-  //       (payload) => {
-  //         console.log('Change received!', payload);
-  //         setIsUpdate((state) => !state);
-  //       },
-  //     )
-  //     .subscribe();
-
-  //   const ROOM = supabase
-  //     .channel('custom-all-channel')
-  //     .on(
-  //       'postgres_changes',
-  //       { event: '*', schema: 'public', table: 'ROOM' },
-  //       (payload) => {
-  //         console.log('Change received!', payload);
-  //         setIsUpdate((state) => !state);
-  //       },
-  //     )
-  //     .subscribe();
-  //   setLoading(false);
-  // };
-
   const handleLoadDevice = async () => {
     try {
       setLoading(true);
       let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
-      console.log('load device success!');
-      console.log('DEVICE');
-      console.log(DEVICE);
+
+      console.log('load devices success!');
       await setDevices(() => DEVICE);
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -118,7 +78,8 @@ const ContentContainer = (props) => {
           loadFacility[`${room.R_Number}`].nurses.push(NURSE[0]);
         }
       }
-      console.log('load facilty success!');
+
+      console.log('load facilties success!');
       setFacilities(loadFacility);
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -130,7 +91,6 @@ const ContentContainer = (props) => {
   const handleSocket = async () => {
     try {
       setLoading(true);
-      console.log('handleSocket');
       let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
       if (error) throw error;
 
@@ -141,8 +101,6 @@ const ContentContainer = (props) => {
         openSocket(device.D_Id);
       }
 
-      console.log('setTelemetries');
-      console.log(obj);
       setTelemetries((prev) => ({ ...prev, ...obj }));
     } catch (error) {
       console.log(error.error_description || error.message);
@@ -169,11 +127,6 @@ const ContentContainer = (props) => {
           .from('DEVICE')
           .update({ Status: 'Streaming' })
           .eq('D_Id', deviceId);
-
-        // await supabase
-        //   .from('PATIENT')
-        //   .update({ D_Status: 'Streaming' })
-        //   .eq('D_Id', deviceId);
 
         if (response.data.temperature[0][1] < 37) {
           timeElapse = status !== 'Normal' ? timeElapse + 4 : 0;
@@ -282,7 +235,6 @@ const ContentContainer = (props) => {
         });
         setTimeout(async () => {
           await supabase.from('DEVICE').update({ Status: 'Paused' }).eq('D_Id', deviceId);
-          // await supabase.from('PATIENT').update({ D_Status: 'Paused' }).eq('D_Id', deviceId);
         }, 20000);
 
         setTelemetries((prev) => ({ ...prev, [deviceId]: telePayload }));
@@ -290,16 +242,14 @@ const ContentContainer = (props) => {
     });
   };
 
-  // useEffect(() => {
-  //   listenUpdateMain();
-  // }, []);
-
   useEffect(async () => {
+    console.log('loading devices and facilities..')
     await handleLoadDevice();
     await handleLoadFacility();
   }, [isUpdate, refresh]);
 
   useEffect(async () => {
+    console.log('opening sockets..')
     await handleSocket();
   }, [refresh]);
 
@@ -308,10 +258,7 @@ const ContentContainer = (props) => {
       // <ContentContainerContext.Provider value={{ telemetries, setTelemetries }}>
       <div className="flex w-[75%] flex-auto flex-col">
         <Routes>
-          <Route
-            path="/index.html"
-            element={<PatientContent setIsChart={props.setIsChart} />}
-          />
+          <Route path="/" element={<PatientContent setIsChart={props.setIsChart} />} />
           <Route path="/account" element={<Account session={props.session} />} />
           <Route
             path="/facilities"

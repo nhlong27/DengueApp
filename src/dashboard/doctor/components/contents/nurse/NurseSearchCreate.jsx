@@ -34,10 +34,13 @@ const addNurse = async () => {
 const NurseSearchCreate = () => {
   const [value, setValue] = useState({});
 
-
-  assetCreationObj.nurse = {}
-  assetCreationObj.nurse = {firstName: value.firstName, lastName: value.lastName, email: value.email, assign: {facility: {...value.facility}}}
-
+  assetCreationObj.nurse = {};
+  assetCreationObj.nurse = {
+    firstName: value.firstName,
+    lastName: value.lastName,
+    email: value.email,
+    assign: { facility: { ...value.facility } },
+  };
 
   return (
     <>

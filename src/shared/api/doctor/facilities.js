@@ -5,16 +5,16 @@ export const loadAndFilterFacilities = async (client, filter = null) => {
   let building_arr = facilities.filter((asset) => asset.type === 'BUILDING');
   let room_arr = facilities.filter((asset) => asset.type.includes('ROOM'));
   let bed_arr = facilities.filter((asset) => asset.type.includes('BED'));
-  let bedsbed = {}
-  let roomsroom = {}
-  for (let bed of bed_arr){
-    bedsbed[`${bed.name}`] = {...bed}
+  let bedsbed = {};
+  let roomsroom = {};
+  for (let bed of bed_arr) {
+    bedsbed[`${bed.name}`] = { ...bed };
   }
-  db_doctor.bedList = {...bedsbed}
-  for (let room of room_arr){
-    roomsroom[`${room.name}`] = {...room}
+  db_doctor.bedList = { ...bedsbed };
+  for (let room of room_arr) {
+    roomsroom[`${room.name}`] = { ...room };
   }
-  db_doctor.roomList = {...roomsroom}
+  db_doctor.roomList = { ...roomsroom };
   // console.log(building_arr);
   // console.log(room_arr);
   // console.log(bed_arr);

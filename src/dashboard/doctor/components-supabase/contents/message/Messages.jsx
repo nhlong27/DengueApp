@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SearchBar from '../../SearchBar';
+import SearchBar from '../../components/SearchBar';
 import { facilityList } from '@/dashboard/doctor/App';
 import { useAtom } from 'jotai';
 import { RiSendPlane2Line } from 'react-icons/ri';
@@ -15,11 +15,11 @@ const Messages = () => {
           <SearchBar />
         </div>
       </div>
-      <div className="relative flex h-[100%] bg-gray-300 overflow-hidden">
+      <div className="relative flex h-[100%] overflow-hidden bg-gray-300">
         <div className="h-[100%] w-[40%] py-4 pr-4 pl-8 shadow-lg">
           <div className="flex h-[100%] w-[100%] flex-col justify-between rounded-2xl bg-auto-white p-4 shadow-lg ring-2 ring-black">
             <div className="flex h-[100%] w-[100%] flex-col items-center justify-between rounded-2xl p-4 shadow-xl ring-2 ring-gray-200">
-              <div className="flex h-[30%] w-[100%] ring-2 ring-black rounded-3xl z-10 shadow-xl flex-wrap items-start justify-start p-4 gap-4">
+              <div className="z-10 flex h-[30%] w-[100%] flex-wrap items-start justify-start gap-4 rounded-3xl p-4 shadow-xl ring-2 ring-black">
                 {facilities ? (
                   Object.values(facilities).map((room, index) => {
                     return (
@@ -36,7 +36,7 @@ const Messages = () => {
                   <div>No room currently</div>
                 )}
               </div>
-              <div className="scrollbar flex h-[70%] z-0 w-[100%] flex-col gap-2 overflow-x-hidden overflow-y-scroll rounded-b-2xl border-l-2 border-black bg-gradient-to-t from-gray-200 to-auto-white pt-4">
+              <div className="scrollbar z-0 flex h-[70%] w-[100%] flex-col gap-2 overflow-x-hidden overflow-y-scroll rounded-b-2xl border-l-2 border-black bg-gradient-to-t from-gray-200 to-auto-white pt-4">
                 {room ? (
                   room.nurses.map((nurse, index) => {
                     return (
@@ -63,7 +63,7 @@ const Messages = () => {
           </div>
         </div>
         <div className="flex h-[100%] w-[60%] flex-col bg-gray-500 ">
-          <div className="h-[85%] w-[100%] overflow-y-scroll scrollbar">
+          <div className="scrollbar h-[85%] w-[100%] overflow-y-scroll">
             <MessageContainer room={room} />
           </div>
           <div className=" flex h-[15%] w-[100%] items-start justify-end bg-gray-300 p-3 shadow-sm">
