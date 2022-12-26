@@ -99,10 +99,6 @@ export function LineChart(props) {
                 refresh: 1000,
                 onRefresh: async (chart) => {
                   chart.data.datasets.forEach((dataset) => {
-                    // dataset.data.push({
-                    //   x: Date.now(),
-                    //   y: currTele.Temperature,
-                    // });
                     if (dataset.label === 'Temperature (Celcius)') {
                       dataset.data.push({
                         x: Date.now(),
@@ -201,13 +197,10 @@ export function LineChart(props) {
                 refresh: 1000,
                 onRefresh: async (chart) => {
                   chart.data.datasets.forEach((dataset) => {
-                    // dataset.data.push({
-                    //   x: Date.now(),
-                    //   y: currTele.Temperature,
-                    // });
+
                     dataset.data.push({
                       x: Date.now(),
-                      y: currTele.Temperature,
+                      y: currTele.temperature,
                     });
                   });
                   chart.update('quiet');
@@ -333,13 +326,9 @@ export function LineChart(props) {
                 refresh: 1000,
                 onRefresh: async (chart) => {
                   chart.data.datasets.forEach((dataset) => {
-                    // dataset.data.push({
-                    //   x: Date.now(),
-                    //   y: currTele.Temperature,
-                    // });
                     dataset.data.push({
                       x: Date.now(),
-                      y: currTele.Pressure,
+                      y: currTele.HrtPressure,
                     });
                   });
                   chart.update('quiet');

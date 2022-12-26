@@ -50,6 +50,7 @@ Title: An IoT-based Remote Patient Monitoring System for Tackling the Dengue Fev
 - Breadcrumbs
 - subscriptions: devices & facilities
 - update patient status when device stops connecting
+- react route persists on refresh (sessionStorage and window clear?)
 
 
 # Some additional background facts:
