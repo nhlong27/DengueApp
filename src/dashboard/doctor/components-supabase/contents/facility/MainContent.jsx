@@ -11,6 +11,38 @@ const MainContent = (props) => {
   const [isRoom, setIsRoom] = useState({});
   const [facilities] = useAtom(facilityList);
 
+  const listenUpdateRoom = () => {
+    const ROOM = supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'ROOM' },
+        (payload) => {
+          console.log('Change received!', payload);
+          props.handleLoadFacility();
+        },
+      )
+      .subscribe();
+  };
+  const listenUpdateBed = () => {
+    const BED = supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'BED' },
+        (payload) => {
+          console.log('Change received!', payload);
+          props.handleLoadFacility();
+        },
+      )
+      .subscribe();
+  };
+
+  useEffect(async () => {
+    await listenUpdateBed();
+    await listenUpdateRoom();
+  }, []);
+
   let style1 = '';
   let style2 = '';
   if (isOpen) {
@@ -23,9 +55,9 @@ const MainContent = (props) => {
   return (
     <>
       <div
-        className={`flex min-h-[100%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-4 transition-all duration-700`}
+        className={` min-h-[100%]  rounded-lg bg-gray-300 p-4 transition-all duration-700`}
       >
-        <div className="w-[100%] rounded-2xl bg-auto-white p-4">
+        <div className="flex w-[100%] flex-col items-center justify-start gap-4 rounded-2xl bg-auto-white p-4">
           {Object.keys(facilities).length === 0 && (
             <div className="flex w-[100%] items-center justify-center font-bold tracking-[5px] text-gray-500">
               NO FACILITY AVAILABLE

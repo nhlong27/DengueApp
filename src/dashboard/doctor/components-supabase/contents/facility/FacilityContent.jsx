@@ -15,7 +15,7 @@ const FacilityContent = (props) => {
         />
       </div>
       <div className="scrollbar relative flex-grow overflow-x-hidden overflow-y-scroll p-8">
-        <MainContent setIsUpdate={props.setIsUpdate} />
+        <MainContent setIsUpdate={props.setIsUpdate} handleLoadFacility={props.handleLoadFacility}/>
       </div>
     </>
   );

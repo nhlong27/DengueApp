@@ -37,7 +37,7 @@ export const DashboardTable = (props) => {
         { event: 'UPDATE', schema: 'public', table: 'PATIENT' },
         (payload) => {
           console.log('Change received!', payload);
-          props.setIsUpdate((state) => !state);
+          props.handleLoadPatient();
         },
       )
       .subscribe();

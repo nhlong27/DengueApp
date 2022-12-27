@@ -18,7 +18,7 @@ const DeviceContent = (props) => {
         // onScroll={() => console.log('scroll')}
         className="scrollbar relative flex-grow overflow-x-hidden overflow-y-scroll p-8"
       >
-        <MainContent setIsUpdate={props.setIsUpdate} />
+        <MainContent setIsUpdate={props.setIsUpdate} handleLoadDevice={props.handleLoadDevice}/>
       </div>
     </>
   );

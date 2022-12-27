@@ -24,11 +24,11 @@ import { Field, Form, Formik } from 'formik';
 import TextFormField from '@/shared/utilities/form/TextFormField';
 import { userSession } from '@/dashboard/Auth';
 import PatientAvatar from './PatientAvatar';
+import { patientList } from '@/dashboard/doctor/App';
 
 const MainContent = (props) => {
-  const [isUpdate, setIsUpdate] = useState(false);
-  const [content, setContent] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [content, setContent] = useAtom(patientList);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const [isPatient, setIsPatient] = useState(null);
   const [devices] = useAtom(deviceList);
@@ -46,42 +46,12 @@ const MainContent = (props) => {
         { event: '*', schema: 'public', table: 'PATIENT' },
         (payload) => {
           console.log('Patient received!', payload);
-          setIsUpdate((state) => !state);
+          props.handleLoadPatient();
         },
       )
       .subscribe();
   };
 
-  const handleLoad = async (type = 'all') => {
-    try {
-      setLoading(true);
-      let { data: PATIENT, error } = await supabase.from('PATIENT').select('*').eq('D_Ssn', session.user.id);
-      if (error) throw error;
-      let patients = {};
-      patients.emergency = PATIENT.filter((patient) => patient.Status === 'Emergency');
-      patients.all = [...patients.emergency];
-      patients.febrile = PATIENT.filter((patient) => patient.Status === 'Febrile');
-      patients.all = patients.all.concat(patients.febrile);
-      patients.incubation = PATIENT.filter((patient) => patient.Status === 'Incubation');
-      patients.all = patients.all.concat(patients.incubation);
-
-      patients.recovery = PATIENT.filter((patient) => patient.Status === 'Recovery');
-      patients.all = patients.all.concat(patients.recovery);
-
-      patients.normal = PATIENT.filter((patient) => patient.Status === 'Normal');
-      patients.all = patients.all.concat(patients.normal);
-
-      patients.none = PATIENT.filter((patient) => patient.Status === 'None');
-      patients.all = patients.all.concat(patients.none);
-
-      console.log('load patients success!')
-      setContent(patients[`${type}`]);
-    } catch (error) {
-      console.log(error.error_description || error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleDelete = async (patient) => {
     try {
@@ -131,16 +101,10 @@ const MainContent = (props) => {
       setLoading(false);
     }
   };
-  useEffect(async () => {
-    await handleLoad();
-    
-  }, [props.refresh, isUpdate]);
+
 
   useEffect(() => {
     listenUpdate();
-    return () => {
-      setIsUpdate(null);
-    }
   }, []);
 
   let style1 = '';
@@ -164,7 +128,7 @@ const MainContent = (props) => {
           setInfoOpen={setOpen}
           open={isOpen}
           setIsPatient={setIsPatient}
-          setIsUpdate={setIsUpdate}
+          handleLoadPatient={props.handleLoadPatient}
         />
         <div
           className={` ${style1} absolute top-0 right-0 min-h-[100%] w-[100%]  rounded-l-lg bg-gray-200 shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
@@ -264,37 +228,37 @@ const MainContent = (props) => {
             Sort by
           </div>
           <button
-            onClick={() => handleLoad('all')}
+            onClick={() => props.handleLoadPatient('all')}
             className="height-[1rem] mr-[1rem] rounded-lg bg-gray-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-gray-500"
           >
             All
           </button>
           <button
-            onClick={() => handleLoad('emergency')}
+            onClick={() => props.handleLoadPatient('emergency')}
             className="height-[1rem] mr-[1rem] rounded-lg bg-red-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-red-500"
           >
             Emergency
           </button>
           <button
-            onClick={() => handleLoad('febrile')}
+            onClick={() => props.handleLoadPatient('febrile')}
             className="height-[1rem] mr-[1rem] rounded-lg bg-orange-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-orange-500"
           >
             Febrile
           </button>
           <button
-            onClick={() => handleLoad('incubation')}
+            onClick={() => props.handleLoadPatient('incubation')}
             className="height-[1rem] mr-[1rem] rounded-lg bg-yellow-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-yellow-500"
           >
             Incubation
           </button>
           <button
-            onClick={() => handleLoad('recovery')}
+            onClick={() => props.handleLoadPatient('recovery')}
             className="height-[1rem] mr-[1rem] rounded-lg bg-green-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-green-500"
           >
             Recovery
           </button>
           <button
-            onClick={() => handleLoad('normal')}
+            onClick={() => props.handleLoadPatient('normal')}
             className="height-[1rem] mr-[1rem] rounded-lg bg-blue-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-blue-500"
           >
             Normal

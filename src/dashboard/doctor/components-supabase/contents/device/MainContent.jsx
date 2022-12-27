@@ -14,14 +14,45 @@ const MainContent = (props) => {
   const [devices] = useAtom(deviceList);
   const [status, setStatus] = useState('Paused');
 
-  const listenStatusUdate = () => {
+  const listenInsert = () => {
     const DEVICE = supabase
-      .channel('custom-update-channel')
+      .channel('custom-insert-channel')
       .on(
         'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'DEVICE' },
+        { event: 'INSERT', schema: 'public', table: 'DEVICE' },
+        (payload) => {
+          console.log('Change received!', payload);
+          props.handleLoadDevice();
+        },
+      )
+      .subscribe()
+      
+  };
+  const listenDelete = () => {
+    const DEVICE = supabase
+      .channel('custom-delete-channel')
+      .on(
+        'postgres_changes',
+        { event: 'DELETE', schema: 'public', table: 'DEVICE' },
+        (payload) => {
+          console.log('Change received!', payload);
+          props.handleLoadDevice();
+        },
+      )
+      .subscribe()
+      
+  };
+
+
+  const listenStatusUpdate = () => {
+    const DEVICE = supabase
+      .channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'DEVICE' },
 
         async (payload) => {
+          console.log('Device change received!', payload);
           let obj = {};
           const { data } = await supabase.from('DEVICE').select('D_Id, Status');
           for (let pair of data) {
@@ -34,8 +65,10 @@ const MainContent = (props) => {
   };
 
   useEffect(() => {
-    listenStatusUdate();
-  }, [status]);
+    listenInsert();
+    listenDelete();
+    listenStatusUpdate();
+  }, []);
 
   let style1 = '';
   let style2 = '';
@@ -50,9 +83,9 @@ const MainContent = (props) => {
   return (
     <>
       <div
-        className={`${style2} flex min-h-[100%] flex-col items-center justify-start gap-4 rounded-lg bg-gray-300 p-4 transition-all duration-700`}
+        className={`${style2} min-h-[100%]  rounded-lg bg-gray-300 p-4 transition-all duration-700`}
       >
-        <div className="w-[100%] rounded-2xl bg-auto-white p-4">
+        <div className="flex w-[100%] flex-col items-center justify-start gap-4 rounded-2xl bg-auto-white  p-4">
           {devices.length === 0 && (
             <div className="flex w-[100%] items-center justify-center font-bold tracking-[5px] text-gray-500">
               NO DEVICE AVAILABLE
@@ -91,12 +124,18 @@ const MainContent = (props) => {
           </div>
           {isDevice && (
             <div className="flex w-[100%] flex-col items-center justify-start">
-              <div className="flex w-[100%] flex-row items-center justify-between rounded bg-auto-white p-2 shadow-lg shadow-gray-200 border-x-2 border-t-2 border-gray-200">
-                <div className="text-[14px] tracking-[2px] font-bold text-gray-500">LABEL</div>
-                <div className="text-[14px] tracking-[2px] font-bold text-gray-500">TYPE</div>
-                <div className="text-[14px] tracking-[2px] font-bold text-gray-500">ASSIGN</div>
+              <div className="flex w-[100%] flex-row items-center justify-between rounded border-x-2 border-t-2 border-gray-200 bg-auto-white p-2 shadow-lg shadow-gray-200">
+                <div className="text-[14px] font-bold tracking-[2px] text-gray-500">
+                  LABEL
+                </div>
+                <div className="text-[14px] font-bold tracking-[2px] text-gray-500">
+                  TYPE
+                </div>
+                <div className="text-[14px] font-bold tracking-[2px] text-gray-500">
+                  ASSIGN
+                </div>
               </div>
-              <div className="flex w-[100%] flex-row items-center justify-between rounded bg-auto-white p-2 shadow-lg shadow-gray-200 border-x-2 border-b-2 border-gray-200">
+              <div className="flex w-[100%] flex-row items-center justify-between rounded border-x-2 border-b-2 border-gray-200 bg-auto-white p-2 shadow-lg shadow-gray-200">
                 <div className="text-[18px] font-bold tracking-wider">
                   {isDevice.Label}
                 </div>
@@ -108,7 +147,9 @@ const MainContent = (props) => {
                   <div className="text-green-500">Assigned</div>
                 )}
               </div>
-              <div className="text-gray-500 ring-2 ring-gray-500 p-4 rounded-lg mt-8">Access Token: {isDevice.Token}</div>
+              <div className="mt-8 rounded-lg p-4 text-gray-500 ring-2 ring-gray-500">
+                Access Token: {isDevice.Token}
+              </div>
             </div>
           )}
         </div>

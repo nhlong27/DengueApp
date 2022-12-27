@@ -6,15 +6,12 @@ import { AiOutlineLeft } from 'react-icons/ai';
 import { useAtom } from 'jotai';
 import { userSession } from '@/dashboard/Auth';
 import NurseAvatar from './NurseAvatar';
+import { nurseList } from '@/dashboard/doctor/App';
 
 const MainContent = (props) => {
-  const [content, setContent] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [content, setContent] = useAtom(nurseList);
   const [isOpen, setOpen] = useState(false);
   const [isNurse, setIsNurse] = useState({});
-  const [isUpdate, setIsUpdate] = useState(false);
-
-  const [session] = useAtom(userSession)
 
   const listenUpdate = async () => {
     const NURSE = supabase
@@ -24,28 +21,11 @@ const MainContent = (props) => {
         { event: '*', schema: 'public', table: 'NURSE' },
         (payload) => {
           console.log('Change received!', payload);
-          setIsUpdate((state) => !state);
+          props.handleLoadNurse();
         },
       )
       .subscribe();
   };
-
-  const handleLoad = async () => {
-    try {
-      setLoading(true);
-      let { data: NURSE, error } = await supabase.from('NURSE').select('*').eq('D_Ssn', session.user.id);
-      if (error) throw error;
-      console.log('load nurses success!');
-      setContent(NURSE);
-    } catch (error) {
-      console.log(error.error_description || error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(async () => {
-    await handleLoad();
-  }, [props.refresh, isUpdate]);
 
   useEffect(() => {
     listenUpdate();
@@ -60,7 +40,7 @@ const MainContent = (props) => {
     style1 = '-mr-[64rem] opacity-0';
     style2 = 'w-[100%]';
   }
-  if (!loading) {
+
     return (
       <div className="absolute min-h-screen w-[95%] rounded-lg bg-gray-300 p-2">
         <DashboardTable
@@ -115,13 +95,7 @@ const MainContent = (props) => {
         </div>
       </div>
     );
-  } else {
-    return (
-      <div className="flex items-center justify-center">
-        <InfinitySpin width="300" color="#475569" />;
-      </div>
-    );
-  }
+
 };
 
 export default MainContent;

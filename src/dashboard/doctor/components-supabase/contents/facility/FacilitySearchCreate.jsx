@@ -43,10 +43,10 @@ const FacilitySearchCreate = (props) => {
         const { data, error } = await supabase
           .from('ROOM')
           .insert([{ R_Number: values.number, D_Ssn: session.user.id }]);
+          if (error) throw error;
       }
 
       console.log('add room/bed success!');
-      if (error) throw error;
     } catch (error) {
       console.log(error.error_description || error.message);
     } finally {

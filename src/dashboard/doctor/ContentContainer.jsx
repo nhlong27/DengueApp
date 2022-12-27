@@ -5,48 +5,55 @@ import FacilityContent from './components-supabase/contents/facility/FacilityCon
 import NurseContent from './components-supabase/contents/nurse/NurseContent';
 import DeviceContent from './components-supabase/contents/device/DeviceContent';
 import Account from './components-supabase/profile/Account';
-import { createContext } from 'react';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { InfinitySpin } from 'react-loader-spinner';
 import { client } from '@/shared/api/initClient_tenant';
 import { useAtom, atom } from 'jotai';
-import { telemetries, deviceList, facilityList } from './App';
+import { telemetries, deviceList, facilityList, nurseList, patientList } from './App';
 import Schedules from './components-supabase/contents/schedule/Schedules';
 import Messages from './components-supabase/contents/message/Messages';
 import { userSession } from '../Auth';
 
-const now = Date.now();
-const mtd = now - 3600000;
 let loadFacility = {};
 
 const ContentContainer = (props) => {
   const [isUpdate, setIsUpdate] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [devices, setDevices] = useAtom(deviceList);
-  const [tele, setTelemetries] = useAtom(telemetries);
-  const [isSocket, setIsSocket] = useState(false);
+  // const [isSocket, setIsSocket] = useState(false); // I forgot what this is for
   const [facilities, setFacilities] = useAtom(facilityList);
-  
-  const [session] = useAtom(userSession)
+  const [devices, setDevices] = useAtom(deviceList);
+  const [nurses, setNurses] = useAtom(nurseList);
+  const [patients, setPatients] = useAtom(patientList);
+
+  const [session] = useAtom(userSession);
 
   const handleLoadDevice = async () => {
     try {
-      setLoading(true);
-      let { data: DEVICE, error } = await supabase.from('DEVICE').select('*').eq('D_Ssn', session.user.id);
+      // setLoading(true);
+      let { data: DEVICE, error } = await supabase
+        .from('DEVICE')
+        .select('*')
+        .eq('D_Ssn', session.user.id);
 
       console.log('load devices success!');
       await setDevices(() => DEVICE);
     } catch (error) {
       console.log(error.error_description || error.message);
     }
+    //  finally {
+    //   setLoading(false);
+    // }
   };
 
   const handleLoadFacility = async () => {
     try {
       loadFacility = {};
-      let { data: ROOM, error } = await supabase.from('ROOM').select('*').eq('D_Ssn', session.user.id);
+      let { data: ROOM, error } = await supabase
+        .from('ROOM')
+        .select('*')
+        .eq('D_Ssn', session.user.id);
       if (error) throw error;
       for (let room of ROOM) {
         loadFacility[`${room.R_Number}`] = { ...room, beds: [], nurses: [] };
@@ -74,193 +81,119 @@ const ContentContainer = (props) => {
       setFacilities(loadFacility);
     } catch (error) {
       console.log(error.error_description || error.message);
-    } finally {
-      setLoading(false);
     }
+    //  finally {
+    //   setLoading(false);
+    // }
   };
 
-  const handleSocket = async () => {
+  const handleLoadNurse = async () => {
     try {
-      setLoading(true);
-      let { data: DEVICE, error } = await supabase.from('DEVICE').select('*');
+      // setLoading(true);
+      let { data: NURSE, error } = await supabase
+        .from('NURSE')
+        .select('*')
+        .eq('D_Ssn', session.user.id);
       if (error) throw error;
-
-      let token = await client.connect();
-      const obj = {};
-      for (let device of DEVICE) {
-        obj[`${device.D_Id}`] = atom({ temperature: 0, HrtPressure: 0, SpO2: 0 });
-        openSocket(device.D_Id);
-      }
-
-      setTelemetries((prev) => ({ ...prev, ...obj }));
+      console.log('load nurses success!');
+      setNurses(NURSE);
     } catch (error) {
       console.log(error.error_description || error.message);
-    } finally {
-      setLoading(false);
-    }
+    } 
+    // finally {
+    //   setLoading(false);
+    // }
   };
 
-  const openSocket = async (deviceId) => {
-    console.log('socket opened!');
-    let params = {
-      cmdId: 10,
-      entityId: deviceId,
-      startTs: mtd,
-      endTs: now,
-      // close: close
-    };
-    let timeElapse = 0;
-    let status = 'none';
-    client.subscribe(params, async function (response) {
-      if (Object.keys(response.data).length !== 0) {
-        console.log('response - streaming');
-        await supabase
-          .from('DEVICE')
-          .update({ Status: 'Streaming' })
-          .eq('D_Id', deviceId);
+  const handleLoadPatient = async (type = 'all') => {
+    try {
+      // setLoading(true);
+      let { data: PATIENT, error } = await supabase
+        .from('PATIENT')
+        .select('*')
+        .eq('D_Ssn', session.user.id);
+      if (error) throw error;
+      let patients = {};
+      patients.emergency = PATIENT.filter((patient) => patient.Status === 'Emergency');
+      patients.all = [...patients.emergency];
+      patients.febrile = PATIENT.filter((patient) => patient.Status === 'Febrile');
+      patients.all = patients.all.concat(patients.febrile);
+      patients.incubation = PATIENT.filter((patient) => patient.Status === 'Incubation');
+      patients.all = patients.all.concat(patients.incubation);
 
-        if (response.data.temperature[0][1] < 37) {
-          timeElapse = status !== 'Normal' ? timeElapse + 4 : 0;
-          if (timeElapse >= 10) {
-            status = 'Normal';
+      patients.recovery = PATIENT.filter((patient) => patient.Status === 'Recovery');
+      patients.all = patients.all.concat(patients.recovery);
 
-            const { error } = await supabase
-              .from('PATIENT')
-              .update({ Status: status })
-              .eq('D_Id', deviceId);
-            if (error) throw error;
-          }
-          const { error } = await supabase.from('TELEMETRY').insert([
-            {
-              D_Id: deviceId,
-              Time: Date.now(),
-              Temperature: response.data.temperature[0][1],
-              SpO2: response.data.SpO2[0][1],
-              Pressure: response.data.HrtPressure[0][1],
-              Elapse: timeElapse,
-              Status: status,
-            },
-          ]);
-          if (error) throw error;
-        } else if (
-          response.data.temperature[0][1] >= 37.5 &&
-          response.data.temperature[0][1] <= 38.5
-        ) {
-          timeElapse = status !== 'Incubation' ? timeElapse + 4 : 0;
-          if (timeElapse >= 10) {
-            status = 'Incubation';
+      patients.normal = PATIENT.filter((patient) => patient.Status === 'Normal');
+      patients.all = patients.all.concat(patients.normal);
 
-            const { error } = await supabase
-              .from('PATIENT')
-              .update({ Status: status })
-              .eq('D_Id', deviceId);
-            if (error) throw error;
-          }
-          const { error } = await supabase.from('TELEMETRY').insert([
-            {
-              D_Id: deviceId,
-              Time: Date.now(),
-              Temperature: response.data.temperature[0][1],
-              SpO2: response.data.SpO2[0][1],
-              Pressure: response.data.HrtPressure[0][1],
-              Elapse: timeElapse,
-              Status: status,
-            },
-          ]);
-          if (error) throw error;
-        } else if (
-          response.data.temperature[0][1] >= 39 &&
-          response.data.temperature[0][1] <= 40
-        ) {
-          timeElapse = status !== 'Febrile' ? timeElapse + 4 : 0;
-          if (timeElapse >= 10) {
-            status = 'Febrile';
-            const { error } = await supabase
-              .from('PATIENT')
-              .update({ Status: status })
-              .eq('D_Id', deviceId);
-            if (error) throw error;
-          }
-          const { error } = await supabase.from('TELEMETRY').insert([
-            {
-              D_Id: deviceId,
-              Time: Date.now(),
-              Temperature: response.data.temperature[0][1],
-              SpO2: response.data.SpO2[0][1],
-              Pressure: response.data.HrtPressure[0][1],
-              Elapse: timeElapse,
-              Status: status,
-            },
-          ]);
-          if (error) throw error;
-        } else if (
-          response.data.temperature[0][1] >= 37 &&
-          response.data.temperature[0][1] <= 37.5
-        ) {
-          timeElapse = status !== 'Recovery' ? timeElapse + 4 : 0;
-          if (timeElapse >= 10) {
-            status = 'Recovery';
-            const { error } = await supabase
-              .from('PATIENT')
-              .update({ Status: status })
-              .eq('D_Id', deviceId);
-            if (error) throw error;
-          }
-          const { error } = await supabase.from('TELEMETRY').insert([
-            {
-              D_Id: deviceId,
-              Time: Date.now(),
-              Temperature: response.data.temperature[0][1],
-              SpO2: response.data.SpO2[0][1],
-              Pressure: response.data.HrtPressure[0][1],
-              Elapse: timeElapse,
-              Status: status,
-            },
-          ]);
-          if (error) throw error;
-        }
-        const telePayload = atom({
-          temperature: response.data.temperature[0][1],
-          SpO2: response.data.SpO2[0][1],
-          HrtPressure: response.data.HrtPressure[0][1],
-        });
-        setTimeout(async () => {
-          await supabase.from('DEVICE').update({ Status: 'Paused' }).eq('D_Id', deviceId);
-        }, 20000);
+      patients.none = PATIENT.filter((patient) => patient.Status === 'None');
+      patients.all = patients.all.concat(patients.none);
 
-        setTelemetries((prev) => ({ ...prev, [deviceId]: telePayload }));
-      }
-    });
+      console.log('load patients success!');
+      setPatients(patients[`${type}`]);
+    } catch (error) {
+      console.log(error.error_description || error.message);
+    } 
+    // finally {
+    //   setLoading(false);
+    // }
   };
 
   useEffect(async () => {
-    console.log('loading devices and facilities..')
+    setLoading(true)
+    console.log('loading devices..');
     await handleLoadDevice();
+    console.log('loading facilities..');
     await handleLoadFacility();
+    console.log('loading nurses..');
+    await handleLoadNurse();
+    console.log('loading patients..');
+    await handleLoadPatient();
+    setLoading(false)
   }, [isUpdate, refresh]);
-
-  useEffect(async () => {
-    console.log('opening sockets..')
-    await handleSocket();
-  }, [refresh]);
 
   if (!loading) {
     return (
       // <ContentContainerContext.Provider value={{ telemetries, setTelemetries }}>
       <div className="flex w-[75%] flex-auto flex-col">
         <Routes>
-          <Route path="/" element={<PatientContent setIsChart={props.setIsChart} />} />
+          <Route
+            path="/"
+            element={
+              <PatientContent
+                setRefresh={setRefresh}
+                setIsChart={props.setIsChart}
+                handleLoadPatient={handleLoadPatient}
+              />
+            }
+          />
           <Route path="/account" element={<Account />} />
           <Route
             path="/facilities"
             element={
-              <FacilityContent setRefresh={setRefresh} setIsUpdate={setIsUpdate} />
+              <FacilityContent
+                handleLoadFacility={handleLoadFacility}
+                setRefresh={setRefresh}
+                setIsUpdate={setIsUpdate}
+              />
             }
           />
-          <Route path="/nurses" element={<NurseContent />} />
+          <Route
+            path="/nurses"
+            element={
+              <NurseContent setRefresh={setRefresh} handleLoadNurse={handleLoadNurse} />
+            }
+          />
           <Route
             path="/devices"
-            element={<DeviceContent setRefresh={setRefresh} setIsUpdate={setIsUpdate} />}
+            element={
+              <DeviceContent
+                handleLoadDevice={handleLoadDevice}
+                setRefresh={setRefresh}
+                setIsUpdate={setIsUpdate}
+              />
+            }
           />
           <Route path="/schedules" element={<Schedules />} />
           <Route path="/messages" element={<Messages />} />

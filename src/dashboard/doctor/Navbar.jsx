@@ -54,6 +54,10 @@ const Navbar = (props) => {
   };
   useEffect(async () => {
     await getProfile();
+
+    return ()=>{
+      setUsername(null);
+    }
   }, []);
   return (
     <nav className="flex h-[10%] w-[100%] items-center justify-between bg-auto-white p-8 shadow-md">
