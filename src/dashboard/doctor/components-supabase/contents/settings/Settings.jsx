@@ -8,10 +8,11 @@ import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { MdScreenSearchDesktop } from 'react-icons/md';
 import BasicSelect from '@/shared/utilities/form/BasicSelect';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
+import { InfinitySpin } from 'react-loader-spinner';
 
 import { ExcelRenderer, OutTable } from 'react-excel-renderer';
-import { useAtom } from 'jotai';
-import { patientList } from '@/dashboard/doctor/App';
+import { atom, useAtom } from 'jotai';
+import { patientList, telemetries } from '@/dashboard/doctor/App';
 import { userSession } from '@/dashboard/Auth';
 
 const Settings = () => {
@@ -19,6 +20,8 @@ const Settings = () => {
   const [session] = useAtom(userSession);
   const [patientSelected, setPatientSelected] = useState('');
   const [isEmuOpen, setEmuOpen] = useState(false);
+  const [tele, setTelemetries] = useAtom(telemetries);
+  const [loading, setLoading] = useState(false);
   const [excelData, setExcelData] = useState({
     rows: [],
     cols: [{ name: 'No Data', key: 0 }],
@@ -42,6 +45,7 @@ const Settings = () => {
   };
 
   const handleUpload = async (list) => {
+    setLoading(true);
     let sheet = [...list];
     sheet.shift();
     console.log('sheet');
@@ -59,8 +63,21 @@ const Settings = () => {
         },
       ]);
       if (error) throw error;
+      setLoading(false);
     }
-    // new Date().toISOString().toLocaleString('zh-TW');
+
+    const lastRow = [...sheet[sheet.length - 1]];
+    const { error } = await supabase
+      .from('PATIENT')
+      .update({ Status: lastRow[4] })
+      .eq('D_Id', patientName[0].D_Id);
+    if (error) throw error;
+    const telePayload = atom({
+      temperature: lastRow[1],
+      SpO2: lastRow[2],
+      HrtPressure: lastRow[3],
+    });
+    setTelemetries((prev) => ({ ...prev, [patientName[0].D_Id]: telePayload }));
   };
 
   return (
@@ -92,7 +109,7 @@ const Settings = () => {
           </TransitionsModal>
         </div>
 
-        <div className=" mt-4 w-[100%] overflow-y-scroll scrollbar p-2">
+        <div className="mt-4 flex h-[80%] w-[100%] flex-col  p-2">
           <div className=" flex w-[100%] items-center rounded-lg shadow-lg ring-2 ring-gray-200">
             <span className="rounded-lg px-4  py-2 text-large tracking-[2px] text-gray-500 ring-2 ring-gray-500">
               Virtual Data
@@ -102,7 +119,9 @@ const Settings = () => {
               input={patientSelected}
               setInput={setPatientSelected}
               name={'Patient'}
-              list={patients.map((patient) => patient.Fname)}
+              list={patients
+                .filter((patient) => patient.D_Id !== null)
+                .map((patient) => patient.Fname)}
               style={{ width: 150, height: 50 }}
               variant="filled"
             />
@@ -113,15 +132,22 @@ const Settings = () => {
               <input type="file" id="single" onChange={fileHandler} />
             </div>
           </div>
-          <div className=" flex w-[100%] items-center justify-start   rounded-b-lg bg-gray-300 p-8">
-            <OutTable
-              data={excelData.rows}
-              columns={excelData.cols}
-              tableClassName="ExcelTable"
-              tableHeaderRowClass="heading"
-            />
+          <div className="scrollbar flex w-[100%] flex-grow items-center justify-start overflow-y-scroll rounded-b-lg bg-gray-300 p-8">
+            {loading && (
+              <div className="flex items-center justify-center">
+                <InfinitySpin width="300" color="#475569" />
+              </div>
+            )}
+            {!loading && (
+              <OutTable
+                data={excelData.rows}
+                columns={excelData.cols}
+                tableClassName="ExcelTable"
+                tableHeaderRowClass="heading"
+              />
+            )}
           </div>
-          <div className="w-[100%] shadow-lg ring-2 ring-gray-200 ">
+          <div className="mt-auto w-[100%] shadow-lg ring-2 ring-gray-200 ">
             <button
               className="rounded-2xl px-4 py-2 text-[16px] text-black ring-2 ring-gray-300 hover:ring-black"
               onClick={() => handleUpload(excelData.rows)}

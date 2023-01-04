@@ -20,13 +20,6 @@ import { telemetries } from '@/dashboard/doctor/App';
 import { useAtom } from 'jotai';
 import { InfinitySpin } from 'react-loader-spinner';
 
-const statusObj = {
-  // applied: { color: 'info' },
-  Febrile: { color: 'error' },
-  none: { color: 'primary' },
-  Incubation: { color: 'warning' },
-  Recovery: { color: 'success' },
-};
 
 export const DashboardTable = (props) => {
   const listenStatusUpdate = () => {
@@ -117,22 +110,18 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
           <div className="flex w-[100%] items-center justify-start gap-2">
             <span
               className={`h-[1.5rem] w-[1.5rem] rounded-full ring-2 ring-offset-2 ${
-                (row.Status === 'Incubation' && 'bg-yellow-400 ring-yellow-400') ||
                 (row.Status === 'Febrile' && 'bg-orange-400 ring-orange-400') ||
-                (row.Status === 'Emergency' && 'bg-red-400 ring-red-400') ||
+                (row.Status === 'Critical' && 'bg-red-500 ring-red-500') ||
                 (row.Status === 'Recovery' && 'bg-green-400 ring-green-400') ||
-                (row.Status === 'None' && 'bg-gray-400 ring-gray-400') ||
-                'bg-blue-400'
+                (row.Status === 'None' && 'bg-blue-400 ring-blue-400')
               }`}
             ></span>
             <span
               className={`font-bold capitalize tracking-wider ${
-                (row.Status === 'Incubation' && 'text-yellow-400') ||
                 (row.Status === 'Febrile' && 'text-orange-400') ||
-                (row.Status === 'Emergency' && 'text-red-400') ||
+                (row.Status === 'Critical' && 'text-red-500') ||
                 (row.Status === 'Recovery' && 'text-green-400') ||
-                (row.Status === 'None' && 'text-gray-400') ||
-                'text-blue-400'
+                (row.Status === 'None' && 'text-blue-400') 
               }
               `}
             >

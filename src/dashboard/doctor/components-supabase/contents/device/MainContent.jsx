@@ -25,8 +25,7 @@ const MainContent = (props) => {
           props.handleLoadDevice();
         },
       )
-      .subscribe()
-      
+      .subscribe();
   };
   const listenDelete = () => {
     const DEVICE = supabase
@@ -39,10 +38,8 @@ const MainContent = (props) => {
           props.handleLoadDevice();
         },
       )
-      .subscribe()
-      
+      .subscribe();
   };
-
 
   const listenStatusUpdate = () => {
     const DEVICE = supabase
@@ -74,7 +71,7 @@ const MainContent = (props) => {
   let style2 = '';
   if (isOpen) {
     style1 = '';
-    style2 = 'w-[50%]';
+    style2 = 'w-[55%]';
   } else {
     style1 = '-mr-[32rem] opacity-0';
     style2 = 'w-[100%]';
@@ -108,7 +105,7 @@ const MainContent = (props) => {
       </div>
 
       <div
-        className={` ${style1} absolute top-4 right-0 z-20 h-[95%] w-[50%] rounded-l-lg bg-auto-white  shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
+        className={` ${style1} absolute top-4 right-0 z-20 h-[95%] w-[45%] rounded-l-lg bg-auto-white  shadow-2xl ring-2 ring-black transition-all duration-500 ease-in-out`}
       >
         <div className="sticky top-0 right-0 flex w-[100%] flex-col items-center justify-start gap-4 p-4">
           <button

@@ -116,18 +116,12 @@ const ContentContainer = (props) => {
         .eq('D_Ssn', session.user.id);
       if (error) throw error;
       let patients = {};
-      patients.emergency = PATIENT.filter((patient) => patient.Status === 'Emergency');
-      patients.all = [...patients.emergency];
+      patients.critical = PATIENT.filter((patient) => patient.Status === 'Critical');
+      patients.all = [...patients.critical];
       patients.febrile = PATIENT.filter((patient) => patient.Status === 'Febrile');
       patients.all = patients.all.concat(patients.febrile);
-      patients.incubation = PATIENT.filter((patient) => patient.Status === 'Incubation');
-      patients.all = patients.all.concat(patients.incubation);
-
       patients.recovery = PATIENT.filter((patient) => patient.Status === 'Recovery');
       patients.all = patients.all.concat(patients.recovery);
-
-      patients.normal = PATIENT.filter((patient) => patient.Status === 'Normal');
-      patients.all = patients.all.concat(patients.normal);
 
       patients.none = PATIENT.filter((patient) => patient.Status === 'None');
       patients.all = patients.all.concat(patients.none);

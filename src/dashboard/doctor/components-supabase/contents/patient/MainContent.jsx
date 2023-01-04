@@ -152,16 +152,13 @@ const MainContent = (props) => {
                     <div className="flex w-[100%] items-center justify-between">
                       <div
                         className={`h-[1rem] w-[1rem] rounded-full ring-2 ring-offset-2 ${
-                          (isPatient.Status === 'Incubation' &&
-                            'bg-yellow-400 ring-yellow-400') ||
                           (isPatient.Status === 'Febrile' &&
                             'bg-orange-400 ring-orange-400') ||
-                          (isPatient.Status === 'Emergency' &&
-                            'bg-red-400 ring-red-400') ||
+                          (isPatient.Status === 'Critical' &&
+                            'bg-red-500 ring-red-500') ||
                           (isPatient.Status === 'Recovery' &&
                             'bg-green-400 ring-green-400') ||
-                          (isPatient.Status === 'None' && 'bg-gray-400 ring-gray-400') ||
-                          'bg-blue-400 ring-blue-400'
+                          (isPatient.Status === 'None' && 'bg-blue-400 ring-blue-400')
                         }`}
                       ></div>
                       <div className="text-[22px] font-semibold tracking-widest text-black">
@@ -234,10 +231,10 @@ const MainContent = (props) => {
             All
           </button>
           <button
-            onClick={() => props.handleLoadPatient('emergency')}
+            onClick={() => props.handleLoadPatient('critical')}
             className="height-[1rem] mr-[1rem] rounded-lg bg-red-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-red-500"
           >
-            Emergency
+            Critical
           </button>
           <button
             onClick={() => props.handleLoadPatient('febrile')}
@@ -246,22 +243,16 @@ const MainContent = (props) => {
             Febrile
           </button>
           <button
-            onClick={() => props.handleLoadPatient('incubation')}
-            className="height-[1rem] mr-[1rem] rounded-lg bg-yellow-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-yellow-500"
-          >
-            Incubation
-          </button>
-          <button
             onClick={() => props.handleLoadPatient('recovery')}
             className="height-[1rem] mr-[1rem] rounded-lg bg-green-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-green-500"
           >
             Recovery
           </button>
           <button
-            onClick={() => props.handleLoadPatient('normal')}
+            onClick={() => props.handleLoadPatient('none')}
             className="height-[1rem] mr-[1rem] rounded-lg bg-blue-400 p-2 text-white ring-2 ring-black ring-offset-1 ring-offset-white hover:bg-blue-500"
           >
-            Normal
+            Unknown
           </button>
         </div>
       </div>

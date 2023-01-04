@@ -100,7 +100,7 @@ const MainContentCard = (
         .update({
           D_Id: null,
           D_Label: null,
-          Status: 'None'
+          Status: 'None',
         })
         .eq('D_Id', component.D_Id);
       await supabase.from('DEVICE').update({ Assign: 'No' }).eq('D_Id', component.D_Id);
@@ -158,69 +158,27 @@ const MainContentCard = (
         <>
           <div className="col-span-3 flex items-center justify-start">
             {infoOpen ? (
-              <>
                 <div className="flex w-[30%] flex-col items-start justify-start">
                   <div className="relative px-4 text-[22px] font-semibold tracking-widest text-black">
                     <GrDevice />
-                    {/* {currTele &&
-                    currTele.connected ? (
-                      <div className="absolute top-0 -right-[4rem] text-[14px] text-green-500">
-                        Connected
-                      </div>
-                    ) : (
-                      <div className="absolute top-0 -right-[4rem] text-[14px] text-red-500">
-                        Disconnected
-                      </div>
-                    )} */}
-
                     {component.Label}
                   </div>
                 </div>
-                <div className="ml-auto flex h-[100%] w-[100%] items-center justify-center gap-[1.8rem]">
-                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-center rounded-2xl text-orange-400 ring-2 ring-orange-400">
-                    <div className="">
-                      <TbTemperatureCelsius size={40} />{' '}
-                    </div>
-                    <div className="text-[20px] font-extrabold tracking-[5px] text-orange-400">
-                      {currTele && currTele.temperature}
-                      {/* {currTele &&
-                        currTele.temperature} */}
-                    </div>
-                  </div>
-                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-center rounded-2xl text-blue-400 ring-2 ring-blue-400">
-                    <div className="">
-                      <GiMedicalDrip size={40} />
-                    </div>
-                    <div className="text-[20px] font-extrabold tracking-[5px] text-blue-400">
-                      {currTele && currTele.SpO2}
-                    </div>
-                  </div>
-                  <div className="flex h-[100%] w-[20%] flex-col items-center justify-center rounded-2xl text-purple-400 ring-2 ring-purple-400">
-                    <div className="">
-                      <BiHeart size={40} />
-                    </div>
-                    <div className="text-[20px] font-extrabold tracking-[5px] text-purple-400">
-                      {currTele && currTele.HrtPressure}
-                    </div>
-                  </div>
-                </div>
-              </>
             ) : (
               <>
                 <div className="flex w-[30%] flex-col items-start justify-start">
                   <div className="relative px-4 text-[22px] font-semibold tracking-widest text-black">
                     <GrDevice />
+                    {component.Label}
                     {status && status[`${component.D_Id}`] === 'Streaming' ? (
-                      <div className="absolute top-0 -right-[4rem] text-[14px] text-green-500">
-                        Receiving Data..
+                      <div className="absolute -bottom-8 left-[9rem] px-2 rounded-lg text-[14px] text-green-500 ring-2 ring-green-400">
+                        STREAMING
                       </div>
                     ) : (
-                      <div className="absolute top-0 -right-[4rem] text-[14px] text-red-500">
-                        Paused
+                      <div className="absolute -bottom-8 left-[9rem] px-2 rounded-lg text-[14px] text-red-500 ring-2 ring-red-400">
+                        PAUSED
                       </div>
                     )}
-
-                    {component.Label}
                   </div>
                   <div className="px-4 text-[16px] font-semibold text-blue-600">
                     {component.Type}
@@ -290,7 +248,6 @@ const MainContentCard = (
                   <AiOutlineCloseCircle size={30} />
                 </button>
                 <DeviceFormContent
-                  // schema={device_schema}
                   handleUpdate={handleUpdate}
                   component={component}
                 />
@@ -344,7 +301,9 @@ const DeviceFormContent = (props) => {
               <div className="text-[16px] text-blue-500">
                 {`Assigned to: ${props.component.Assign}`} <br />
                 {`Access token: ${props.component.Token}`} <br />
-                <span className='text-red-500'>Please note that access token cannot be updated.</span>
+                <span className="text-red-500">
+                  Please note that access token cannot be updated.
+                </span>
               </div>
               <div className={`mt-6`}>
                 <Field
@@ -366,19 +325,12 @@ const DeviceFormContent = (props) => {
                   helperText={`Please update the type of your device`}
                 />
               </div>
-              {/* 
-            {props.loading ? (
-              <div className="absolute bottom-[2rem] right-[3rem]">
-                <InfinitySpin width="300" color="#475569" />
-              </div>
-            ) : ( */}
               <button
                 className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
                 type="submit"
               >
                 Update
               </button>
-              {/* )} */}
             </div>
           </Form>
         )}

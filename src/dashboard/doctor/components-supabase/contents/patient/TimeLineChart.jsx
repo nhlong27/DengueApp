@@ -59,8 +59,14 @@ export function TimeLineChart(props) {
   };
 
   useEffect(async () => {
+    setRecordsCollected({
+      tempRecords: [0],
+      spo2Records: [0],
+      pressureRecords: [0],
+      timeElapsed: ['time', 'time', 'time', 'time', 'time'],
+    });
     handleLoadTele();
-  }, []);
+  }, [props.deviceId]);
 
   return (
     <Line

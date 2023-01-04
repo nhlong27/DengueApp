@@ -30,7 +30,6 @@ const PatientAvatar = ({ isPatient }) => {
       }
     } catch (error) {
       console.log('Error downloading image: ', error.message);
-      
     }
   };
 
@@ -91,12 +90,10 @@ const PatientAvatar = ({ isPatient }) => {
       )}
       <img
         className={`row-span-3 mt-4 h-[10rem] w-[80%] rounded-full bg-gray-400 ring-4 ring-offset-2 ${
-          (isPatient.Status === 'Incubation' && 'ring-yellow-400') ||
           (isPatient.Status === 'Febrile' && 'ring-orange-400') ||
-          (isPatient.Status === 'Emergency' && 'ring-red-400') ||
+          (isPatient.Status === 'Critical' && 'ring-red-400') ||
           (isPatient.Status === 'Recovery' && 'ring-green-400') ||
-          (isPatient.Status === 'None' && 'ring-gray-400') ||
-          'ring-blue-400'
+          (isPatient.Status === 'None' && 'ring-blue-400')
         }`}
         src={avatarUrl ? avatarUrl : `https://place-hold.it/150x150`}
         alt={avatarUrl ? 'Avatar' : 'No image'}

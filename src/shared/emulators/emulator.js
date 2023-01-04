@@ -8,7 +8,7 @@ const thingsboardHost = HOST;
 
 // Reads the access token from arguments
 // const accessToken = 'E6v3eim55SWRndoHW8n5';
-const accessToken = 'eDemoToken';
+const accessToken = 'wSFSB5fuyn5I4RIWyAPs';
 const minTemperature = 36,
   maxTemperature = 41,
   minSpO2 = 95,
@@ -37,7 +37,7 @@ client.on('connect', function () {
   );
   // Schedules telemetry data upload once per second
   console.log('Uploading temperature and SpO2 data once per second...');
-  setInterval(publishTelemetry, 2000);
+  setInterval(publishTelemetry, 1000);
 });
 
 // Uploads telemetry data using 'v1/devices/me/telemetry' MQTT topic
