@@ -7,7 +7,8 @@ var mqtt = require('mqtt');
 const thingsboardHost = HOST;
 
 // Reads the access token from arguments
-const accessToken = 'E6v3eim55SWRndoHW8n5';
+// const accessToken = 'E6v3eim55SWRndoHW8n5';
+const accessToken = 'eDemoToken';
 const minTemperature = 36,
   maxTemperature = 41,
   minSpO2 = 95,

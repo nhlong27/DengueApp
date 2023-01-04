@@ -12,8 +12,9 @@ const NurseAvatar = ({ isNurse }) => {
   const [session] = useAtom(userSession);
 
   useEffect(() => {
+    setAvatarUrl(null);
     downloadImage('avatar.png');
-  }, [update]);
+  }, [update, isNurse]);
 
   const downloadImage = async (path) => {
     try {
@@ -74,12 +75,12 @@ const NurseAvatar = ({ isNurse }) => {
       {uploading ? (
         <InfinitySpin width="100" color="#475569" />
       ) : (
-        <div className="flex flex-col items-center justify-start text-[14px] absolute top-0 w-[45%] left-0">
+        <div className="absolute top-0 left-0 flex w-[45%] flex-col items-center justify-start text-[14px]">
           {/* <label className="text-blue-600" htmlFor="single">
             Upload an avatar
           </label> */}
           <input
-            className="bg-auto-white ring-2 ring-gray-300 hover:ring-black overflow-hidden w-[100%] rounded-xl h-[1.5rem]"
+            className="h-[1.5rem] w-[100%] overflow-hidden rounded-xl bg-auto-white ring-2 ring-gray-300 hover:ring-black"
             type="file"
             accept="image/*"
             onChange={uploadAvatar}

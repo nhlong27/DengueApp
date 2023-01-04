@@ -51,7 +51,7 @@ const PatientSearchCreate = (props) => {
 
       console.log('registering patient..');
 
-      const DEVICE = '';
+      let device = '';
       if (values.label) {
         let { data: DEVICE } = await supabase
           .from('DEVICE')
@@ -64,6 +64,8 @@ const PatientSearchCreate = (props) => {
           .from('DEVICE')
           .update({ Assign: values.fname })
           .eq('D_Id', DEVICE.D_Id);
+
+        device = { ...DEVICE };
       }
       if (values.B_Number) {
         console.log('assigning bed..');
@@ -79,6 +81,7 @@ const PatientSearchCreate = (props) => {
       });
 
       console.log('activation mail sent!');
+      console.log(device);
 
       const { error } = await supabase.from('PATIENT').insert([
         {
@@ -93,10 +96,10 @@ const PatientSearchCreate = (props) => {
           District: values.district,
           Street: values.street,
           Email: values.email,
-          D_Id: DEVICE && DEVICE.D_Id,
+          D_Id: device && device.D_Id,
           B_Number: values.B_Number,
           Age: values.age,
-          D_Label: DEVICE && DEVICE.Label,
+          D_Label: device && device.Label,
           D_Ssn: session.user.id,
         },
       ]);
@@ -140,7 +143,8 @@ const PatientSearchCreate = (props) => {
                 .reduce(
                   (accumulator, currentValue) => accumulator.concat(currentValue),
                   [],
-                ),
+                )
+                .map((bed) => bed.B_Number),
             }}
             // schema={patient_schema}
             handleSubmit={handleSubmit}

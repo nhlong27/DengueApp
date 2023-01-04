@@ -205,9 +205,7 @@ const MainContent = (props) => {
                 <div className="col-span-3 rounded ring-2 ring-gray-300">
                   <StatisticsCard
                     component={isPatient}
-                    devices={devices
-                      .filter((device) => device.Assign === 'No')
-                      .map((device) => device.Label)}
+                    devices={devices}
                     setIsChart={props.setIsChart}
                     facilities={facilities}
                     setOpen={setOpen}
@@ -405,7 +403,8 @@ const StatisticsCard = (props) => {
                         input={device}
                         setInput={setDevice}
                         name={'Assign a device'}
-                        list={props.devices}
+                        list={props.devices.filter((device) => device.Assign === 'No')
+                      .map((device) => device.Label)}
                         style={{ width: 150, height: 50 }}
                         variant="filled"
                       />

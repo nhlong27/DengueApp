@@ -19,7 +19,7 @@
   <h3 align="center">DENGUIDE</h3>
 
   <p align="center">
-    An IoT-based monitoring application for tackling the dengue fever outbreak.
+    An IoT-based monitoring application for tackling the dengue fever outbreak
     <br />
     Author: Nguyen Hoang Long 
     <!-- <a href="https://github.com/nhlong27/dengueapp"><strong>Explore the docs »</strong></a> -->
@@ -70,16 +70,16 @@ This application was developed with the use of several IoT sensors and wireless 
 <br/>
 Problems to solve:
 <ul>
-  <li>Shortages of medical workers during outbreaks of diseases like dengue fever.
+  <li>Shortages of medical workers during outbreaks of diseases like dengue fever
   </li>
-  <li>Inefficient traditional methods of monitoring patients' conditions.
+  <li>Inefficient traditional methods of monitoring patients' conditions
   </li>
 </ul>
 Features:
 <ul>
-  <li>Monitoring with built in alarm system. Data is collected from IoT wearables.
+  <li>Monitoring with built in alarm system. Data is collected from IoT wearables
   </li>
-  <li>Providing a patient management system.
+  <li>Providing a patient management system
   </li>
 </ul>
 
@@ -116,7 +116,7 @@ This is an example of how to list things you need to use the software and how to
 
 _Below is how you can install and set up your app. This template doesn't rely on any external dependencies or services._
 
-1. Default host is Thingsboard.cloud and Supabase. Create your own accounts.
+1. Default hosts are Thingsboard.cloud and Supabase. Create your own accounts
 2. Clone the repo
    ```sh
    git clone https://github.com/nhlong27/dengueapp.git
@@ -125,13 +125,14 @@ _Below is how you can install and set up your app. This template doesn't rely on
    ```sh
    npm install
    ```
-4. Replace with your local environment variables: VITE_USERNAME, VITE_PASSWORD, VITE_SUPABASE_URL, VITE_SUPABASE_ANON.
+4. Replace with your local environment variables: VITE_USERNAME, VITE_PASSWORD, VITE_SUPABASE_URL, VITE_SUPABASE_ANON, VITE_DEVICE_PROFILE
    ```js
    const VITE_HOST = 'thingsboard.cloud';
-   const VITE_USERNAME = 'your_username';
-   const VITE_PASSWORD = 'your_password'; 
+   const VITE_USERNAME = 'your_thingsboard_username';
+   const VITE_PASSWORD = 'your_thingsboard_password'; 
+   const VITE_DEVICE_PROFILE = 'your_thingsboard_device_profile_id'; 
    const VITE_SUPABASE_URL = 'your_supabase_host'; 
-   const VITE_SUPABASE_ANON = 'your_anon_key'; 
+   const VITE_SUPABASE_ANON = 'your_supabase_anon_key'; 
    
    ```
 
@@ -141,7 +142,7 @@ _Below is how you can install and set up your app. This template doesn't rely on
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-### Default Assets:
+### Default Assets
 _Doctors (firstName lastName - email): 
 <ul>
   <!-- <li>Long Nguyen - nhlong2706@gmail.com *</li> -->
@@ -154,15 +155,12 @@ _Nurses (firstName lastName - email):
   <li>Ms Z - MsZ@mail.com</li>
 </ul>
   
-  
-  
-
 _Patients (firstName lastName - email): 
 <ul>
   <!-- <li>MrE demo - iamfallers@gmail.com * </li> -->
   <li>MrA febrile - MrA_febrile@mail.com</li>
   <li>MrB critical - MrB_critical@mail.com</li>
-  <li>MrC recovery - MrC_recovery@mail.com</li>
+  <li>MsC recovery - MsC_recovery@mail.com</li>
   <li>MrD normal - MrD_normal@mail.com</li>
 </ul>
 
@@ -177,14 +175,16 @@ _Beds:
   <!-- <li>A1_201.1 *</li> -->
   <li>A1_101.1</li>
   <li>A1_101.2</li>
+  <li>A1_101.3</li>
+  <li>A1_101.4</li>
 </ul>
 
 _Devices (label - token <MultiSensor>):
 <ul>
   <!-- <li>Device_MrE_demo - [your token: E6v3eim55SWRndoHW8n5] *</li> -->
   <li>Device_MrA_febrile - aFebrileToken</li>
-  <li>Device_MrB_critical - aCriticalToken</li>
-  <li>Device_MrC_recovery - cRecoveryToken</li>
+  <li>Device_MrB_critical - bCriticalToken</li>
+  <li>Device_MsC_recovery - cRecoveryToken</li>
   <li>Device_MrD_normal - dNormalToken</li>
 </ul>
 

@@ -40,7 +40,7 @@ const DeviceSearchCreate = (props) => {
             type: values.type,
             label: values.label,
             deviceProfileId: {
-              id: '3e29a7f0-750f-11ed-81cb-3bc720ab387f',
+              id: import.meta.env.VITE_DEVICE_PROFILE,
               entityType: 'DEVICE_PROFILE',
             },
             additionalInfo: {},

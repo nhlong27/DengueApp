@@ -50,7 +50,7 @@ const NurseSearchCreate = (props) => {
           Fname: values.fname,
           Lname: values.lname,
           Email: values.email,
-          Assign: values.rooms ? values.rooms.join() : 'No',
+          Assign: values.rooms.length>0 ? values.rooms.join() : 'No',
           D_Ssn: session.user.id,
         },
       ]);
@@ -94,7 +94,7 @@ const NurseSearchCreate = (props) => {
             <AiOutlineCloseCircle size={30} />
           </button>
           <FacilityFormContent
-            optionList={Object.keys(facilities)}
+            optionList={Object.values(facilities)}
             // schema={nurse_schema}
             handleSubmit={handleSubmit}
             loading={loading}

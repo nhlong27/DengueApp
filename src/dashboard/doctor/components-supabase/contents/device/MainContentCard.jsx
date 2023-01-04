@@ -99,6 +99,8 @@ const MainContentCard = (
         .from('PATIENT')
         .update({
           D_Id: null,
+          D_Label: null,
+          Status: 'None'
         })
         .eq('D_Id', component.D_Id);
       await supabase.from('DEVICE').update({ Assign: 'No' }).eq('D_Id', component.D_Id);

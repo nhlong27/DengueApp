@@ -90,8 +90,8 @@ const Account = (props) => {
   };
 
   return (
-    <div className="m-8 min-h-[92%] rounded-lg bg-gray-300 px-4 py-4">
-      <div className="flex w-auto flex-col items-start justify-start rounded-lg bg-auto-white px-8 pt-8 shadow-lg ring-2 ring-black">
+    <div className="m-8 min-h-[92%] rounded-lg bg-gray-300 px-4 py-4 ">
+      <div className="scrollbar flex w-auto flex-col items-start justify-start overflow-y-scroll rounded-lg bg-auto-white px-8 pt-8 shadow-lg ring-2 ring-black">
         {loading ? (
           <InfinitySpin width="100" color="#475569" />
         ) : (
