@@ -14,6 +14,7 @@ import { telemetries, deviceList, facilityList, nurseList, patientList } from '.
 import Schedules from './components-supabase/contents/schedule/Schedules';
 import Messages from './components-supabase/contents/message/Messages';
 import { userSession } from '../Auth';
+import Settings from './components-supabase/contents/settings/Settings';
 
 let loadFacility = {};
 
@@ -23,7 +24,7 @@ const ContentContainer = (props) => {
   const [loading, setLoading] = useState(false);
   // const [isSocket, setIsSocket] = useState(false); // I forgot what this is for
   const [facilities, setFacilities] = useAtom(facilityList);
-  const [devices, setDevices] = useAtom(deviceList);
+  const [devices, setDevices] = useAtom(deviceList);  
   const [nurses, setNurses] = useAtom(nurseList);
   const [patients, setPatients] = useAtom(patientList);
 
@@ -39,6 +40,7 @@ const ContentContainer = (props) => {
 
       console.log('load devices success!');
       await setDevices(() => DEVICE);
+      if (error) throw error;
     } catch (error) {
       console.log(error.error_description || error.message);
     }
@@ -197,6 +199,7 @@ const ContentContainer = (props) => {
           />
           <Route path="/schedules" element={<Schedules />} />
           <Route path="/messages" element={<Messages />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>
 

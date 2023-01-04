@@ -25,6 +25,7 @@ import TextFormField from '@/shared/utilities/form/TextFormField';
 import { userSession } from '@/dashboard/Auth';
 import PatientAvatar from './PatientAvatar';
 import { patientList } from '@/dashboard/doctor/App';
+import { TimeLineChart } from './TimeLineChart';
 
 const MainContent = (props) => {
   const [content, setContent] = useAtom(patientList);
@@ -36,7 +37,7 @@ const MainContent = (props) => {
   const [openUpdate, setOpenUpdate] = useState(false);
   // const [statusList, setStatusList] = useState({});
 
-  const [session] = useAtom(userSession)
+  const [session] = useAtom(userSession);
 
   const listenUpdate = async () => {
     const PATIENT = supabase
@@ -51,7 +52,6 @@ const MainContent = (props) => {
       )
       .subscribe();
   };
-
 
   const handleDelete = async (patient) => {
     try {
@@ -102,7 +102,6 @@ const MainContent = (props) => {
     }
   };
 
-
   useEffect(() => {
     listenUpdate();
   }, []);
@@ -149,7 +148,7 @@ const MainContent = (props) => {
               <div className="grid w-[100%] grid-cols-4 gap-8">
                 <div className="col-span-1  grid min-h-[20rem] min-w-[15rem] grid-cols-2 grid-rows-5 gap-4 rounded bg-auto-white p-4 ring-2 ring-gray-300">
                   <div className="relative col-span-2 row-span-4 flex flex-col items-center justify-between gap-2">
-                    <PatientAvatar isPatient={isPatient}/>
+                    <PatientAvatar isPatient={isPatient} />
                     <div className="flex w-[100%] items-center justify-between">
                       <div
                         className={`h-[1rem] w-[1rem] rounded-full ring-2 ring-offset-2 ${
@@ -217,6 +216,9 @@ const MainContent = (props) => {
                     handleUpdate={handleUpdate}
                   />
                 </div>
+                <div className="col-span-4   min-h-[20rem] rounded bg-auto-white p-4 ring-2 ring-gray-300">
+                  <TimeLineChart deviceId={isPatient.D_Id} />
+                </div>
               </div>
             )}
           </div>
@@ -277,8 +279,8 @@ const MainContent = (props) => {
 
 const StatisticsCard = (props) => {
   const [device, setDevice] = useState('');
-  const [room, setRoom] = useState(null);
-  const [bed, setBed] = useState(null);
+  const [room, setRoom] = useState('');
+  const [bed, setBed] = useState('');
   const [age, setAge] = useState(props.component.Age);
   const [sex, setSex] = useState(props.component.Sex);
   const [bloodtype, setBloodtype] = useState(props.component.BloodType);

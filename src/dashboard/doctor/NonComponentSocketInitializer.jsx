@@ -12,7 +12,7 @@ import { InfinitySpin } from 'react-loader-spinner';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { telemetries } from './App';
 
-const now = Date.now();
+const now = new Date().toISOString().toLocaleString('zh-TW');
 const mtd = now - 3600000;
 
 const NonComponentSocketInitializer = () => {
@@ -60,9 +60,9 @@ const NonComponentSocketInitializer = () => {
           .eq('D_Id', deviceId);
 
         if (response.data.temperature[0][1] < 37) {
-          timeElapse = status !== 'Normal' ? timeElapse + 4 : 0;
+          timeElapse = status !== 'recovery' ? timeElapse + 4 : 0;
           if (timeElapse >= 10) {
-            status = 'Normal';
+            status = 'recovery';
 
             const { error } = await supabase
               .from('PATIENT')
@@ -73,58 +73,7 @@ const NonComponentSocketInitializer = () => {
           const { error } = await supabase.from('TELEMETRY').insert([
             {
               D_Id: deviceId,
-              Time: Date.now(),
-              Temperature: response.data.temperature[0][1],
-              SpO2: response.data.SpO2[0][1],
-              Pressure: response.data.HrtPressure[0][1],
-              Elapse: timeElapse,
-              Status: status,
-            },
-          ]);
-          if (error) throw error;
-        } else if (
-          response.data.temperature[0][1] >= 37.5 &&
-          response.data.temperature[0][1] <= 38.5
-        ) {
-          timeElapse = status !== 'Incubation' ? timeElapse + 4 : 0;
-          if (timeElapse >= 10) {
-            status = 'Incubation';
-
-            const { error } = await supabase
-              .from('PATIENT')
-              .update({ Status: status })
-              .eq('D_Id', deviceId);
-            if (error) throw error;
-          }
-          const { error } = await supabase.from('TELEMETRY').insert([
-            {
-              D_Id: deviceId,
-              Time: Date.now(),
-              Temperature: response.data.temperature[0][1],
-              SpO2: response.data.SpO2[0][1],
-              Pressure: response.data.HrtPressure[0][1],
-              Elapse: timeElapse,
-              Status: status,
-            },
-          ]);
-          if (error) throw error;
-        } else if (
-          response.data.temperature[0][1] >= 39 &&
-          response.data.temperature[0][1] <= 40
-        ) {
-          timeElapse = status !== 'Febrile' ? timeElapse + 4 : 0;
-          if (timeElapse >= 10) {
-            status = 'Febrile';
-            const { error } = await supabase
-              .from('PATIENT')
-              .update({ Status: status })
-              .eq('D_Id', deviceId);
-            if (error) throw error;
-          }
-          const { error } = await supabase.from('TELEMETRY').insert([
-            {
-              D_Id: deviceId,
-              Time: Date.now(),
+              created_at: new Date().toISOString().toLocaleString('zh-TW'),
               Temperature: response.data.temperature[0][1],
               SpO2: response.data.SpO2[0][1],
               Pressure: response.data.HrtPressure[0][1],
@@ -135,11 +84,12 @@ const NonComponentSocketInitializer = () => {
           if (error) throw error;
         } else if (
           response.data.temperature[0][1] >= 37 &&
-          response.data.temperature[0][1] <= 37.5
+          response.data.temperature[0][1] <= 38.5
         ) {
-          timeElapse = status !== 'Recovery' ? timeElapse + 4 : 0;
+          timeElapse = status !== 'critical' ? timeElapse + 4 : 0;
           if (timeElapse >= 10) {
-            status = 'Recovery';
+            status = 'critical';
+
             const { error } = await supabase
               .from('PATIENT')
               .update({ Status: status })
@@ -149,7 +99,32 @@ const NonComponentSocketInitializer = () => {
           const { error } = await supabase.from('TELEMETRY').insert([
             {
               D_Id: deviceId,
-              Time: Date.now(),
+              created_at: new Date().toISOString().toLocaleString('zh-TW'),
+              Temperature: response.data.temperature[0][1],
+              SpO2: response.data.SpO2[0][1],
+              Pressure: response.data.HrtPressure[0][1],
+              Elapse: timeElapse,
+              Status: status,
+            },
+          ]);
+          if (error) throw error;
+        } else if (
+          response.data.temperature[0][1] >= 37 &&
+          response.data.temperature[0][1] <= 41
+        ) {
+          timeElapse = status !== 'febrile' ? timeElapse + 4 : 0;
+          if (timeElapse >= 10) {
+            status = 'febrile';
+            const { error } = await supabase
+              .from('PATIENT')
+              .update({ Status: status })
+              .eq('D_Id', deviceId);
+            if (error) throw error;
+          }
+          const { error } = await supabase.from('TELEMETRY').insert([
+            {
+              D_Id: deviceId,
+              created_at: new Date().toISOString().toLocaleString('zh-TW'),
               Temperature: response.data.temperature[0][1],
               SpO2: response.data.SpO2[0][1],
               Pressure: response.data.HrtPressure[0][1],
@@ -159,6 +134,32 @@ const NonComponentSocketInitializer = () => {
           ]);
           if (error) throw error;
         }
+        //  else if (
+        //   response.data.temperature[0][1] >= 37 &&
+        //   response.data.temperature[0][1] <= 37
+        // ) {
+        //   timeElapse = status !== 'Recovery' ? timeElapse + 4 : 0;
+        //   if (timeElapse >= 10) {
+        //     status = 'Recovery';
+        //     const { error } = await supabase
+        //       .from('PATIENT')
+        //       .update({ Status: status })
+        //       .eq('D_Id', deviceId);
+        //     if (error) throw error;
+        //   }
+        //   const { error } = await supabase.from('TELEMETRY').insert([
+        //     {
+        //       D_Id: deviceId,
+        //       created_at:((new Date()).toISOString()).toLocaleString('zh-TW'),
+        //       Temperature: response.data.temperature[0][1],
+        //       SpO2: response.data.SpO2[0][1],
+        //       Pressure: response.data.HrtPressure[0][1],
+        //       Elapse: timeElapse,
+        //       Status: status,
+        //     },
+        //   ]);
+        //   if (error) throw error;
+        // }
         const telePayload = atom({
           temperature: response.data.temperature[0][1],
           SpO2: response.data.SpO2[0][1],

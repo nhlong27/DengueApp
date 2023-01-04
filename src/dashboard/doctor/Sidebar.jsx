@@ -8,13 +8,6 @@ import { MdOutlineSchedule } from 'react-icons/md';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { AiOutlineLeft } from 'react-icons/ai';
 import { AiOutlineRight } from 'react-icons/ai';
-import { MdScreenSearchDesktop } from 'react-icons/md';
-import { Field, Form, Formik, setNestedObjectValues } from 'formik';
-import { Typography } from '@mui/material';
-import TransitionsModal from '@/shared/utilities/Modal';
-import SelectFormField from '@/shared/utilities/form/SelectFormField';
-import TextFormField from '@/shared/utilities/form/TextFormField';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
 import {BsChatLeftDots} from 'react-icons/bs'
 import { BsCalendar2Date } from 'react-icons/bs';
 
@@ -23,7 +16,6 @@ import { FiSettings } from 'react-icons/fi';
 const Sidebar = (props) => {
   const [isOpen, setOpen] = useState(false);
   const open = isOpen ? 'w-[15%]  rounded-r-lg' : 'w-[5%] my-4 rounded-2xl ml-4';
-  const [isEmuOpen, setEmuOpen] = useState(false);
 
   return (
     <div
@@ -187,93 +179,21 @@ const Sidebar = (props) => {
               <BsChatLeftDots size={20} />
               {/* <span className="hidden">Notifs</span> */}
             </Link>
-            <div
+            <Link
               onClick={() => {
-                setEmuOpen(true);
+                props.setLocation('Settings');
               }}
+              to='/dashboard/settings'
               className="duration-400 p-center my-2 mt-8 flex items-center justify-center py-2  text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
             >
               <FiSettings size={20} />
-            </div>
+            </Link>
           </div>
         </>
       )}
-      <TransitionsModal open={isEmuOpen}>
-        <button
-          onClick={() => setEmuOpen(false)}
-          className="absolute -top-[1rem] -right-[1rem] rounded-full bg-white"
-        >
-          <AiOutlineCloseCircle size={30} />
-        </button>
-        <FacilityFormContent
-          // schema={device_schema}
-          handleSubmit={() => setEmuOpen(false)}
-        />
-      </TransitionsModal>
     </div>
   );
 };
 
-const FacilityFormContent = (props) => {
-  return (
-    <Formik
-      validateOnChange={false}
-      // validationSchema={props.schema}
-      initialValues={{
-        deviceId: '',
-        accessToken: '',
-        addDate: '',
-      }}
-      onSubmit={(values) => {
-        console.log('for later');
-        props.handleSubmit();
-      }}
-    >
-      {({ values }) => (
-        <Form>
-          <div className="flex flex-col items-start justify-start">
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              Device emulator
-            </Typography>
-            <div className={`mt-6`}>
-              <Field
-                name="deviceId"
-                component={TextFormField}
-                required
-                id="id-required"
-                label={`Device Id`}
-              />
-              <Field
-                name="accessToken"
-                component={TextFormField}
-                id="token-required"
-                label={`Access Token`}
-              />
-              <Field
-                name="addDate"
-                component={TextFormField}
-                id="date"
-                label={`Simulated date`}
-              />
-            </div>
-
-            {props.loading ? (
-              <div className="absolute bottom-[2rem] right-[3rem]">
-                <InfinitySpin width="300" color="#475569" />
-              </div>
-            ) : (
-              <button
-                className="absolute bottom-[4.5rem] right-[4rem] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-400  "
-                type="submit"
-              >
-                Change
-              </button>
-            )}
-          </div>
-        </Form>
-      )}
-    </Formik>
-  );
-};
 
 export default Sidebar;

@@ -12,6 +12,8 @@ import { supabase } from '@/shared/api/supabase/supabaseClient';
 // import { AppContext } from '@/dashboard/doctor/App';
 import { InfinitySpin } from 'react-loader-spinner';
 import { BiRefresh } from 'react-icons/bi';
+import { userSession } from '@/dashboard/Auth';
+import { useAtom } from 'jotai';
 
 const device_schema = yup.object({
   label: yup.string().min(1).max(30),
@@ -20,19 +22,8 @@ const device_schema = yup.object({
 });
 
 const DeviceSearchCreate = (props) => {
-  const [session, setSession] = useState(null);
+  const [session] = useAtom(userSession);
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    setSession(null);
-  }, []);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);

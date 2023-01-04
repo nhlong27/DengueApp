@@ -185,7 +185,7 @@ export const DepositWithdraw = (props) => {
           {props.bedData.map((item, index) => {
             return (
               <Box
-                key={item.B_Number}
+                key={index}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
@@ -266,7 +266,7 @@ export const DepositWithdraw = (props) => {
           {props.nurseData.map((item, index) => {
             return (
               <Box
-                key={item.N_Ssd}
+                key={index}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',

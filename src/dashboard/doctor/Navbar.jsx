@@ -123,12 +123,15 @@ export const DropDownMenu = (props) => {
         >
           Profile
         </Link>
-        <a
+        <Link
           className="block w-full px-4 py-2 text-left text-sm hover:bg-slate-200 hover:text-black"
-          href="#"
+          onClick={() => {
+            props.setLocation('Settings');
+          }}
+          to="/dashboard/settings"
         >
           Settings
-        </a>
+        </Link>
         {/* <a
           className="block w-full px-4 py-2 text-left text-sm hover:bg-slate-200 hover:text-black"
           href="#"
