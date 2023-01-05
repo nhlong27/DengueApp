@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from './Navbar';
-import Sidebar from './Sidebar';
-import Chatbox from './Chatbox';
-import ContentContainer from './ContentContainer';
+import Navbar from '../../Navbar';
+import Sidebar from '../../Sidebar';
+import ContentContainer from '../../ContentContainer';
 import { client } from '@/shared/api/initClient_tenant';
-import { LineChart } from './components-supabase/contents/patient/SingleLineChart';
+import { LineChart } from './SingleLineChart';
 import { AiOutlineDown } from 'react-icons/ai';
 import { Provider, atom, useAtom } from 'jotai';
-import { userSession } from '../Auth';
+import { userSession } from '../../../Auth';
 import { InfinitySpin } from 'react-loader-spinner';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
-import { telemetries } from './App';
+import { telemetries } from '../../App';
 
 const now = new Date().toISOString().toLocaleString('zh-TW');
 const mtd = now - 3600000;

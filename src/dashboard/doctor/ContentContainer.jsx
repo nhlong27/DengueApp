@@ -10,7 +10,15 @@ import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { InfinitySpin } from 'react-loader-spinner';
 import { client } from '@/shared/api/initClient_tenant';
 import { useAtom, atom } from 'jotai';
-import { telemetries, deviceList, facilityList, nurseList, patientList } from './App';
+import {
+  telemetries,
+  deviceList,
+  facilityList,
+  nurseList,
+  patientList,
+  messageList,
+  notifList,
+} from './App';
 import Schedules from './components-supabase/contents/schedule/Schedules';
 import Messages from './components-supabase/contents/message/Messages';
 import { userSession } from '../Auth';
@@ -24,9 +32,11 @@ const ContentContainer = (props) => {
   const [loading, setLoading] = useState(false);
   // const [isSocket, setIsSocket] = useState(false); // I forgot what this is for
   const [facilities, setFacilities] = useAtom(facilityList);
-  const [devices, setDevices] = useAtom(deviceList);  
+  const [devices, setDevices] = useAtom(deviceList);
   const [nurses, setNurses] = useAtom(nurseList);
   const [patients, setPatients] = useAtom(patientList);
+  const [messages, setMessages] = useAtom(messageList);
+  const [notif, setNotif] = useAtom(notifList);
 
   const [session] = useAtom(userSession);
 
@@ -101,7 +111,7 @@ const ContentContainer = (props) => {
       setNurses(NURSE);
     } catch (error) {
       console.log(error.error_description || error.message);
-    } 
+    }
     // finally {
     //   setLoading(false);
     // }
@@ -130,23 +140,34 @@ const ContentContainer = (props) => {
       setPatients(patients[`${type}`]);
     } catch (error) {
       console.log(error.error_description || error.message);
-    } 
+    }
     // finally {
     //   setLoading(false);
     // }
   };
 
-  useEffect(async () => {
-    setLoading(true)
+  const handleLoadMessage = async () => {
+    const { data: MESSAGE, error } = await supabase.from('MESSAGE').select('*');
+    let lastMessage = { ...MESSAGE[MESSAGE.length - 1] };
+    if (lastMessage.Signature !== session.user.id) {
+      setNotif(() => ({ ...lastMessage }));
+    }
+    setMessages(() => MESSAGE);
+  };
+
+  useEffect(() => {
+    setLoading(true);
     console.log('loading devices..');
-    await handleLoadDevice();
+    handleLoadDevice();
     console.log('loading facilities..');
-    await handleLoadFacility();
+    handleLoadFacility();
     console.log('loading nurses..');
-    await handleLoadNurse();
+    handleLoadNurse();
     console.log('loading patients..');
-    await handleLoadPatient();
-    setLoading(false)
+    handleLoadPatient();
+    console.log('loading messages..');
+    handleLoadMessage();
+    setLoading(false);
   }, [isUpdate, refresh]);
 
   if (!loading) {
@@ -192,7 +213,10 @@ const ContentContainer = (props) => {
             }
           />
           <Route path="/schedules" element={<Schedules />} />
-          <Route path="/messages" element={<Messages />} />
+          <Route
+            path="/messages"
+            element={<Messages handleLoadMessage={handleLoadMessage} />}
+          />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>

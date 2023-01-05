@@ -208,14 +208,13 @@ _ Facility page: show room & bed creation
 #### **Monitoring: Data collection, Categorization, Alarms** 
 
 - Device page: show device stream (virtual/real), explain receiving/paused
-- Patient Detail page: show line charts, show time-queries (MrA/B/C)
+- Patient Detail page: show real-time line charts, show time series history charts
 - Patient page: explain status, show categories
  
 #### **Interaction: Messages, Scheduling** 
 
 - Nurse page: show nurse registering & room assignment
 - Message page: show messaging
-- Schedule page: show making schedules (assign task to nurse with patient)
 
 #### **Alternatives**
 
@@ -242,21 +241,22 @@ _ Facility page: show room & bed creation
 ![Original project snapshot](assets/img/readme/project-screenshot.png?raw=true)
 
 ### Todos
-- [x] Refresh 
-- [ ] Keep session
+- [x] Refresh buttons 
+- [x] Keep session
+- [x] Sticky info 
+- [x] Add subscriptions
+- [x] Update device status when stoppping connection
 - [ ] Invite (server api)
-- [ ] Remaster UI/UX 
 - [ ] Already existed (token, fname, lname, ...) --> Announce error
 - [ ] Show and hide sensitive information
-- [x] Sticky info 
-- [ ] Local storage
+- [ ] User info schemas
+- [ ] Local storage?
 - [ ] Manually Open & Close websocket
 - [ ] Breadcrumbs
-- [ ] subscriptions: devices & facilities
-- [ ] update patient status when device stops connecting
-- [ ] react route persists on refresh (sessionStorage and window clear?)
+- [ ] React route persists on refresh
 - [ ] Multi-language Support
     - [ ] Vietnamese
+- [ ] Schedules
 
 See the [open issues](https://github.com/nhlong27/dengueapp/issues) for a full list of proposed features (and known issues).
 

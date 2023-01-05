@@ -25,7 +25,7 @@ import TextFormField from '@/shared/utilities/form/TextFormField';
 import { userSession } from '@/dashboard/Auth';
 import PatientAvatar from './PatientAvatar';
 import { patientList } from '@/dashboard/doctor/App';
-import { TimeLineChart } from './TimeLineChart';
+import { TimeSeriesHistory } from './TimeSeriesHistory';
 
 const MainContent = (props) => {
   const [content, setContent] = useAtom(patientList);
@@ -212,7 +212,7 @@ const MainContent = (props) => {
                   />
                 </div>
                 <div className="col-span-4   min-h-[20rem] rounded bg-auto-white p-4 ring-2 ring-gray-300">
-                  <TimeLineChart deviceId={isPatient.D_Id} />
+                  <TimeSeriesHistory deviceId={isPatient.D_Id} />
                 </div>
               </div>
             )}

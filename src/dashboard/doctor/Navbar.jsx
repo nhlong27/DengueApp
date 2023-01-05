@@ -12,6 +12,7 @@ import { AiOutlineDown } from 'react-icons/ai';
 import Prompt from './components-supabase/components/Prompt';
 import { useAtom } from 'jotai';
 import { userSession } from '../Auth';
+import { notifList } from './App';
 // import {useLocation} from 'react-router-dom'
 
 const Navbar = (props) => {
@@ -21,7 +22,9 @@ const Navbar = (props) => {
   const [isOpen, setDropDown] = useState(false);
   const [title, setTitle] = useState('Dashboard');
 
-  const [session] = useAtom(userSession)
+  const [session] = useAtom(userSession);
+  const [notif] = useAtom(notifList);
+  const [isMessageNotifOpen, setIsMessageNotifOpen] = useState(false);
 
   const getProfile = async () => {
     try {
@@ -55,9 +58,9 @@ const Navbar = (props) => {
   useEffect(async () => {
     await getProfile();
 
-    return ()=>{
+    return () => {
       setUsername(null);
-    }
+    };
   }, []);
   return (
     <nav className="flex h-[10%] w-[100%] items-center justify-between bg-auto-white p-8 shadow-md">
@@ -71,9 +74,31 @@ const Navbar = (props) => {
         <Link to="/dashboard/schedules">
           <GrSchedulePlay />
         </Link>
-        <Link to="/dashboard/messages">
-          <BiMessageSquareDots />
-        </Link>
+        <div className="relative">
+          {notif ? (
+            <>
+              <BiMessageSquareDots
+                onClick={() => setIsMessageNotifOpen((state) => !state)}
+              />
+              <div className="absolute -bottom-[2px] -right-[2px] h-[2px] w-[2px] rounded-full bg-red-500"></div>
+              {isMessageNotifOpen && (
+                <div className="absolute -bottom-[5rem] right-4 min-h-[5rem] min-w-[10rem] rounded-xl bg-auto-white p-4 ring-2 ring-black">
+                  <Link
+                    to="/dashboard/messages"
+                    className="flex flex-col items-start justify-start "
+                  >
+                    <div className="text-[15px] font-bold text-blue-400">
+                      {notif.Username}
+                    </div>
+                    <div className="text-[12px] text-black">{notif.Content}</div>
+                  </Link>
+                </div>
+              )}
+            </>
+          ) : (
+            <BiMessageSquareDots />
+          )}
+        </div>
         <button onClick={() => alert('The functionality for this does not yet exist')}>
           <IoMdNotificationsOutline />
         </button>
@@ -132,13 +157,6 @@ export const DropDownMenu = (props) => {
         >
           Settings
         </Link>
-        {/* <a
-          className="block w-full px-4 py-2 text-left text-sm hover:bg-slate-200 hover:text-black"
-          href="#"
-        >
-          Support
-        </a> */}
-
         <button
           type="button"
           className="block w-full border-t-2 border-gray-300 px-4 py-2 text-left text-sm hover:bg-slate-200 hover:text-black"
@@ -156,19 +174,3 @@ export const DropDownMenu = (props) => {
   );
 };
 export default Navbar;
-// const menuRef = useRef();
-// const closeOpenMenus = (e)=> {
-//   if (isOpen && !menuRef.current.contains(e.target)) {
-//     setDropDown(false);
-//   }
-// };
-// useEffect(() => {
-//   if (typeof window !== "undefined") {
-//     window.addEventListener("mousedown", (e) => closeOpenMenus(e));
-//   }
-//   return () => {
-//     if (typeof window !== "undefined") {
-//       window.removeEventListener("mousedown", (e) => closeOpenMenus(e));
-//     }
-//   };
-// }, []);

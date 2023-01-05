@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@/shared/api/supabase/supabaseClient';
 import { RiNurseFill } from 'react-icons/ri';
 
-const Chatbox = () => {
+const StatusReport = () => {
   const [nurses, setNurses] = useState([]);
   const loadNurse = async () => {
     const { data: NURSE, error } = await supabase.from('NURSE').select('*');
@@ -47,4 +47,4 @@ const Chatbox = () => {
   );
 };
 
-export default Chatbox;
+export default StatusReport;
