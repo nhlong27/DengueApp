@@ -8,6 +8,24 @@ import { userSession } from '@/dashboard/Auth';
 const MessageContainer = (props) => {
   const [messages] = useAtom(messageList);
   const [session] = useAtom(userSession);
+  const [imgSource, setImgSource] = useState({});
+  const downloadImage = async () => {
+    const { data: MESSAGE } = await supabase
+      .from('MESSAGE')
+      .select('*')
+      .eq('Type', 'image');
+    for (let n of MESSAGE) {
+      const { data } = await supabase.storage
+        .from(`doctors/${session.user.id}/messages`)
+        .download(n.Content);
+      const url = URL.createObjectURL(data);
+      setImgSource((imgSource) => ({ ...imgSource, [n.Content]: url }));
+    }
+  };
+
+  useEffect(() => {
+    downloadImage();
+  }, []);
 
   return (
     <div className="flex min-h-[100%] w-[95%] flex-col items-start justify-start gap-10 bg-gradient-to-b from-gray-800 to-gray-500 pb-8">
@@ -37,11 +55,11 @@ const MessageContainer = (props) => {
                       <div className="ml-auto mr-4 rounded-sm bg-white shadow-lg ring-2 ring-black">
                         <img
                           src={
-                            message.Content
-                              ? message.Content
+                            imgSource
+                              ? imgSource[`${message.Content}`]
                               : `https://place-hold.it/150x150`
                           }
-                          alt={message.Content ? 'Image' : 'No image'}
+                          alt={imgSource ? 'Image' : 'No image'}
                           style={{ height: 150, width: 150 }}
                         />
                       </div>

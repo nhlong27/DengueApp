@@ -11,11 +11,6 @@ const StatusReport = () => {
   const [facilities] = useAtom(facilityList);
   const [patient, setPatient] = useAtom(patientList);
   const [devices] = useAtom(deviceList);
-  console.log(Object.values(facilities).map((room) => room.beds));
-  const handleLoadPatient = (type) => {
-    setPatient(patients[`${type}`]);
-  };
-  console.log(Object.keys(facilities));
   return (
     <div className="m-4 flex h-[95%] w-[95%] flex-col items-center justify-start gap-2 rounded-2xl p-4 shadow-lg ring-2 ring-black">
       <div className="flex w-[100%] items-center justify-center text-[20px] font-extrabold tracking-[5px] text-gray-500">

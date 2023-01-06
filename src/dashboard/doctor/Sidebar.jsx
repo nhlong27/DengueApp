@@ -8,10 +8,12 @@ import { MdOutlineSchedule } from 'react-icons/md';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { AiOutlineLeft } from 'react-icons/ai';
 import { AiOutlineRight } from 'react-icons/ai';
-import {BsChatLeftDots} from 'react-icons/bs'
+import { BsChatLeftDots } from 'react-icons/bs';
 import { BsCalendar2Date } from 'react-icons/bs';
 
 import { FiSettings } from 'react-icons/fi';
+
+import logoImage from '../../../assets/img/mos_files/mos.png';
 
 const Sidebar = (props) => {
   const [isOpen, setOpen] = useState(false);
@@ -29,7 +31,7 @@ const Sidebar = (props) => {
           <>
             <img
               className="mr-4 h-[3rem] w-[3rem] transition-all duration-500"
-              src="../../../../assets/img/mos_files/mos.png"
+              src={logoImage}
               alt="mos"
             />
             <span className="opacity-100 transition-opacity duration-500">DengueApp</span>
@@ -38,7 +40,7 @@ const Sidebar = (props) => {
           <>
             <img
               className="h-[2.5rem] w-[2.5rem] transition-all duration-500"
-              src="../../../../assets/img/mos_files/mos.png"
+              src={logoImage}
               alt="mos"
             />
             <span className="opacity-0 transition-opacity duration-500">DengueApp</span>
@@ -183,7 +185,7 @@ const Sidebar = (props) => {
               onClick={() => {
                 props.setLocation('Settings');
               }}
-              to='/dashboard/settings'
+              to="/dashboard/settings"
               className="duration-400 p-center my-2 mt-8 flex items-center justify-center py-2  text-[20px] tracking-wider text-auto-white transition-all hover:border-r-4  hover:border-auto-white  hover:text-[22px] focus:border-r-4 focus:border-auto-white   focus:text-[22px] focus:text-auto-white"
             >
               <FiSettings size={20} />
@@ -194,6 +196,5 @@ const Sidebar = (props) => {
     </div>
   );
 };
-
 
 export default Sidebar;

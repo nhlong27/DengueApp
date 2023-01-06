@@ -82,10 +82,7 @@ const Messages = (props) => {
       if (uploadError) {
         throw uploadError;
       }
-      const { data } = await supabase.storage
-        .from(`doctors/${session.user.id}/messages`)
-        .download(filePath);
-      const url = URL.createObjectURL(data);
+
       const { data: USER } = await supabase
         .from('DOCTOR')
         .select('*')
@@ -95,7 +92,7 @@ const Messages = (props) => {
       const { error } = await supabase.from('MESSAGE').insert([
         {
           Username: USER.Username,
-          Content: url,
+          Content: filePath,
           R_Number: room.R_Number,
           Signature: session.user.id,
           Type: 'image',
