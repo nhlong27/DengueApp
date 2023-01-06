@@ -18,6 +18,7 @@ export const facilityList = atom({});
 export const nurseList = atom([]);
 export const patientList = atom([]);
 export const messageList = atom([]);
+export const allPatients = atom({})
 
 export const notifList = atom(null);
 
@@ -42,7 +43,7 @@ function App() {
         <main className="flex h-[90%] w-[100%] flex-auto">
           <ContentContainer setIsChart={setIsChart} />
 
-          <div className="ml-auto flex w-[25%] flex-col items-center justify-start overflow-y-scroll bg-auto-white shadow-lg">
+          <div className="ml-auto flex w-[25%] bg-auto-white shadow-lg">
             <StatusReport />
           </div>
         </main>

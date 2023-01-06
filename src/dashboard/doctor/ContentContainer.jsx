@@ -18,6 +18,7 @@ import {
   patientList,
   messageList,
   notifList,
+  allPatients,
 } from './App';
 import Schedules from './components-supabase/contents/schedule/Schedules';
 import Messages from './components-supabase/contents/message/Messages';
@@ -37,7 +38,7 @@ const ContentContainer = (props) => {
   const [patients, setPatients] = useAtom(patientList);
   const [messages, setMessages] = useAtom(messageList);
   const [notif, setNotif] = useAtom(notifList);
-
+  const [all, setAllPatients] = useAtom(allPatients);
   const [session] = useAtom(userSession);
 
   const handleLoadDevice = async () => {
@@ -117,6 +118,7 @@ const ContentContainer = (props) => {
     // }
   };
 
+
   const handleLoadPatient = async (type = 'all') => {
     try {
       // setLoading(true);
@@ -135,8 +137,8 @@ const ContentContainer = (props) => {
 
       patients.none = PATIENT.filter((patient) => patient.Status === 'None');
       patients.all = patients.all.concat(patients.none);
-
       console.log('load patients success!');
+      setAllPatients(patients);
       setPatients(patients[`${type}`]);
     } catch (error) {
       console.log(error.error_description || error.message);

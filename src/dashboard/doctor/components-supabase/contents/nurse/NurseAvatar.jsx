@@ -76,9 +76,7 @@ const NurseAvatar = ({ isNurse }) => {
         <InfinitySpin width="100" color="#475569" />
       ) : (
         <div className="absolute top-0 left-0 flex w-[45%] flex-col items-center justify-start text-[14px]">
-          {/* <label className="text-blue-600" htmlFor="single">
-            Upload an avatar
-          </label> */}
+
           <input
             className="h-[1.5rem] w-[100%] overflow-hidden rounded-xl bg-auto-white ring-2 ring-gray-300 hover:ring-black"
             type="file"
@@ -89,7 +87,7 @@ const NurseAvatar = ({ isNurse }) => {
         </div>
       )}
       <img
-        className={`row-span-3 mt-4 h-[10rem] w-[80%] rounded-full bg-gray-400 ring-4 ring-offset-2 `}
+        className={`row-span-3 mt-4 h-[10rem] w-[80%] rounded-full bg-gray-400 ring-black ring-4 ring-offset-2 `}
         src={avatarUrl ? avatarUrl : `https://place-hold.it/150x150`}
         alt={avatarUrl ? 'Avatar' : 'No image'}
         style={{ height: 150, width: 150 }}

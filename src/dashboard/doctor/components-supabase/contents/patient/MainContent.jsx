@@ -28,7 +28,7 @@ import { patientList } from '@/dashboard/doctor/App';
 import { TimeSeriesHistory } from './TimeSeriesHistory';
 
 const MainContent = (props) => {
-  const [content, setContent] = useAtom(patientList);
+  const [content] = useAtom(patientList);
   const [loading, setLoading] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const [isPatient, setIsPatient] = useState(null);

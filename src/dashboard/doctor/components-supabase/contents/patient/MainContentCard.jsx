@@ -20,7 +20,6 @@ import { telemetries } from '@/dashboard/doctor/App';
 import { useAtom } from 'jotai';
 import { InfinitySpin } from 'react-loader-spinner';
 
-
 export const DashboardTable = (props) => {
   const listenStatusUpdate = () => {
     const PATIENT = supabase
@@ -76,14 +75,15 @@ export const DashboardTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.rows.map((row, index) => (
-                <TableComponent
-                  key={index}
-                  row={row}
-                  setInfoOpen={props.setInfoOpen}
-                  setIsPatient={props.setIsPatient}
-                />
-              ))}
+              {props.rows &&
+                props.rows.map((row, index) => (
+                  <TableComponent
+                    key={index}
+                    row={row}
+                    setInfoOpen={props.setInfoOpen}
+                    setIsPatient={props.setIsPatient}
+                  />
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -121,7 +121,7 @@ const TableComponent = ({ row, setInfoOpen, setIsPatient }) => {
                 (row.Status === 'Febrile' && 'text-orange-400') ||
                 (row.Status === 'Critical' && 'text-red-500') ||
                 (row.Status === 'Recovery' && 'text-green-400') ||
-                (row.Status === 'None' && 'text-blue-400') 
+                (row.Status === 'None' && 'text-blue-400')
               }
               `}
             >

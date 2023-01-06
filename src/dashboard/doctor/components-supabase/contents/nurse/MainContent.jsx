@@ -70,10 +70,7 @@ const MainContent = (props) => {
                 <div className="col-span-1  grid h-[20rem] min-w-[15rem] grid-cols-2 grid-rows-5 gap-4 divide-y-2 divide-gray-400 rounded bg-auto-white p-4 ring-2 ring-gray-300">
                   <div className="relative col-span-2 row-span-4 flex flex-col items-center justify-between gap-2">
                     <NurseAvatar isNurse={isNurse} />
-                    <div className="flex w-[100%] items-center justify-between">
-                      <div
-                        className={`h-[1rem] w-[1rem] rounded-full ring-2 ring-offset-2`}
-                      ></div>
+                    <div className="flex w-[100%] items-center justify-center">
                       <div className="text-[22px] font-semibold tracking-widest text-black">
                         {isNurse.Fname}
                       </div>
@@ -86,9 +83,9 @@ const MainContent = (props) => {
                       {isNurse.Email}
                     </div>
                   </div>
-                  
                 </div>
-                <div className="col-span-3 rounded ring-2 ring-gray-300"></div>
+
+                <div className="col-span-3 rounded ring-2 ring-gray-300 flex justify-center items-center text-black text-[30px] font-bold">Coming soon...</div>
               </div>
             )}
           </div>
