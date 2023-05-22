@@ -7,7 +7,7 @@ import { Provider, atom, useAtom } from 'jotai';
 import AppNurse from './nurse/AppNurse';
 import AppPatient from './patient/AppPatient';
 import App from './doctor/App';
-import {useNavigate, useLocation} from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const logInAsAtom = atom('doctor');
 export const userSession = atom('');
@@ -17,15 +17,6 @@ const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [credentials, getCredentials] = useState({});
   const [session, setSession] = useAtom(userSession);
-
-  const { thisLocation } = useLocation(); 
-
-  useEffect(() => {
-  localStorage.setItem( // persist to localStorage
-    "localState",
-    JSON.stringify(thisLocation)
-  );
-}, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -45,6 +36,8 @@ const Auth = () => {
     imgStyle = 'left-[28.6rem] w-[51%]';
   }
 
+  console.log({ session, logInAs });
+  // return <AppNurse />;
   if (session && logInAs === 'doctor') {
     return <App />;
   } else if (session && logInAs === 'nurse') {

@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react';
 import Auth from '../Auth';
+import { userSession } from '../Auth';
+import {useAtom} from 'jotai'
 
 const AppPatient = () => {
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []);
-  return <>{!session ? <Auth /> : <div>AppPatient</div>}</>;
+  const [session] = useAtom(userSession)
+  return (
+    <>
+      kdjfkdjf
+    </>
+  );
 };
 
 export default AppPatient;

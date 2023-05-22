@@ -157,7 +157,8 @@ export const DropDownMenu = (props) => {
         >
           Settings
         </Link>
-        <button
+        <Link
+          to="/dashboard/"
           type="button"
           className="block w-full border-t-2 border-gray-300 px-4 py-2 text-left text-sm hover:bg-slate-200 hover:text-black"
           role="menuitem"
@@ -165,10 +166,11 @@ export const DropDownMenu = (props) => {
           id="menu-item-3"
           onClick={async () => {
             let { error } = await supabase.auth.signOut();
+            if (error) throw error;
           }}
         >
           Sign out
-        </button>
+        </Link>
       </div>
     </div>
   );

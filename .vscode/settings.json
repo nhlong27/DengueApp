@@ -9,5 +9,6 @@
   "editor.quickSuggestions": {
     "strings": true
   },
-  "markdown.preview.scrollPreviewWithEditor": false
+  "markdown.preview.scrollPreviewWithEditor": false,
+  "files.autoSave": "afterDelay"
 }

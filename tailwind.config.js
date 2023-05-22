@@ -24,6 +24,13 @@ module.exports = {
         large: '22px',
         verylarge: '30px',
       },
+      minHeight: {
+        'dynamic-screen': ['100vh /* fallback for Opera, IE and etc. */', '100dvh'],
+      },
+      screens: {
+        '4k': '2560px',
+        xs: '500px',
+      },
     },
   },
   plugins: [],
