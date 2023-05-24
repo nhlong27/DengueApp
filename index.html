@@ -10,63 +10,58 @@
     <div id="root"></div>
     
     <script type="module" src="/src/main.jsx"></script>
-    <!-- <script
-      src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=5e30f06b05f79621331ddc25"
-      type="text/javascript"
-      integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
-      crossorigin="anonymous"
-    ></script>
+
     <script>
-      switch (location.pathname) {
-        case '/dashboard/facilities':
-          window.location.replace('/dashboard/');
-          break;
-        case '/dashboard/nurses':
-          window.location.replace('/dashboard/');
-          break;
-        case '/dashboard/devices':
-          window.location.replace('/dashboard/');
-          break;
-        case '/dashboard/schedules':
-          window.location.replace('/dashboard/');
-          break;
-        case '/dashboard/messages':
-          window.location.replace('/dashboard/');
-          break;
-        case '/dashboard/account':
-          window.location.replace('/dashboard/');
-          break;
-        case '/dashboard/settings':
-          window.location.replace('/dashboard/');
-          break;
-      }
+      // switch (location.pathname) {
+      //   case '/dashboard/facilities':
+      //     window.location.replace('/dashboard/');
+      //     break;
+      //   case '/dashboard/nurses':
+      //     window.location.replace('/dashboard/');
+      //     break;
+      //   case '/dashboard/devices':
+      //     window.location.replace('/dashboard/');
+      //     break;
+      //   case '/dashboard/schedules':
+      //     window.location.replace('/dashboard/');
+      //     break;
+      //   case '/dashboard/messages':
+      //     window.location.replace('/dashboard/');
+      //     break;
+      //   case '/dashboard/account':
+      //     window.location.replace('/dashboard/');
+      //     break;
+      //   case '/dashboard/settings':
+      //     window.location.replace('/dashboard/');
+      //     break;
+      // } 
 
-      window.smoothScroll = function (target) {
-        var scrollContainer = target;
-        do {
-          //find scroll container
-          scrollContainer = scrollContainer.parentNode;
-          if (!scrollContainer) return;
-          scrollContainer.scrollTop += 1;
-        } while (scrollContainer.scrollTop == 0);
+      // window.smoothScroll = function (target) {
+      //   var scrollContainer = target;
+      //   do {
+      //     //find scroll container
+      //     scrollContainer = scrollContainer.parentNode;
+      //     if (!scrollContainer) return;
+      //     scrollContainer.scrollTop += 1;
+      //   } while (scrollContainer.scrollTop == 0);
 
-        var targetY = 0;
-        do {
-          //find the top of target relatively to the container
-          if (target == scrollContainer) break;
-          targetY += target.offsetTop;
-        } while ((target = target.offsetParent));
+      //   var targetY = 0;
+      //   do {
+      //     //find the top of target relatively to the container
+      //     if (target == scrollContainer) break;
+      //     targetY += target.offsetTop;
+      //   } while ((target = target.offsetParent));
 
-        scroll = function (c, a, b, i) {
-          i++;
-          if (i > 30) return;
-          c.scrollTop = a + ((b - a) / 30) * i;
-          setTimeout(function () {
-            scroll(c, a, b, i);
-          }, 10);
-        };
-        scroll(scrollContainer, scrollContainer.scrollTop, targetY, 0);
-      };
-    </script> -->
+      //   scroll = function (c, a, b, i) {
+      //     i++;
+      //     if (i > 30) return;
+      //     c.scrollTop = a + ((b - a) / 30) * i;
+      //     setTimeout(function () {
+      //       scroll(c, a, b, i);
+      //     }, 10);
+      //   };
+      //   scroll(scrollContainer, scrollContainer.scrollTop, targetY, 0);
+      // };
+    </script>
   </body>
 </html>
