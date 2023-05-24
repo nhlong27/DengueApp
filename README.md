@@ -13,7 +13,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/nhlong27/dengueapp">
-    <img src="assets/img/mos_files/mos.png" alt="Logo" width="80" height="80">
+    <img src="public/assets/logos/logo_better.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">DENGUIDE</h3>
@@ -22,8 +22,6 @@
     An IoT-based monitoring application for tackling the dengue fever outbreak
     <br />
     Author: Nguyen Hoang Long 
-    <!-- <a href="https://github.com/nhlong27/dengueapp"><strong>Explore the docs »</strong></a> -->
-    <!-- <br /> -->
     <br />
     <a href="https://dengueapp.vercel.app/">View Demo</a>
     ·
@@ -33,62 +31,153 @@
   </p>
 </div>
 
+## Live Demo
+Official website: <a href="https://dengueapp.vercel.app/">https://dengueapp.vercel.app/</a>
+
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#about">About The Project</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#screenshots">Screenshots</a></li>
+        <li><a href="#duration">Duration</a></li>
+        <li><a href="#challenges">Challenges</a></li>
+        <li><a href="#solutions">Solutions</a></li>
       </ul>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#getting_started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <!-- <li><a href="#usage">Usage</a></li>
+    <li><a href="#roadmap">Roadmap</a></li> -->
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <!-- <li><a href="#contact">Contact</a></li> -->
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
 
 <!-- ABOUT THE PROJECT -->
+<a id='about'></a>
 ## About The Project
 
 [![Product Name Screen Shot][product-screenshot]](https://dengueapp.vercel.app/)
 
 This application was developed with the use of several IoT sensors and wireless communication technologies. The use of IoT sensors will enable the application to collect data on the health of patients with dengue fever, including their temperature, pulse, and blood pressure. Data will be transmitted wirelessly to healthcare providers, who can use it to monitor the health of patients in real time.
+
+### Contributors
+Special thanks to Do Nguyen Dat - who contributed to the architecture design process and management of the IoT devices 
+
 <br/>
-<br/>
-Problems to solve:
+Problems to address:
 <ul>
   <li>Shortages of medical workers during outbreaks of diseases like dengue fever
   </li>
   <li>Inefficient traditional methods of monitoring patients' conditions
   </li>
 </ul>
-Features:
+Provided solutions:
 <ul>
-  <li>Monitoring with built in alarm system. Data is collected from IoT wearables
+  <li>Provide a monitoring with built in alarm system. Data is collected from IoT wearables
   </li>
-  <li>Providing a patient management system
+  <li>Include a patient management system
   </li>
 </ul>
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Built With
+#
+<a id='screenshot'></a>
+## Screenshots
+<details>
+  <summary>Toggle Show/Hide</summary>
+  
+  <!-- <h1>Media page</h1>
+  <img src='./screenshots/mediaPage.png' name="mediaPage-screenshot">
+  <p align="right"><a href="#screenshot">back to section</a></p> -->
+</details>
 
-This section lists all major frameworks/libraries used to bootstrap this project.
+<a id='duration'></a>
+## Duration
 
+Around 2 months - Nov 2022 to Jan 2023 
+
+## User stories  
+<!-- <b>Note</b>: media = movie | TV shows -->
+<ul>
+  <li>User should be able to sign up as either patient, doctor or nuse</li>
+  <li>User should be able to edit their profile information such as:<i>Username</i>, <i>Email</i>, <i>Password</i></li>
+  <li>User as doctor and nurses should be able to have their own protected routes to sections unavailable to patients</li>
+  <li>User as doctor and nurses should be able to access the chatroom and messages</li>
+  <li>User as doctor should be able to add and remove new devices, rooms and beds</li>
+  <li>User as patients should be able to see their own real-time telemetry data and statuses</li>
+</ul>
+
+<!-- 
+
+### Guide
+#### **Basic: Landing page, Auth, Dashboard**
+
+- Home page: smoothscroll
+- Sign up page: explain why only doctor, show mail validation 
+_ Log in page: show logging in with existing doctor account 
+- Account page: show avatar uploading, explain update personal info
+_ Dashboard/Home: explain each section: dashboard, nurses, facilities, devices
+
+#### **CRUD**
+_ Device page: show device creation
+_ Facility page: show room & bed creation
+- Patient page: show patient registering & bed, device assignment
+- Patient Detail page: explain update patient and assigning bed/device
+
+#### **Monitoring: Data collection, Categorization, Alarms** 
+
+- Device page: show device stream (virtual/real), explain receiving/paused
+- Patient Detail page: show real-time line charts, show time series history charts
+- Patient page: explain status, show categories
+ 
+#### **Interaction: Messages, Scheduling** 
+
+- Nurse page: show nurse registering & room assignment
+- Message page: show messaging
+
+#### **Alternatives**
+
+- Nurse View/ Dashboard: show notifications from messages
+
+- Patient View/ Dashboard: show telemetry data stream and line graphs
+
+ -->
+
+
+<a id='challenges'></a>
+<h2>Challenges</h2>
+
+<ul>
+  <li>Use 100% Typescript with frontend and backend</li>
+  <li>Pick a suitable API</li>
+  <li>Pick state management library for client side (between Redux, Zustand, Jotai or React Context, + React Query)</li>
+  <li>Pick a UI routing options</li>
+  <li>Implement auth</li>
+  <li>Pick a suitable database paradigm</li>
+  <li>Create unit tests</li>
+  <li>Deploy frontend and backend on seperate machines</li>
+</ul>
+
+<a id='solutions'></a>
+<h2>Solutions</h2>
+
+<h3>API Source</h3>
+...
+
+### Solution Stack
+
+Here are all major frameworks/libraries used to bootstrap this project
 * [![React][React-badge]][React-url]
 * [![Vite][Vite-badge]][Vite-url]
 * [![TailwindCSS][TailwindCSS-badge]][TailwindCSS-url]
@@ -98,23 +187,31 @@ This section lists all major frameworks/libraries used to bootstrap this project
 * [![Jotai][Jotai-badge]][Jotai-url]
 * [![Supabase][Supabase-badge]][Supabase-url]
 * [![Chartjs][Chartjs-badge]][Chartjs-url]
+<br/> 
+<br/> 
+<b>Note</b>: necessary libraries may have been left out
+* React-Query with Axios
+* Mongoose
+* React Hook Form
+* React Router v6
+* React Auto-Animated
+* React Toastify
+* React Infinite Scroll Component
+* React Lazy Load Image Component
+* React Router Dom
+
+### Images & Icons
+* React Icons
+* Unsplash
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-<!-- ### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ``` -->
-
 ### Installation
 
-_Below is how you can install and set up your app. This template doesn't rely on any external dependencies or services._
+_Below is how you can install and set up your app._
 
 1. Default hosts are Thingsboard.cloud and Supabase. Create your own accounts
 2. Clone the repo
@@ -188,77 +285,7 @@ _Devices (label - token <MultiSensor>):
   <li>Device_MrD_normal - dNormalToken</li>
 </ul>
 
-### Guide
 
-
-#### **Basic: Landing page, Auth, Dashboard**
-
-- Home page: smoothscroll
-- Sign up page: explain why only doctor, show mail validation 
-_ Log in page: show logging in with existing doctor account 
-- Account page: show avatar uploading, explain update personal info
-_ Dashboard/Home: explain each section: dashboard, nurses, facilities, devices
-
-#### **CRUD**
-_ Device page: show device creation
-_ Facility page: show room & bed creation
-- Patient page: show patient registering & bed, device assignment
-- Patient Detail page: explain update patient and assigning bed/device
-
-#### **Monitoring: Data collection, Categorization, Alarms** 
-
-- Device page: show device stream (virtual/real), explain receiving/paused
-- Patient Detail page: show real-time line charts, show time series history charts
-- Patient page: explain status, show categories
- 
-#### **Interaction: Messages, Scheduling** 
-
-- Nurse page: show nurse registering & room assignment
-- Message page: show messaging
-
-#### **Alternatives**
-
-- Nurse View/ Dashboard: show notifications from messages
-
-- Patient View/ Dashboard: show telemetry data stream and line graphs
-
-<!-- _For more examples, please refer to the [Documentation](https://example.com)_ -->
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-<!-- ROADMAP -->
-## Roadmap
-### Versions
-
-<!-- # Design Layer
-
-# Development Layer
-
-# Deployment Layer -->
-
-**1**
-![Original project snapshot](assets/img/readme/project-screenshot.png?raw=true)
-
-### Todos
-- [x] Refresh buttons 
-- [x] Keep session
-- [x] Sticky info 
-- [x] Add subscriptions
-- [x] Update device status when stoppping connection
-- [ ] Invite (server api)
-- [ ] Already existed (token, fname, lname, ...) --> Announce error
-- [ ] Show and hide sensitive information
-- [ ] User info schemas
-- [ ] Local storage?
-- [ ] Manually Open & Close websocket
-- [ ] Breadcrumbs
-- [ ] React route persists on refresh
-- [ ] Multi-language Support
-    - [ ] Vietnamese
-- [ ] Schedules
-
-See the [open issues](https://github.com/nhlong27/dengueapp/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -276,13 +303,17 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+See the [open issues](https://github.com/nhlong27/dengueapp/issues) for a full list of proposed features (and known issues).
+
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+<!-- Distributed under the MIT License. See `LICENSE.txt` for more information. -->
+To be added
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -290,7 +321,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
+This space is for resources I found helpful and would like to give credit to.
 
 * [Choose an Open Source License](https://choosealicense.com)
 * [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
